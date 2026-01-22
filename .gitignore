@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Environment files - KHÔNG COMMIT
+.env
+.env.local
+.env.*.local
+.env.dev
+.env.prod
+# CHỈ commit .env.example
+!.env.example
