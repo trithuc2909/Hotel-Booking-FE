@@ -5,11 +5,6 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
 import Cookies from "js-cookie";
-import { ValueOf } from "next/dist/shared/lib/constants";
-import { error } from "console";
-import { headers } from "next/headers";
-import { resolve } from "path";
-import { rejects } from "assert";
 
 // Token refresh logic
 let isRefreshing = false;

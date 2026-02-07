@@ -1,11 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./slices/authSlice";
+import { authApi } from "./feature/auth/authApi";
 
 export const store = configureStore({
   reducer: {
-    // Thêm reducers vào đây
-    // auth: authReducer,
-    // room: roomReducer,
+    // Slices
+    auth: authReducer,
+
+    // RTK Query APIs
+    [authApi.reducerPath]: authApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(authApi.middleware),
 });
 
 // Export types
