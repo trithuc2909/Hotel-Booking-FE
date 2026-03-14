@@ -1,8 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { customBaseQueryWithReauth } from "@/lib/api/baseQuery";
 import {
+  ForgotPasswordRequest,
   LoginRequest,
   RegisterRequest,
+  ResetPasswordRequest,
   VerifyOTPRequest,
 } from "@/types/request/auth";
 import { AuthResponse, RegisterResponse } from "@/types/response/auth";
@@ -47,6 +49,35 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+
+    // Forgot Password
+    forgotPassword: builder.mutation<
+      { message: string },
+      ForgotPasswordRequest
+    >({
+      query: (data) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    // Reset Password
+    resetPassword: builder.mutation<{ message: string }, ResetPasswordRequest>({
+      query: (data) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    // Validate Reset Token
+    validateResetToken: builder.query<{ valid: boolean }, string>({
+      query: (token) => ({
+        url: `/auth/validate-reset-token?token=${token}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -55,4 +86,7 @@ export const {
   useVerifyOTPMutation,
   useResendOTPMutation,
   useLoginMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useValidateResetTokenQuery,
 } = authApi;

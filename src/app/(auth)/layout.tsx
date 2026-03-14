@@ -7,7 +7,7 @@ interface AuthLayoutProps {
 // Auth layout component
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className={`min-h-screen flex`}>
+    <div className={`light min-h-screen flex`}>
       {/* container */}
       <div className="hidden lg:flex lg:w-1/2  bg-gradient-to-br from-blue-500 to-blue-700 relative overflow-hidden">
         {/* Background Pattern */}
