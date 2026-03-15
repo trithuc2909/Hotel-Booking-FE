@@ -1,4 +1,4 @@
-import { ApiResponse } from "./common";
+import { ApiResponse } from "../common";
 
 // Auth data (tokens)
 export interface AuthData {
