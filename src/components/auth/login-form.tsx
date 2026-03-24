@@ -30,12 +30,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Eye, EyeOff } from "lucide-react";
+import { useAppDispatch } from "@/store/hooks";
+import { setAuth } from "@/store/slices/authSlice";
 
 export default function LoginForm() {
   const router = useRouter();
 
   const [login, { isLoading }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -52,9 +56,10 @@ export default function LoginForm() {
       // Destructure data từ response
       const { data: authData } = await login(data).unwrap();
 
-      // Lưu tokens vào localStorage
-      localStorage.setItem("accessToken", authData.accessToken);
-      localStorage.setItem("refreshToken", authData.refreshToken);
+      dispatch(setAuth({
+        accessToken: authData.accessToken,
+        refreshToken: authData.refreshToken,
+      }))
 
       // Success toast
       toast.success("Đăng nhập thành công!");

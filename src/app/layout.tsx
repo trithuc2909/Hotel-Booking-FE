@@ -5,6 +5,7 @@ import { Toaster } from "../components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/components/providers";
 import { ToasterCustom } from "@/components/ui/toaster-custom";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 // Font chính: Open Sans
 const openSans = Open_Sans({
@@ -28,16 +29,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={openSans.className}>
-        <Providers>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            disableTransitionOnChange
-          >
-            {children}
-            <ToasterCustom />
-          </ThemeProvider>
-        </Providers>
+        <NuqsAdapter>
+          <Providers>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              disableTransitionOnChange
+            >
+              {children}
+              <ToasterCustom />
+            </ThemeProvider>
+          </Providers>
+        </NuqsAdapter>
       </body>
     </html>
   );

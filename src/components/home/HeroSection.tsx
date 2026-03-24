@@ -1,8 +1,9 @@
 "use client";
+
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Search, Users, BedDouble } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQueryState, parseAsString } from "nuqs";
 import {
   Select,
   SelectContent,
@@ -23,8 +24,8 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ROOM_TYPES = [
-  { value: "standard", label: "Phòng tiêu chuẩn" },
-  { value: "vip", label: "Phòng VIP" },
+  { value: "STD", label: "Phòng tiêu chuẩn" },
+  { value: "VIP", label: "Phòng VIP" },
 ] as const;
 
 const GUEST_OPTIONS = [
@@ -35,11 +36,10 @@ const GUEST_OPTIONS = [
 ] as const;
 
 export default function HeroSection() {
-  const router = useRouter();
-  const [roomType, setRoomType] = useState<string>("");
-  const [checkIn, setCheckIn] = useState<Date | undefined>(undefined);
-  const [checkOut, setCheckOut] = useState<Date | undefined>(undefined);
-  const [guests, setGuests] = useState<string>("");
+  const [roomType, setRoomType] = useQueryState("type", parseAsString.withDefault(""));
+  const [checkIn, setCheckIn] = useQueryState("checkIn", parseAsString.withDefault(""));
+  const [checkOut, setCheckOut] = useQueryState("checkOut", parseAsString.withDefault(""));
+  const [guests, setGuests] = useQueryState("guests", parseAsString.withDefault(""));
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -47,8 +47,6 @@ export default function HeroSection() {
     if (checkIn) params.set("checkIn", format(checkIn, "yyyy-MM-dd"));
     if (checkOut) params.set("checkOut", format(checkOut, "yyyy-MM-dd"));
     if (guests) params.set("guests", guests);
-
-    router.push(`/rooms?${params.toString()}`);
   };
 
   return (
@@ -127,13 +125,12 @@ export default function HeroSection() {
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" avoidCollisions={false}>
                   <Calendar
                     mode="single"
-                    selected={checkIn}
                     onSelect={(date) => {
-                      setCheckIn(date);
+                      setCheckIn(date ? format(date, "yyyy-MM-dd") : null);
 
                       // reset checkout if checkout < checkin
-                      if (checkOut && date && checkOut < date) {
-                        setCheckOut(undefined);
+                      if (checkOut && date && new Date(checkOut) < date) {
+                        setCheckOut(null);
                       }
                     }}
                     disabled={(date) =>
@@ -173,11 +170,10 @@ export default function HeroSection() {
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" avoidCollisions={false}>
                   <Calendar
                     mode="single"
-                    selected={checkOut}
-                    onSelect={setCheckOut}
+                    onSelect={(date) => setCheckOut(date ? format(date, "yyyy-MM-dd") : null)}
+                    selected={checkOut ? new Date(checkOut) : undefined}
                     disabled={(date) =>
-                      date <
-                      (checkIn ?? new Date(new Date().setHours(0, 0, 0, 0)))
+                      date < (checkIn ? new Date(checkIn) : new Date(new Date().setHours(0, 0, 0, 0)))
                     }
                     initialFocus
                     locale={vi}

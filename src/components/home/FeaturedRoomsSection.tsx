@@ -1,47 +1,61 @@
-import { FeaturedRoomResponse } from "@/types/response/room";
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Users, BedDouble, Star } from "lucide-react";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import AmenityIcon from "../common/AmenityIcon";
+import { parseAsString, useQueryState } from "nuqs";
+import { useGetRoomsQuery } from "@/store/feature/room/roomApi";
+import { RoomResponse } from "@/types/response/room";
 
-async function getFeaturedRooms(): Promise<FeaturedRoomResponse[]> {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/rooms/featured-room`,
-      {
-        next: { revalidate: 3600 },
-      },
-    );
-    if (!response.ok) return [];
-    const data = await response.json();
-    return data.data ?? [];
-  } catch (error) {
-    return [];
-  }
-}
+export default function FeaturedRoomsSection() {
+    const [type] = useQueryState("type", parseAsString.withDefault(""));
+    const [checkIn] = useQueryState("checkIn", parseAsString.withDefault(""));
+    const [checkOut] = useQueryState("checkOut", parseAsString.withDefault(""));
+    const [guests] = useQueryState("guests", parseAsString.withDefault(""));
 
-export default async function FeaturedRoomsSection() {
-    const rooms = await getFeaturedRooms();
+    const hasFilter = !!(type || guests || checkIn || checkOut);
 
-    if (rooms.length === 0) return null;
-    return (
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      {/* Header */}
+    const { data, isLoading } = useGetRoomsQuery({
+      roomTypeCode: type ? type.toUpperCase() : "VIP",
+      guests:  guests  ? Number(guests) : undefined,
+      checkIn:  checkIn  || undefined,
+      checkOut: checkOut || undefined,
+      limit: hasFilter ? undefined : 4,
+    });
+
+
+    const rooms = data?.data ?? [];
+
+
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="mb-8 text-center">
         <p className="text-sm font-semibold uppercase tracking-widest text-[#0D99FF]">
-          Phòng tiêu biểu
+          {type === "vip" || !type ? "Phòng VIP tiêu biểu" : "Phòng phù hợp với yêu cầu"}
         </p>
         <h2 className="mt-2 text-3xl font-bold text-gray-900">
           Khám phá không gian sang trọng bậc nhất tại Bullman Hotel
         </h2>
       </div>
-      {/* Grid cards */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {rooms.map((room) => (
-          <RoomCard key={room.id} room={room} />
-        ))}
-      </div>
+      {isLoading && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-80 animate-pulse rounded-2xl bg-gray-100" />
+          ))}
+        </div>
+      )}
+      {!isLoading && rooms.length > 0 && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {rooms.map((room) => <RoomCard key={room.id} room={room} />)}
+        </div>
+      )}
+      {!isLoading && rooms.length === 0 && (
+        <p className="text-center py-10 text-gray-500">
+          Không tìm thấy phòng phù hợp. Thử thay đổi bộ lọc!
+        </p>
+      )}
     </section>
   );
 }
@@ -70,7 +84,7 @@ function StarRating({ rating }: { rating: number | null }) {
   );
 }
 
-function RoomCard({ room }: { room: FeaturedRoomResponse }) {
+function RoomCard({ room }: { room: RoomResponse }) {
   const DEFAULT_IMAGE =
     "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800";
 
