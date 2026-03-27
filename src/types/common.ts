@@ -7,4 +7,15 @@ export interface ApiResponse<T = any> {
   errors: any | null;
 }
 
+export type PaginationMeta = {
+  total: number;
+  pageNum: number;
+  pageSize: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  nextPage: number | null;
+  prevPage: number | null;
+}
+
 export type ApiData<T> = T extends ApiResponse<infer D> ? D : never;

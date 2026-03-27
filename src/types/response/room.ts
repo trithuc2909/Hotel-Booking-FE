@@ -1,3 +1,5 @@
+import { PaginationMeta } from "../common";
+
 export type AmenityResponse = {
     id: string;
     name: string;
@@ -26,4 +28,13 @@ export type RoomsFilter = {
   limit?: number;
   checkIn?: string;
   checkOut?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  pageNum?: number;
+  pageSize?: number;
 };
+
+export type RoomsPagedResponse = {
+  data: RoomResponse[];
+  meta: PaginationMeta;
+}
