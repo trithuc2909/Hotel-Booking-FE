@@ -84,7 +84,7 @@ export default function RoomFilter() {
               >
                 <Checkbox checked={checked} />
                 <span className="text-sm text-gray-700">
-                  {rt.label} <span className="text-gray-400">(4)</span>
+                  {rt.label} <span className="text-gray-400"></span>
                 </span>
               </div>
             );

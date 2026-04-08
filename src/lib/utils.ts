@@ -17,7 +17,7 @@ export function formatDate(
 
 export function formatCurrency(amount: number | null | undefined): string {
   if (amount == null || isNaN(amount)) return "-";
-  return amount.toLocaleString("vi-VN") + " đ";
+  return new Intl.NumberFormat("vi-VN").format(amount);
 }
 
 export function isValidEmail(email: string): boolean {

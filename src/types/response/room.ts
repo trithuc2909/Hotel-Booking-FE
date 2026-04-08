@@ -1,10 +1,10 @@
 import { PaginationMeta } from "../common";
 
 export type AmenityResponse = {
-    id: string;
-    name: string;
-    icon: string;
-}
+  id: string;
+  name: string;
+  icon: string;
+};
 
 export type RoomResponse = {
   id: string;
@@ -37,4 +37,16 @@ export type RoomsFilter = {
 export type RoomsPagedResponse = {
   data: RoomResponse[];
   meta: PaginationMeta;
-}
+};
+
+export type AdminRoomsFilter = {
+  roomTypeCode?: string;
+  status?: string;
+  sortBy?: string;
+  sortDirection?: "asc" | "desc";
+  minPrice?: number;
+  maxPrice?: number;
+  pageNum?: number;
+  pageSize?: number;
+  search?: string;
+};
