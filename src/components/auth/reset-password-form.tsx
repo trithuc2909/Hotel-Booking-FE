@@ -16,7 +16,7 @@ import {
 import {
   useResetPasswordMutation,
   useValidateResetTokenQuery,
-} from "@/store/feature/auth/authApi";
+} from "@/features/auth/api/authApi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

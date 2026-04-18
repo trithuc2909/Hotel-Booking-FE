@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/authSlice";
-import { authApi } from "./feature/auth/authApi";
-import { userApi } from "./feature/user/userApi";
+import authReducer from "@/features/auth/slices/authSlice";
+import { authApi } from "@/features/auth/api/authApi";
+import { userApi } from "@/features/user/api/userApi";
+import { roomApi } from "@/features/room/api/roomApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { roomApi } from "./feature/room/roomApi";
+import { lookupApi } from "@/features/room/api/lookupApi";
 
 export const store = configureStore({
   reducer: {
@@ -14,9 +15,15 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [roomApi.reducerPath]: roomApi.reducer,
+    [lookupApi.reducerPath]: lookupApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware, userApi.middleware, roomApi.middleware),
+    getDefaultMiddleware().concat(
+      authApi.middleware,
+      userApi.middleware,
+      roomApi.middleware,
+      lookupApi.middleware,
+    ),
 });
 
 setupListeners(store.dispatch);

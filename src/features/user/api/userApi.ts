@@ -1,6 +1,6 @@
 import { customBaseQueryWithReauth } from "@/lib/api/baseQuery";
 import { ApiResponse } from "@/types/common";
-import { UserProfileResponse } from "@/types/response/user";
+import { UserProfileResponse } from "@/features/user/types/user";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const userApi = createApi({

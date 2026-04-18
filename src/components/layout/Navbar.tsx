@@ -16,7 +16,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { useGetMeQuery } from "@/store/feature/user/userApi";
+import { useGetMeQuery } from "@/features/user/api/userApi";
 
 const NAV_LINKS = [
   { label: "Phòng & Giá", href: "/rooms" },

@@ -1,4 +1,4 @@
-import type { RoomResponse } from "@/types/response/room";
+import type { RoomResponse } from "@/features/room/types/room.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
 

@@ -9,7 +9,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
 } from "@/lib/validations/auth";
-import { useForgotPasswordMutation } from "@/store/feature/auth/authApi";
+import { useForgotPasswordMutation } from "@/features/auth/api/authApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

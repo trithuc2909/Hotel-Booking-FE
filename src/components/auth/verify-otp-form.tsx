@@ -15,7 +15,7 @@ import {
 import {
   useVerifyOTPMutation,
   useResendOTPMutation,
-} from "@/store/feature/auth/authApi";
+} from "@/features/auth/api/authApi";
 // Import UI components
 import { Button } from "@/components/ui/button";
 import {

@@ -1,12 +1,20 @@
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+"use client"
 
+import DashboardHeader from "@/components/layout/DashboardHeader";
+import DashboardSidebar from "@/components/layout/DashboardSidebar";
+import { useEffect } from "react";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
       <DashboardSidebar />

@@ -3,7 +3,7 @@ export default function DashboardHeader() {
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-gray-100 bg-white px-6">
       <span className="text-sm font-semibold text-gray-700">
-        Trang quản lý
+        BULLMAN DASHBOARD
       </span>
       <div className="flex items-center gap-1">
         {[Bell, Settings, HelpCircle].map((Icon, i) => (

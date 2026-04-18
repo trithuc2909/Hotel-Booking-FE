@@ -1,0 +1,23 @@
+{
+  "repoId": "c4ddc716-a595-46c0-bd0f-f78c3d785ac2",
+  "repoName": "hotel-booking-ui-web",
+  "server": "https://api.grapuco.com",
+  "language": "typescript",
+  "framework": "nextjs",
+  "features": {
+    "embeddings": true,
+    "dataFlowAnalysis": true
+  },
+  "ignore": [
+    "node_modules",
+    "dist",
+    ".next",
+    ".git",
+    ".grapuco",
+    "__pycache__",
+    "vendor",
+    "target",
+    "build"
+  ],
+  "lastPush": "2026-04-17T04:42:15.149Z"
+}

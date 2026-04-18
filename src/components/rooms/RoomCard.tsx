@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Users, Star } from "lucide-react";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
-import AmenityIcon from "@/components/common/AmenityIcon";
-import type { RoomResponse } from "@/types/response/room";
+import AmenityIcon from "@/components/shared/AmenityIcon";
+import type { RoomResponse } from "@/features/room/types/room.type";
 
 const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800";
 
@@ -80,7 +80,7 @@ export function RoomCard({ room }: { room: RoomResponse }) {
         {room.amenities.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1">
             {room.amenities.slice(0, 4).map((a) => (
-              <AmenityIcon key={a.id} icon={a.icon} name={a.name} />
+              <AmenityIcon key={a.id} icon={a.icon ?? ""} name={a.name} />
             ))}
             {room.amenities.length > 4 && (
               <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-400">

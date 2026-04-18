@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { registerSchema, type RegisterFormData } from "@/lib/validations/auth";
 
 // Import Redux mutation
-import { useRegisterMutation } from "@/store/feature/auth/authApi";
+import { useRegisterMutation } from "@/features/auth/api/authApi";
 
 // Import UI components
 import { Button } from "@/components/ui/button";

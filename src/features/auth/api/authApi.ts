@@ -6,8 +6,8 @@ import {
   RegisterRequest,
   ResetPasswordRequest,
   VerifyOTPRequest,
-} from "@/types/request/auth";
-import { AuthResponse, RegisterResponse } from "@/types/response/auth";
+} from "@/features/auth/types/auth";
+import { AuthResponse, RegisterResponse } from "@/features/auth/types/auth";
 
 export const authApi = createApi({
   reducerPath: "authApi",

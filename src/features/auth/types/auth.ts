@@ -1,3 +1,16 @@
+import { ApiResponse } from "../../../types/common";
+
+// Auth data (tokens)
+export interface AuthData {
+  accessToken: string;
+  refreshToken: string;
+}
+
+// Register data
+export interface RegisterData {
+  userId: string;
+}
+
 export interface RegisterRequest {
   username: string;
   email: string;
@@ -24,3 +37,7 @@ export interface ResetPasswordRequest {
   newPassword: string;
   confirmPassword: string;
 }
+
+// Wrapped responses
+export type AuthResponse = ApiResponse<AuthData>;
+export type RegisterResponse = ApiResponse<RegisterData>;

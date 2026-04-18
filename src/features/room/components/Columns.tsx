@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import type { RoomResponse } from "@/types/response/room";
+import type { RoomResponse } from "@/features/room/types/room.type";
 import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 import { CellAction } from "./CellAction";
@@ -7,23 +7,12 @@ import { CellAction } from "./CellAction";
 const DEFAULT_IMG =
   "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200";
 
-type RoomStatus = "AVL" | "OCP" | "CLN";
-
-const STATUS_CONFIG: Record<RoomStatus, { label: string; className: string }> =
-  {
-    AVL: {
-      label: "Còn trống",
-      className: "bg-green-50 text-green-600 border-green-200",
-    },
-    OCP: {
-      label: "Đang ở",
-      className: "bg-red-50 text-red-500 border-red-200",
-    },
-    CLN: {
-      label: "Đang dọn dẹp",
-      className: "bg-orange-50 text-orange-500 border-orange-200",
-    },
-  };
+const STATUS_COLOR_CONFIG: Record<string, string> = {
+  AVL: "bg-green-50 text-green-600 border-green-200",
+  OCP: "bg-red-50 text-red-500 border-red-200",
+  CLN: "bg-orange-50 text-orange-500 border-orange-200",
+  RSV: "bg-blue-50 text-blue-500 border-blue-200",
+};
 
 interface ColumnCallbacks {
   onView: (room: RoomResponse) => void;
@@ -73,17 +62,17 @@ export const createRoomColumns = (
     header: "Trạng thái",
     cell: ({ row }) => {
       const room = row.original;
-      const cfg = STATUS_CONFIG[room.status as RoomStatus];
+      const className =
+        STATUS_COLOR_CONFIG[room.status] ??
+        "bg-gray-50 text-gray-500 border-gray-200";
 
-      if (!cfg) {
-        return <span className="text-xs text-gray-400">Không xác định</span>;
-      }
+      const statusLabel = room.statusLabel || "Không xác định";
 
       return (
         <span
-          className={`inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold ${cfg.className}`}
+          className={`inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold ${className}`}
         >
-          {cfg.label}
+          {statusLabel}
         </span>
       );
     },

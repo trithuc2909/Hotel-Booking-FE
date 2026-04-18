@@ -3,12 +3,12 @@
 import { AlertTriangle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import type { RoomResponse } from "@/types/response/room";
+import type { RoomResponse } from "@/features/room/types/room.type";
 
 const DEFAULT_IMG =
   "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200";
 
-type RoomStatus = "AVL" | "CLN" | "OCP";
+type RoomStatus = "AVL" | "CLN" | "OCP" | "RSV";
 
 interface BaseModalProps {
   room: RoomResponse;
@@ -43,7 +43,7 @@ export function DeleteRoomModal({
       role="dialog"
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in"
-      onClick={onClose} 
+      onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -134,7 +134,90 @@ const STATUSES: {
     bg: "bg-red-50",
     text: "text-red-500",
   },
+  {
+    code: "RSV",
+    label: "Đã đặt trước",
+    emoji: "📋",
+    border: "border-blue-400",
+    bg: "bg-blue-50",
+    text: "text-blue-500",
+  },
 ];
+
+const TRANSITIONS: { from: string; fromEmoji: string; to: string[] }[] = [
+  { from: "Còn trống", fromEmoji: "✅", to: ["Đang ở", "Đã đặt trước"] },
+  { from: "Đang ở", fromEmoji: "🏨", to: ["Đang dọn dẹp"] },
+  { from: "Đang dọn dẹp", fromEmoji: "🧹", to: ["Còn trống"] },
+  { from: "Đã đặt trước", fromEmoji: "📋", to: ["Đang ở", "Còn trống"] },
+];
+
+function StatusGuideModal({ onClose }: { onClose: () => void }) {
+  useCloseOnEsc(onClose);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-60 flex items-center justify-center bg-black/50 backdrop-blur-[2px] animate-in fade-in"
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-[420px] rounded-2xl bg-white p-6 shadow-2xl animate-in zoom-in-95"
+      >
+        {/* Header */}
+        <div className="mb-5 flex items-start justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50">
+              <span className="text-base">🗺️</span>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-gray-900">Hướng dẫn chuyển trạng thái</h3>
+              <p className="text-xs text-gray-400">Các luồng chuyển đổi hợp lệ</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Transitions list */}
+        <div className="space-y-3">
+          {TRANSITIONS.map((t) => (
+            <div
+              key={t.from}
+              className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3"
+            >
+              <span className="text-xl shrink-0">{t.fromEmoji}</span>
+              <span className="text-sm font-semibold text-gray-700 w-28 shrink-0">
+                {t.from}
+              </span>
+              <span className="text-gray-500 text-sm shrink-0">→</span>
+              <div className="flex flex-wrap gap-1.5">
+                {t.to.map((target) => (
+                  <span
+                    key={target}
+                    className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-600"
+                  >
+                    {target}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer note */}
+        <p className="mt-4 text-center text-[11px] text-gray-500">
+          Chỉ các chuyển đổi được liệt kê mới được phép thực hiện
+        </p>
+      </div>
+    </div>
+  );
+}
 
 interface UpdateStatusModalProps extends BaseModalProps {
   onSave: (status: RoomStatus) => void;
@@ -150,6 +233,8 @@ export function UpdateStatusModal({
   const [selected, setSelected] = useState<RoomStatus>(
     room.status as RoomStatus,
   );
+
+  const [showGuide, setShowGuide] = useState(false);
 
   useCloseOnEsc(onClose);
 
@@ -203,9 +288,19 @@ export function UpdateStatusModal({
         </div>
 
         {/* Status */}
-        <p className="mb-3 text-xs font-semibold uppercase text-gray-400">
-          Chọn trạng thái
-        </p>
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-xs font-semibold uppercase text-gray-400">
+            Chọn trạng thái
+          </p>
+          <button
+            onClick={() => setShowGuide(true)}
+            className="text-xs text-[#0D99FF] hover:underline cursor-pointer flex items-center gap-1"
+          >
+            🗺️ Xem hướng dẫn
+          </button>
+        </div>
+
+        {showGuide && <StatusGuideModal onClose={() => setShowGuide(false)} />}
 
         <div className="mb-6 grid grid-cols-3 gap-3">
           {STATUSES.map((s) => {

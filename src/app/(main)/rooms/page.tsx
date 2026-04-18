@@ -1,14 +1,14 @@
 "use client";
 
-import Breadcrumb from "@/components/common/Breadcrumb";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
-import Pagination from "@/components/common/Pagination";
+import Pagination from "@/components/shared/Pagination";
 import { RoomCard } from "@/components/rooms/RoomCard";
 import RoomFilter from "@/components/rooms/RoomFilter";
-import { useGetRoomsQuery } from "@/store/feature/room/roomApi";
+import { useGetRoomsQuery } from "@/features/room/api/roomApi";
 import { PaginationMeta } from "@/types/common";
-import { RoomResponse } from "@/types/response/room";
+import { RoomResponse } from "@/features/room/types/room.type";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useEffect } from "react";
 

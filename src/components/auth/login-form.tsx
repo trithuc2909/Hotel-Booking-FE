@@ -6,11 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-// Import validation schema
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
-// Import Redux mutation
-import { useLoginMutation } from "@/store/feature/auth/authApi";
-// Import UI components
+import { useLoginMutation } from "@/features/auth/api/authApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,7 +28,7 @@ import {
 } from "@/components/ui/form";
 import { Eye, EyeOff } from "lucide-react";
 import { useAppDispatch } from "@/store/hooks";
-import { setAuth } from "@/store/slices/authSlice";
+import { setAuth } from "@/features/auth/slices/authSlice";
 
 export default function LoginForm() {
   const router = useRouter();

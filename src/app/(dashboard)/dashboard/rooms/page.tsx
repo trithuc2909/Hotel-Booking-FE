@@ -1,16 +1,25 @@
 "use client";
 
-import Breadcrumb from "@/components/common/Breadcrumb";
-import Pagination from "@/components/common/Pagination";
-import SearchInput from "@/components/common/SearchInput";
-import { createRoomColumns } from "@/components/dashboard/rooms/Columns";
-import { DeleteRoomModal, UpdateStatusModal } from "@/components/dashboard/rooms/Modal";
-import RoomFilterBar from "@/components/dashboard/rooms/RoomFilterBar";
-import RoomTable from "@/components/dashboard/rooms/RoomTable";
-import { useGetAdminRoomsQuery } from "@/store/feature/room/roomApi";
-import type { RoomResponse } from "@/types/response/room";
+import Breadcrumb from "@/components/shared/Breadcrumb";
+import Pagination from "@/components/shared/Pagination";
+import SearchInput from "@/components/shared/SearchInput";
+import { createRoomColumns } from "@/features/room/components/Columns";
+import {
+  DeleteRoomModal,
+  UpdateStatusModal,
+} from "@/features/room/components/Modal";
+import RoomFilterBar from "@/features/room/components/RoomFilterBar";
+import RoomTable from "@/features/room/components/RoomTable";
+import {
+  useGetAdminRoomsQuery,
+  useUpdateRoomStatusMutation,
+  useDeleteRoomMutation,
+} from "@/features/room/api/roomApi";
+import type { RoomResponse, RoomStatusCode } from "@/features/room/types/room.type";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type ModalType = "update" | "delete" | null;
 
@@ -35,18 +44,62 @@ export default function AdminRoomsPage() {
     pageSize,
   });
 
+  const [updateRoomStatus, { isLoading: isUpdating }] =
+    useUpdateRoomStatusMutation();
+
+  const [deleteRoom, { isLoading: isDeleting }] = useDeleteRoomMutation();
+
   const rooms = data?.data ?? [];
   const meta = data?.meta;
+  const router = useRouter();
 
   const closeModal = () => {
     setModalType(null);
     setSelectedRoom(null);
   };
 
+  const handleUpdateStatus = async (status: RoomStatusCode) => {
+    if (!selectedRoom) return;
+
+    try {
+      await updateRoomStatus({ id: selectedRoom.id, status }).unwrap();
+      toast.success("Cập nhật trạng thái phòng thành công");
+      closeModal();
+    } catch (err: any) {
+      const code = err?.data?.code;
+
+      if (code === "INVALID_TRANSITION") {
+        toast.error(
+          "Không thể chuyển trạng thái này. Xem hướng dẫn để biết thứ tự hợp lệ.",
+        );
+      } else {
+        toast.error(err?.data?.message ?? "Có lỗi xảy ra");
+      }
+    }
+  };
+
+  const handleDeleteRoom = async () => {
+    if (!selectedRoom) return;
+
+    try {
+      await deleteRoom({ id: selectedRoom.id }).unwrap();
+      toast.success("Xóa phòng thành công");
+      closeModal();
+    } catch (err: any) {
+      const code = err?.data?.code;
+
+      if (code === "ROOM_OCCUPIED") {
+        toast.error("Không thể xóa phòng đang có khách");
+      } else {
+        toast.error(err?.data?.message ?? "Có lỗi xảy ra");
+      }
+    }
+  };
+
   const columns = useMemo(
     () =>
       createRoomColumns({
-        onView: (room) => console.log("view", room.id), // TODO: navigate to detail
+        onView: (room) => router.push(`/dashboard/rooms/${room.id}`),
         onUpdate: (room) => {
           setSelectedRoom(room);
           setModalType("update");
@@ -80,7 +133,10 @@ export default function AdminRoomsPage() {
           placeholder="Tìm kiếm theo tên phòng, mã phòng..."
           className="flex-1 max-w-md"
         />
-        <button className="flex cursor-pointer shrink-0 items-center gap-2 rounded-lg bg-[#0D99FF] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0B84E6] transition-colors">
+        <button
+          onClick={() => router.push("/dashboard/rooms/create")}
+          className="flex cursor-pointer shrink-0 items-center gap-2 rounded-lg bg-[#0D99FF] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0B84E6] transition-colors"
+        >
           <Plus size={16} />
           Thêm Phòng Mới
         </button>
@@ -90,9 +146,18 @@ export default function AdminRoomsPage() {
         type={roomTypeFilter}
         status={statusFilter}
         sortPrice={sortPrice}
-        onSortPriceChange={(v) => { setSortPrice(v); setPageNum(1); }}
-        onTypeChange={(v) => { setRoomTypeFilter(v); setPageNum(1); }}
-        onStatusChange={(v) => { setStatusFilter(v); setPageNum(1); }}
+        onSortPriceChange={(v) => {
+          setSortPrice(v);
+          setPageNum(1);
+        }}
+        onTypeChange={(v) => {
+          setRoomTypeFilter(v);
+          setPageNum(1);
+        }}
+        onStatusChange={(v) => {
+          setStatusFilter(v);
+          setPageNum(1);
+        }}
       />
 
       {isLoading ? (
@@ -110,7 +175,10 @@ export default function AdminRoomsPage() {
             onPageChange={setPageNum}
             total={meta?.total}
             pageSize={pageSize}
-            onPageSizeChange={(s) => { setPageSize(s); setPageNum(1); }}
+            onPageSizeChange={(s) => {
+              setPageSize(s);
+              setPageNum(1);
+            }}
           />
         </>
       )}
@@ -120,20 +188,16 @@ export default function AdminRoomsPage() {
         <DeleteRoomModal
           room={selectedRoom}
           onClose={closeModal}
-          onConfirm={() => {
-            console.log("delete", selectedRoom.id); // TODO: gọi API
-            closeModal();
-          }}
+          isDeleting={isDeleting}
+          onConfirm={handleDeleteRoom}
         />
       )}
       {selectedRoom && modalType === "update" && (
         <UpdateStatusModal
           room={selectedRoom}
           onClose={closeModal}
-          onSave={(status) => {
-            console.log("update", selectedRoom.id, status); // TODO: gọi API
-            closeModal();
-          }}
+          isSaving={isUpdating}
+          onSave={handleUpdateStatus}
         />
       )}
     </div>
