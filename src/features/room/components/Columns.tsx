@@ -41,7 +41,7 @@ export const createRoomColumns = (
             <p className="text-sm font-semibold text-gray-800">
               {room.roomName}
             </p>
-            <p className="text-xs text-gray-400">{room.roomNumber}</p>
+            <p className="text-xs text-gray-400">Phòng {room.roomNumber}</p>
           </div>
         </div>
       );

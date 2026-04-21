@@ -10,6 +10,12 @@ import HotelRules from "@/components/rooms/HotelRules";
 import BookingWidget from "@/components/rooms/BookingWidget";
 import { StarRating } from "@/components/rooms/RoomCard";
 import { useGetRoomByIdQuery } from "@/features/room/api/roomApi";
+import {
+  Maximize2,
+  BedDouble,
+  Compass,
+  Wind,
+} from "lucide-react";
 
 function Skeleton() {
   return (
@@ -31,6 +37,19 @@ export default function RoomDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError } = useGetRoomByIdQuery({ id });
   const room = data?.data;
+
+  const VIEW_LABELS: Record<string, string> = {
+    Sea: "Hướng biển",
+    City: "Hướng thành phố",
+    Garden: "Hướng vườn",
+    Pool: "Hướng hồ bơi",
+  };
+
+  const BED_TYPE_LABELS: Record<string, string> = {
+    Single: "Giường đơn",
+    Double: "Giường đôi",
+    Triple: "Giường ba",
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -75,13 +94,58 @@ export default function RoomDetailPage() {
                   </h1>
                   <div className="mt-1 flex items-center gap-2">
                     <StarRating rating={room.rating} />
-                    {room.rating && (
-                      <span className="text-sm text-gray-500">
-                        {room.rating} đánh giá
-                      </span>
-                    )}
                   </div>
                 </div>
+
+                <section>
+                  <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                    Tổng quan không gian
+                  </h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {room.size && (
+                      <div className="flex flex-col items-center gap-1.5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm text-center">
+                        <Maximize2 size={22} className="text-[#0D99FF]" />
+                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
+                          Diện tích
+                        </span>
+                        <span className="text-sm font-bold text-gray-900">
+                          {room.size} m²
+                        </span>
+                      </div>
+                    )}
+                    {room.bedType && (
+                      <div className="flex flex-col items-center gap-1.5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm text-center">
+                        <BedDouble size={22} className="text-[#0D99FF]" />
+                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
+                          Giường
+                        </span>
+                        <span className="text-sm font-bold text-gray-900">
+                          {BED_TYPE_LABELS[room.bedType] ?? room.bedType}
+                        </span>
+                      </div>
+                    )}
+                    {room.view && (
+                      <div className="flex flex-col items-center gap-1.5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm text-center">
+                        <Compass size={22} className="text-[#0D99FF]" />
+                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
+                          Hướng
+                        </span>
+                        <span className="text-sm font-bold text-gray-900">
+                          {VIEW_LABELS[room.view] ?? room.view}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex flex-col items-center gap-1.5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm text-center">
+                      <Wind size={22} className="text-[#0D99FF]" />
+                      <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
+                        Ban công
+                      </span>
+                      <span className="text-sm font-bold text-gray-900">
+                        {room.balcony ? "Có ban công" : "Không có"}
+                      </span>
+                    </div>
+                  </div>
+                </section>
 
                 {/* Description */}
                 {room.description && (
