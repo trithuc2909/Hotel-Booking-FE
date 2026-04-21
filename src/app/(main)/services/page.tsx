@@ -4,10 +4,10 @@ import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import { SERVICES, SERVICE_CATEGORIES } from "@/constants/services";
-import { Tag, ChevronRight } from "lucide-react";
+import { Tag } from "lucide-react";
 import Image from "next/image";
 import { ASSETS } from "@/constants/assets";
+import { useGetServicesQuery } from "@/features/service/api/serviceApi";
 
 const FALLBACK =
   "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600";
@@ -21,11 +21,17 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function ServicesPage() {
   const [activeTab, setActiveTab] = useState("Tất cả");
+  const { data, isLoading } = useGetServicesQuery();
 
+  const services = data?.data ?? [];
+  const categories = [
+    "Tất cả",
+    ...Array.from(new Set(services.map((s) => s.category.name))),
+  ];
   const filtered =
     activeTab === "Tất cả"
-      ? SERVICES
-      : SERVICES.filter((s) => s.category === activeTab);
+      ? services
+      : services.filter((s) => s.category.name === activeTab);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -40,11 +46,9 @@ export default function ServicesPage() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
-
         {/* Hero */}
-        <div className="relative w-full h-74 overflow-hidden rounded-2xl mb-8">
+        <div className="relative w-full h-64 overflow-hidden rounded-2xl mb-8">
           <Image
             src={ASSETS.servicesHero}
             alt="Dịch vụ tiện ích"
@@ -61,9 +65,10 @@ export default function ServicesPage() {
             </p>
           </div>
         </div>
+
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-2 mb-8">
-          {SERVICE_CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
@@ -78,57 +83,66 @@ export default function ServicesPage() {
           ))}
         </div>
 
+        {/* Loading */}
+        {isLoading && (
+          <div className="space-y-5">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-36 bg-gray-100 rounded-2xl animate-pulse"
+              />
+            ))}
+          </div>
+        )}
+
         {/* Service Cards */}
-        <div className="space-y-5">
-          {filtered.map((service) => (
-            <div
-              key={service.id}
-              className="flex gap-5 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-            >
-              {/* Image */}
-              <div className="relative w-52 shrink-0">
-                <Image
-                  src={service.imageUrl}
-                  alt={service.name}
-                  fill
-                  className="object-cover"
-                  sizes="208px"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = FALLBACK;
-                  }}
-                />
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 py-5 pr-5">
-                {/* Category pill */}
-                <span
-                  className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full mb-2 ${CATEGORY_COLORS[service.category] ?? "bg-gray-100 text-gray-600"}`}
-                >
-                  <Tag size={11} />
-                  {service.category}
-                </span>
-
-                <h2 className="text-base font-bold text-gray-900 mb-1.5">
-                  {service.name}
-                </h2>
-
-                <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-3">
-                  {service.description}
-                </p>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-[#0D99FF]">
-                    Giá dịch vụ: {service.price}
+        {!isLoading && (
+          <div className="space-y-5">
+            {filtered.map((service) => (
+              <div
+                key={service.id}
+                className="flex gap-5 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+              >
+                <div className="relative w-52 shrink-0">
+                  <Image
+                    src={service.imageUrl ?? FALLBACK}
+                    alt={service.name}
+                    fill
+                    className="object-cover"
+                    sizes="208px"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = FALLBACK;
+                    }}
+                  />
+                </div>
+                <div className="flex-1 py-5 pr-5">
+                  <span
+                    className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full mb-2 ${CATEGORY_COLORS[service.category.name] ?? "bg-gray-100 text-gray-600"}`}
+                  >
+                    <Tag size={11} />
+                    {service.category.name}
                   </span>
-                  <button className="flex cursor-pointer items-center gap-1 text-xs font-medium text-white bg-[#0D99FF] hover:bg-[#0B84E6] transition-colors px-3 py-1.5 rounded-lg">
-                    Liên hệ
-                  </button>
+                  <h2 className="text-base font-bold text-gray-900 mb-1.5">
+                    {service.name}
+                  </h2>
+                  <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-3">
+                    {service.description}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-[#0D99FF]">
+                      Giá dịch vụ:{" "}
+                      {Number(service.basePrice).toLocaleString("vi-VN")} VNĐ /{" "}
+                      {service.unit}
+                    </span>
+                    <button className="flex cursor-pointer items-center gap-1 text-xs font-medium text-white bg-[#0D99FF] hover:bg-[#0B84E6] transition-colors px-3 py-1.5 rounded-lg">
+                      Liên hệ
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <Footer />

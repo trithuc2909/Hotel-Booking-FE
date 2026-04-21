@@ -5,6 +5,7 @@ import { userApi } from "@/features/user/api/userApi";
 import { roomApi } from "@/features/room/api/roomApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { lookupApi } from "@/features/room/api/lookupApi";
+import { serviceApi } from "@/features/service/api/serviceApi";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [roomApi.reducerPath]: roomApi.reducer,
     [lookupApi.reducerPath]: lookupApi.reducer,
+    [serviceApi.reducerPath]: serviceApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -23,6 +25,7 @@ export const store = configureStore({
       userApi.middleware,
       roomApi.middleware,
       lookupApi.middleware,
+      serviceApi.middleware,
     ),
 });
 
