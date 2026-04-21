@@ -1,3 +1,4 @@
+import { ASSETS } from "@/constants/assets";
 import { ReactNode } from "react";
 
 interface AuthLayoutProps {
@@ -21,8 +22,8 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           {/* Logo */}
           <div className="mb-8">
             <img
-              src="/images/logo-default.jpg"
-              alt="Hotel Booking Logo"
+              src={ASSETS.logoDefault}
+              alt="BullmanHotel Logo"
               className="w-24 h-24 object-contain rounded-full"
             />
           </div>

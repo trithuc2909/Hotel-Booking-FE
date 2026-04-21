@@ -1,5 +1,5 @@
 import { customBaseQueryWithReauth } from "@/lib/api/baseQuery";
-import { ApiResponse, PaginationMeta } from "@/types/common";
+import { ApiResponse } from "@/types/common";
 import {
   AdminRoomsFilter,
   RoomDetailResponse,
@@ -11,8 +11,16 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 export const roomApi = createApi({
   reducerPath: "roomApi",
   baseQuery: customBaseQueryWithReauth,
-  tagTypes: ["Rooms", "AdminRooms", "AdminRoomDetail"],
+  tagTypes: ["Rooms","RoomDetail", "AdminRooms", "AdminRoomDetail"],
   endpoints: (builder) => ({
+    getRoomById: builder.query<ApiResponse<RoomDetailResponse>, {
+      id: string;
+    }>({
+      query: ({id}) => `rooms/${id}`,
+      providesTags: (result, error, {id}) => [
+        {type: "RoomDetail", id}
+      ]
+    }),
     getRooms: builder.query<ApiResponse<RoomResponse[]>, RoomsFilter>({
       query: (filter = {}) => {
         const params = new URLSearchParams();
@@ -108,6 +116,7 @@ export const roomApi = createApi({
 });
 
 export const {
+  useGetRoomByIdQuery,
   useGetRoomsQuery,
   useGetAdminRoomByIdQuery,
   useGetAdminRoomsQuery,

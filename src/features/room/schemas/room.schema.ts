@@ -33,8 +33,9 @@ export const roomSchema = z
           .instanceof(File)
           .refine((file) => file.size <= IMAGE_MAX_SIZE, "Ảnh tối đa 5MB")
           .refine(
-            (file) => ["image/jpeg", "image/png"].includes(file.type),
-            "Chỉ chấp nhận JPG/PNG",
+            (file) =>
+              ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+            "Chỉ chấp nhận JPG/PNG/WEBP",
           ),
       )
       .max(4, "Tối đa 4 ảnh")

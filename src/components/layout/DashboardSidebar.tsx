@@ -9,6 +9,7 @@ import {
   ConciergeBell,
   Tag,
 } from "lucide-react";
+import { ASSETS } from "@/constants/assets";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Quản lý doanh thu", icon: LayoutDashboard },
@@ -33,6 +34,11 @@ export default function DashboardSidebar() {
     <aside className="flex h-screen w-60 shrink-0 flex-col bg-[#EEF4FF]">
       {/* Logo */}
       <div className="flex items-center gap-2 px-5 py-4 border-b border-blue-100">
+        <img
+          src={ASSETS.logoDefault}
+          alt="Logo"
+          className="h-8 w-8 rounded-full object-cover"
+        />
         <span className="text-[#0D99FF] font-bold text-base tracking-widest">
           BULLMAN HOTEL
         </span>

@@ -32,9 +32,6 @@ export function StarRating({ rating }: { rating: number | null }) {
 }
 
 export function RoomCard({ room }: { room: RoomResponse }) {
-  const DEFAULT_IMAGE =
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800";
-
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
       {/* Thumbnail */}
