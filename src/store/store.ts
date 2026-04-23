@@ -6,6 +6,7 @@ import { roomApi } from "@/features/room/api/roomApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { lookupApi } from "@/features/room/api/lookupApi";
 import { serviceApi } from "@/features/service/api/serviceApi";
+import { promotionApi } from "@/features/promotion/api/promotionApi";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     [roomApi.reducerPath]: roomApi.reducer,
     [lookupApi.reducerPath]: lookupApi.reducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
+    [promotionApi.reducerPath]: promotionApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -26,6 +28,7 @@ export const store = configureStore({
       roomApi.middleware,
       lookupApi.middleware,
       serviceApi.middleware,
+      promotionApi.middleware,
     ),
 });
 

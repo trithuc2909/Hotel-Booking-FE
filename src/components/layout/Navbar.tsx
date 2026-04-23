@@ -10,7 +10,7 @@ import { ASSETS } from "@/constants/assets";
 const NAV_LINKS = [
   { label: "Phòng & Giá", href: "/rooms" },
   { label: "Dịch vụ", href: "/services" },
-  { label: "Ưu đãi", href: "/offers" },
+  { label: "Ưu đãi", href: "/promotions" },
   { label: "Liên hệ", href: "/contact" },
 ] as const;
 
