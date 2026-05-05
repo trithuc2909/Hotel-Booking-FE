@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
+import { loginSchema, type LoginFormData } from "@/features/auth/schemas/auth.schema";
 import { useLoginMutation } from "@/features/auth/api/authApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

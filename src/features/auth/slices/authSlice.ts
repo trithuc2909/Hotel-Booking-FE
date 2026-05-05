@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import { LogOut } from "lucide-react";
-import { stringify } from "querystring";
-import { act } from "react";
 interface AuthState {
   isAuthenticated: boolean;
   userId: string | null;

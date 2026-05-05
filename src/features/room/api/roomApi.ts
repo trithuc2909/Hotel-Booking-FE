@@ -2,6 +2,7 @@ import { customBaseQueryWithReauth } from "@/lib/api/baseQuery";
 import { ApiResponse } from "@/types/common";
 import {
   AdminRoomsFilter,
+  AvailableRoomResponse,
   RoomDetailResponse,
   RoomResponse,
   RoomsFilter,
@@ -11,15 +12,16 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 export const roomApi = createApi({
   reducerPath: "roomApi",
   baseQuery: customBaseQueryWithReauth,
-  tagTypes: ["Rooms","RoomDetail", "AdminRooms", "AdminRoomDetail"],
+  tagTypes: ["Rooms", "RoomDetail", "AdminRooms", "AdminRoomDetail"],
   endpoints: (builder) => ({
-    getRoomById: builder.query<ApiResponse<RoomDetailResponse>, {
-      id: string;
-    }>({
-      query: ({id}) => `rooms/${id}`,
-      providesTags: (result, error, {id}) => [
-        {type: "RoomDetail", id}
-      ]
+    getRoomById: builder.query<
+      ApiResponse<RoomDetailResponse>,
+      {
+        id: string;
+      }
+    >({
+      query: ({ id }) => `rooms/${id}`,
+      providesTags: (result, error, { id }) => [{ type: "RoomDetail", id }],
     }),
     getRooms: builder.query<ApiResponse<RoomResponse[]>, RoomsFilter>({
       query: (filter = {}) => {
@@ -112,6 +114,20 @@ export const roomApi = createApi({
       }),
       invalidatesTags: ["AdminRooms"],
     }),
+    getAvailableRooms: builder.query<
+      ApiResponse<AvailableRoomResponse[]>,
+      {
+        checkInDate: string;
+        checkOutDate: string;
+        guests: number;
+        excludeRoomId?: string;
+      }
+    >({
+      query: ({ checkInDate, checkOutDate, guests, excludeRoomId }) => ({
+        url: "/rooms/available",
+        params: { checkInDate, checkOutDate, guests, excludeRoomId },
+      }),
+    }),
   }),
 });
 
@@ -124,4 +140,5 @@ export const {
   useDeleteRoomMutation,
   useCreateRoomMutation,
   useUpdateRoomByIdMutation,
+  useGetAvailableRoomsQuery,
 } = roomApi;

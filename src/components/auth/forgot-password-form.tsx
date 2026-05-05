@@ -8,7 +8,7 @@ import { Mail, ArrowLeft } from "lucide-react";
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
-} from "@/lib/validations/auth";
+} from "@/features/auth/schemas/auth.schema";
 import { useForgotPasswordMutation } from "@/features/auth/api/authApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

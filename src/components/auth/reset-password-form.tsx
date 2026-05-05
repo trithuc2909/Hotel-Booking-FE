@@ -11,7 +11,7 @@ import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import {
   resetPasswordSchema,
   type ResetPasswordFormData,
-} from "@/lib/validations/auth";
+} from "@/features/auth/schemas/auth.schema";
 
 import {
   useResetPasswordMutation,

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 // Import validation schema
-import { registerSchema, type RegisterFormData } from "@/lib/validations/auth";
+import { registerSchema, type RegisterFormData } from "@/features/auth/schemas/auth.schema";
 
 // Import Redux mutation
 import { useRegisterMutation } from "@/features/auth/api/authApi";

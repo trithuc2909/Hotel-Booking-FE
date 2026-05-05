@@ -74,6 +74,25 @@ export type AdminRoomsFilter = {
   search?: string;
 };
 
+export type AvailableRoomResponse = {
+  id: string;
+  roomName: string;
+  thumbnailUrl: string | null;
+  basePrice: number;
+  maxGuests: number;
+  bedType: string | null;
+  roomTypeId: string;
+  roomTypeName: string;
+};
+
+export type SelectedRoom = {
+  roomId: string;
+  roomName: string;
+  thumbnailUrl: string | null;
+  basePrice: number;
+  nights: number;
+};
+
 export const ROOM_STATUS = {
   AVAILABLE: "AVL",
   OCCUPIED: "OCP",

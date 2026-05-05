@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import {
   verifyOTPSchema,
   type VerifyOTPFormData,
-} from "@/lib/validations/auth";
+} from "@/features/auth/schemas/auth.schema";
 // Import Redux mutations
 import {
   useVerifyOTPMutation,

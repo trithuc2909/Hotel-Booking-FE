@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Users, ChevronRight } from "lucide-react";
+import { Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { RoomDetailResponse } from "@/features/room/types/room.type";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
@@ -29,7 +29,7 @@ export default function BookingWidget({ room }: Props) {
   const total = subtotal + tax;
 
   const handleBook = () => {
-    router.push(`/bookings/new?roomId=${room.id}&checkIn=${checkIn}&checkOut=${checkOut}`);
+    router.push(`/bookings/create?roomId=${room.id}&checkInDate=${checkIn}&checkOutDate=${checkOut}&guests=${room.maxGuests}`);
   };
 
   return (
@@ -59,13 +59,13 @@ export default function BookingWidget({ room }: Props) {
           <div key={label} className="space-y-1">
             <label className="block text-xs font-medium text-gray-500">{label}</label>
             <div className="relative">
-              <Calendar size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               <input
                 type="date"
                 value={value}
                 min={min}
                 onChange={(e) => onChange(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 pl-7 pr-2 py-2 text-sm focus:outline-none focus:border-[#0D99FF]"
+                className="w-full rounded-lg border border-gray-200 pl-4 pr-2 py-2 text-sm focus:outline-none focus:border-[#0D99FF]"
               />
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function BookingWidget({ room }: Props) {
       <div className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700">
         <Users size={14} className="text-gray-400" />
         <span>Số lượng khách</span>
-        <span className="ml-auto text-xs text-gray-400">Tối đa {room.maxGuests} người</span>
+        <span className="ml-auto text-sm font-medium text-gray-700">{room.maxGuests} người lớn</span>
       </div>
 
       <hr className="border-gray-100" />
@@ -99,7 +99,7 @@ export default function BookingWidget({ room }: Props) {
       </div>
 
       {/* Book now button */}
-      <button onClick={handleBook} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0D99FF] py-3 text-sm font-semibold text-white hover:bg-[#0B84E6] transition-colors">
+      <button onClick={handleBook} className="cursor-pointer flex w-full items-center justify-center gap-2 rounded-xl bg-[#0D99FF] py-3 text-sm font-semibold text-white hover:bg-[#0B84E6] transition-colors">
         Đặt phòng ngay
       </button>
     </div>

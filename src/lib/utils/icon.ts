@@ -1,6 +1,7 @@
 import {
   Wifi, Bath, Tv, Waves, Wine, DoorOpen, Flame, Coffee,
   Wind, Shirt, Archive, Zap, Thermometer, Fan,
+  Car, Sparkles, Heart, Map,
   type LucideIcon,
 } from "lucide-react";
 
@@ -19,6 +20,10 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   "zap":         Zap,
   "thermometer": Thermometer,
   "fan":         Fan,
+  "car":         Car,
+  "sparkles":    Sparkles,
+  "heart":       Heart,
+  "map":         Map,
 };
 
 export function getIconComponent(iconName: string | null): LucideIcon | null {
