@@ -128,6 +128,12 @@ export const roomApi = createApi({
         params: { checkInDate, checkOutDate, guests, excludeRoomId },
       }),
     }),
+    getOccupiedDateRangesForRoom: builder.query<
+      ApiResponse<{ checkInDate: string; checkOutDate: string }[]>,
+      string
+    >({
+      query: (roomId) => `/rooms/${roomId}/availability`,
+    }),
   }),
 });
 
@@ -141,4 +147,5 @@ export const {
   useCreateRoomMutation,
   useUpdateRoomByIdMutation,
   useGetAvailableRoomsQuery,
+  useGetOccupiedDateRangesForRoomQuery,
 } = roomApi;

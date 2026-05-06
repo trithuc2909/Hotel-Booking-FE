@@ -13,7 +13,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import ServiceModal from "../components/ServiceModal";
@@ -21,12 +21,19 @@ import { SelectedService } from "../types/booking.type";
 import { getIconComponent } from "@/lib/utils/icon";
 import RoomSuggestionModal from "../components/RoomSuggestionModal";
 import { SelectedRoom } from "@/features/room/types/room.type";
+import { useGetMeQuery } from "@/features/user/api/userApi";
+import {
+  useCreateBookingMutation,
+  useCreateVNPayPaymentMutation,
+} from "@/features/booking/api/bookingApi";
+import { toast } from "sonner";
+import { useLazyValidatePromoCodeQuery } from "@/features/promotion/api/promotionApi";
 
 function BookingContent() {
   const params = useSearchParams();
   const roomId = params.get("roomId") ?? "";
-  const checkIn = params.get("checkInDate") ?? "";
-  const checkOut = params.get("checkOutDate") ?? "";
+  const checkInDate = params.get("checkInDate") ?? "";
+  const checkOutDate = params.get("checkOutDate") ?? "";
   const guests = Number(params.get("guests") ?? 1);
 
   const { data, isLoading } = useGetRoomByIdQuery(
@@ -46,6 +53,9 @@ function BookingContent() {
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [promotionId, setPromotionId] = useState<string | null>(null);
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+
+  const [validatePromoCode] = useLazyValidatePromoCodeQuery();
 
   const [selectedRooms, setSelectedRooms] = useState<SelectedRoom[]>([]);
   const [showRoomModal, setShowRoomModal] = useState(false);
@@ -54,25 +64,44 @@ function BookingContent() {
     if (!room) return;
     setSelectedRooms((prev) => {
       if (prev.some((r) => r.roomId === room.id)) return prev;
-      return [{
-        roomId: room.id,
-        roomName: room.roomName,
-        thumbnailUrl: room.thumbnailUrl,
-        basePrice: Number(room.basePrice),
-        nights,
-      }];
+      return [
+        {
+          roomId: room.id,
+          roomName: room.roomName,
+          thumbnailUrl: room.thumbnailUrl,
+          basePrice: Number(room.basePrice),
+          nights,
+        },
+      ];
     });
   }, [room?.id]);
 
   const nights = Math.max(
     1,
     Math.round(
-      (new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86_400_000,
+      (new Date(checkOutDate).getTime() - new Date(checkInDate).getTime()) /
+        86_400_000,
     ),
   );
 
-  const roomsTotal = selectedRooms.reduce((sum, r) => sum + r.basePrice * r.nights, 0);
-  const servicesTotal = selectedServices.reduce((sum, s) => sum + s.basePrice, 0);
+  const { data: meData } = useGetMeQuery();
+  const profile = meData?.data;
+
+  useEffect(() => {
+    if (profile) {
+      if (profile.fullName) setFullName(profile.fullName);
+      if (profile.phone) setPhoneNumber(profile.phone);
+    }
+  }, [profile?.fullName, profile?.phone]);
+
+  const roomsTotal = selectedRooms.reduce(
+    (sum, r) => sum + r.basePrice * r.nights,
+    0,
+  );
+  const servicesTotal = selectedServices.reduce(
+    (sum, s) => sum + s.basePrice,
+    0,
+  );
   const subtotal = roomsTotal + servicesTotal;
   const tax = Math.round(subtotal * 0.1);
   const total = subtotal + tax - discount;
@@ -85,6 +114,71 @@ function BookingContent() {
         Không tìm thấy phòng.
       </div>
     );
+
+  const router = useRouter();
+  const [createBooking, { isLoading: isCreating }] = useCreateBookingMutation();
+  const [createVNPayPayment, { isLoading: isPaying }] =
+    useCreateVNPayPaymentMutation();
+
+  const isSubmitting = isCreating || isPaying;
+
+  const handleApplyPromo = async () => {
+    const code = promoCode.trim().toUpperCase();
+    if (!code) {
+      toast.error("Vui lòng nhập mã khuyến mãi");
+      return;
+    }
+    setIsApplyingPromo(true);
+    try {
+      const res = await validatePromoCode({
+        code,
+        orderValue: subtotal + tax,
+      }).unwrap();
+      const promo = res.data;
+      setDiscount(promo.discountAmount);
+      setPromotionId(promo.promotionId);
+      setPromoCode(code);
+      toast.success(`Áp dụng "${promo.title}" - giảm ${formatCurrency(promo.discountAmount)}`);
+    } catch (err: any) {
+      const msg = err?.data?.message ?? "Mã khuyến mãi không hợp lệ";
+      toast.error(msg);
+      setDiscount(0);
+      setPromotionId(null);
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
+
+  const handleConfirmPayment = async () => {
+    if (selectedRooms.length === 0) {
+      toast.error("Vui lòng chọn ít nhất 1 phòng");
+      return;
+    }
+
+    try {
+      const bookingRes = await createBooking({
+        checkInDate: checkInDate,
+        checkOutDate: checkOutDate,
+        numberOfGuests: guests,
+        promotionId: promotionId ?? undefined,
+        rooms: selectedRooms.map((r) => ({ roomId: r.roomId })),
+        services: selectedServices.map((s) => ({
+          serviceId: s.id,
+          quantity: 1,
+        })),
+      }).unwrap();
+
+      const bookingId = bookingRes.data.bookingId;
+
+      const paymentRes = await createVNPayPayment({
+        bookingId,
+      }).unwrap();
+
+      window.location.href = paymentRes.data.payUrl;
+    } catch (error) {
+      toast.error("Phòng này vừa được đặt bởi khách khác trong khoảng thời gian bạn chọn. Vui lòng chọn ngày hoặc phòng khác.");
+    }
+  };
 
   return (
     <div className="flex gap-8 items-start">
@@ -132,27 +226,41 @@ function BookingContent() {
                 Thông tin phòng đã chọn
               </h2>
             </div>
-            <span className="text-xs text-gray-400">{selectedRooms.length} phòng</span>
+            <span className="text-xs text-gray-400">
+              {selectedRooms.length} phòng
+            </span>
           </div>
 
           {/* Unified room list */}
           <div className="space-y-3">
             {selectedRooms.map((r) => (
-              <div key={r.roomId} className="relative flex gap-4 rounded-xl border border-gray-100 bg-gray-50 p-3">
+              <div
+                key={r.roomId}
+                className="relative flex gap-4 rounded-xl border border-gray-100 bg-gray-50 p-3"
+              >
                 <div className="relative w-28 h-20 shrink-0 rounded-lg overflow-hidden bg-gray-200">
                   {r.thumbnailUrl && (
-                    <Image src={r.thumbnailUrl} alt={r.roomName} fill className="object-cover" />
+                    <Image
+                      src={r.thumbnailUrl}
+                      alt={r.roomName}
+                      fill
+                      className="object-cover"
+                    />
                   )}
                 </div>
                 <div className="flex-1 min-w-0 space-y-1">
-                  <p className="text-sm font-bold text-gray-900 truncate pr-6">{r.roomName}</p>
+                  <p className="text-sm font-bold text-gray-900 truncate pr-6">
+                    {r.roomName}
+                  </p>
                   <div className="flex items-center gap-1 text-xs text-gray-500">
                     <Users size={11} />
                     <span>{guests} người lớn</span>
                   </div>
                   <div className="flex items-center gap-1 text-xs text-gray-500">
                     <CalendarDays size={11} />
-                    <span>{checkIn} → {checkOut}</span>
+                    <span>
+                      {checkInDate} → {checkOutDate}
+                    </span>
                   </div>
                   <p className="text-xs font-semibold text-[#0D99FF]">
                     {r.nights} đêm · {formatCurrency(r.basePrice * r.nights)}
@@ -160,7 +268,11 @@ function BookingContent() {
                 </div>
                 {/* Remove button */}
                 <button
-                  onClick={() => setSelectedRooms((prev) => prev.filter((x) => x.roomId !== r.roomId))}
+                  onClick={() =>
+                    setSelectedRooms((prev) =>
+                      prev.filter((x) => x.roomId !== r.roomId),
+                    )
+                  }
                   className="absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors cursor-pointer"
                 >
                   <X size={15} />
@@ -169,7 +281,9 @@ function BookingContent() {
             ))}
 
             {selectedRooms.length === 0 && (
-              <p className="text-sm text-gray-400 text-center py-4">Chưa chọn phòng nào</p>
+              <p className="text-sm text-gray-400 text-center py-4">
+                Chưa chọn phòng nào
+              </p>
             )}
           </div>
         </section>
@@ -180,13 +294,15 @@ function BookingContent() {
           className="cursor-pointer w-full flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 py-4 hover:border-[#0D99FF] hover:bg-blue-50 transition-colors"
         >
           <Plus size={18} className="text-gray-400" />
-          <span className="text-sm text-gray-500">Thêm phòng khác vào đặt phòng</span>
+          <span className="text-sm text-gray-500">
+            Thêm phòng khác vào đặt phòng
+          </span>
         </button>
 
         {showRoomModal && (
           <RoomSuggestionModal
-            checkInDate={checkIn}
-            checkOutDate={checkOut}
+            checkInDate={checkInDate}
+            checkOutDate={checkOutDate}
             guests={guests}
             nights={nights}
             selected={selectedRooms}
@@ -270,7 +386,10 @@ function BookingContent() {
           {/* Line items */}
           <div className="space-y-2.5 text-sm text-gray-600 border-t border-gray-100 pt-4">
             {selectedRooms.map((r) => (
-              <div key={r.roomId} className="flex justify-between items-start gap-2">
+              <div
+                key={r.roomId}
+                className="flex justify-between items-start gap-2"
+              >
                 <span className="leading-snug">
                   {r.roomName}{" "}
                   <span className="text-gray-400">({r.nights} đêm)</span>
@@ -286,7 +405,9 @@ function BookingContent() {
               <div className="flex justify-between items-center gap-2">
                 <span>
                   Dịch vụ bổ sung{" "}
-                  <span className="text-gray-400">({selectedServices.length})</span>
+                  <span className="text-gray-400">
+                    ({selectedServices.length})
+                  </span>
                 </span>
                 <span className="shrink-0 font-medium text-gray-800">
                   {formatCurrency(servicesTotal)}
@@ -307,9 +428,15 @@ function BookingContent() {
               <div className="flex justify-between items-center gap-2 text-green-600">
                 <span className="font-medium">Khuyến mãi</span>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="font-medium">- {formatCurrency(discount)}</span>
+                  <span className="font-medium">
+                    - {formatCurrency(discount)}
+                  </span>
                   <button
-                    onClick={() => { setDiscount(0); setPromoCode(""); setPromotionId(null); }}
+                    onClick={() => {
+                      setDiscount(0);
+                      setPromoCode("");
+                      setPromotionId(null);
+                    }}
                     className="p-0.5 rounded-full hover:bg-green-50 transition-colors cursor-pointer"
                   >
                     <X size={13} className="text-green-500" />
@@ -322,7 +449,9 @@ function BookingContent() {
           {/* Total */}
           <div className="border-t border-gray-100 pt-4">
             <div className="flex justify-between items-start gap-2">
-              <span className="text-base font-bold text-gray-900">Tổng cộng</span>
+              <span className="text-base font-bold text-gray-900">
+                Tổng cộng
+              </span>
               <div className="text-right">
                 <p className="text-2xl font-bold text-[#0D99FF] leading-tight">
                   {formatCurrency(total)}
@@ -346,21 +475,33 @@ function BookingContent() {
               {/* Check icon */}
               <div className="w-5 h-5 rounded-full bg-[#0D99FF] flex items-center justify-center shrink-0">
                 <svg width="11" height="8" viewBox="0 0 11 8" fill="none">
-                  <path d="M1 4L4 7L10 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path
+                    d="M1 4L4 7L10 1"
+                    stroke="white"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </div>
             </div>
           </div>
 
           {/* Confirm button */}
-          <button className="cursor-pointer w-full rounded-xl bg-[#0D99FF] py-3.5 text-sm font-semibold text-white hover:bg-[#0B84E6] active:scale-[0.98] transition-all">
-            Xác nhận thanh toán
+          <button
+            onClick={handleConfirmPayment}
+            disabled={isSubmitting}
+            className="cursor-pointer w-full rounded-xl bg-[#0D99FF] py-3.5 text-sm font-semibold text-white hover:bg-[#0B84E6] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? "Đang xử lý..." : "Xác nhận thanh toán"}
           </button>
 
           {/* Disclaimer */}
           <p className="text-[11px] text-gray-400 text-center leading-relaxed">
             Bằng cách nhấn nút, bạn đồng ý với các{" "}
-            <span className="text-[#0D99FF] underline cursor-pointer">Điều khoản và Điều kiện</span>{" "}
+            <span className="text-[#0D99FF] underline cursor-pointer">
+              Điều khoản và Điều kiện
+            </span>{" "}
             của BullMan Hotel.
           </p>
         </div>
@@ -373,20 +514,27 @@ function BookingContent() {
           <div className="flex gap-2">
             <input
               value={promoCode}
-              onChange={(e) => setPromoCode(e.target.value)}
+              onChange={(e) => {
+                setPromoCode(e.target.value.toUpperCase());
+                if (promotionId) {
+                  setDiscount(0);
+                  setPromotionId(null);
+                }
+              }}
+              onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
               placeholder="Nhập mã khuyến mãi"
               className="flex-1 rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-[#0D99FF]"
             />
             <button
-              onClick={() => {}}
-              className="rounded-lg border border-[#0D99FF] bg-white px-4 py-2 text-sm font-semibold text-[#0D99FF] hover:bg-[#0D99FF] hover:text-white transition-colors"
+              onClick={handleApplyPromo}
+              disabled={isApplyingPromo || !!promotionId}
+              className="rounded-lg border border-[#0D99FF] bg-white px-4 py-2 text-sm font-semibold text-[#0D99FF] hover:bg-[#0D99FF] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              Áp dụng
+              {isApplyingPromo ? "..." : promotionId ? "Đã dùng" : "Áp dụng"}
             </button>
           </div>
         </div>
       </div>
-
     </div>
   );
 }

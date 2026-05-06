@@ -7,6 +7,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { lookupApi } from "@/features/room/api/lookupApi";
 import { serviceApi } from "@/features/service/api/serviceApi";
 import { promotionApi } from "@/features/promotion/api/promotionApi";
+import { bookingApi } from "@/features/booking/api/bookingApi";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     [lookupApi.reducerPath]: lookupApi.reducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
     [promotionApi.reducerPath]: promotionApi.reducer,
+    [bookingApi.reducerPath]: bookingApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -29,6 +31,7 @@ export const store = configureStore({
       lookupApi.middleware,
       serviceApi.middleware,
       promotionApi.middleware,
+      bookingApi.middleware,
     ),
 });
 

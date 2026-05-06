@@ -6,10 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Save, CheckCircle2 } from "lucide-react";
 import { colors } from "@/constants/colors";
 
-// ─────────────────────────────────────────────────────────────
-// TODO (BE): Import và dùng mutation khi có API
-// import { useChangePasswordMutation } from "@/features/user/api/userApi";
-// ─────────────────────────────────────────────────────────────
+import { useChangePasswordMutation } from "@/features/user/api/userApi";
+import { toast } from "sonner";
 
 function PasswordInput({
   id,
@@ -59,9 +57,7 @@ function PasswordInput({
 }
 
 export default function ChangePasswordForm() {
-  // TODO (BE): Bỏ comment khi có API
-  // const [changePassword, { isLoading }] = useChangePasswordMutation();
-  const isLoading = false; // TODO (BE): Xoá dòng này
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
 
   const [form, setForm] = useState({
     oldPassword: "",
@@ -100,22 +96,20 @@ export default function ChangePasswordForm() {
       return;
     }
 
-    // TODO (BE): Gọi API thực tế tại đây
-    // try {
-    //   await changePassword({
-    //     oldPassword: form.oldPassword,
-    //     newPassword: form.newPassword,
-    //     confirmPassword: form.confirmPassword,
-    //   }).unwrap();
-    // } catch (err) {
-    //   setErrors({ oldPassword: "Mật khẩu cũ không đúng" });
-    //   return;
-    // }
+    try {
+      await changePassword({
+        oldPassword: form.oldPassword,
+        newPassword: form.newPassword,
+        confirmPassword: form.confirmPassword,
+      }).unwrap();
 
-    // Giả lập thành công (xoá khi có BE)
-    setSaved(true);
-    setForm({ oldPassword: "", newPassword: "", confirmPassword: "" });
-    setTimeout(() => setSaved(false), 3000);
+      setSaved(true);
+      setForm({ oldPassword: "", newPassword: "", confirmPassword: "" });
+      toast.success("Đổi mật khẩu thành công");
+      setTimeout(() => setSaved(false), 3000);
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Đổi mật khẩu thất bại");
+    }
   };
 
   return (
@@ -125,7 +119,6 @@ export default function ChangePasswordForm() {
       </h2>
 
       <div className="grid grid-cols-1 gap-4">
-        {/* Mật khẩu cũ */}
         <div>
           <label
             htmlFor="pwd-old"
@@ -142,7 +135,6 @@ export default function ChangePasswordForm() {
           />
         </div>
 
-        {/* Mật khẩu mới */}
         <div>
           <label
             htmlFor="pwd-new"
@@ -159,7 +151,6 @@ export default function ChangePasswordForm() {
           />
         </div>
 
-        {/* Xác nhận mật khẩu */}
         <div>
           <label
             htmlFor="pwd-confirm"
@@ -177,7 +168,6 @@ export default function ChangePasswordForm() {
         </div>
       </div>
 
-      {/* Nút Lưu */}
       <div className="flex items-center justify-end gap-3 mt-6">
         {saved && (
           <span className="flex items-center gap-1.5 text-sm text-green-600 animate-in fade-in">
@@ -189,11 +179,11 @@ export default function ChangePasswordForm() {
           id="change-pwd-save-btn"
           onClick={handleSubmit}
           disabled={isLoading}
-          className="flex items-center gap-2 text-white rounded-lg px-5"
+          className="flex items-center gap-2 text-white rounded-lg px-5 cursor-pointer"
           style={{ backgroundColor: colors.primary.blue }}
         >
           <Save size={15} />
-          {isLoading ? "Đang lưu..." : "Lưu"}
+          {isLoading ? "Đang lưu..." : "Lưu thông tin"}
         </Button>
       </div>
     </div>

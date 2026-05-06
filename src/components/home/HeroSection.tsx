@@ -31,8 +31,8 @@ const ROOM_TYPES = [
 const GUEST_OPTIONS = [
   { value: "1", label: "1 người lớn" },
   { value: "2", label: "2 người lớn" },
-  { value: "3", label: "2 người lớn, 1 trẻ em" },
-  { value: "4", label: "2 người lớn, 2 trẻ em" },
+  { value: "3", label: "3 người lớn" },
+  { value: "4", label: "4 người lớn" },
 ] as const;
 
 export default function HeroSection() {
@@ -90,7 +90,7 @@ export default function HeroSection() {
                 </SelectTrigger>
                 <SelectContent side="bottom" position="popper" sideOffset={3} className="w-[var(--radix-select-trigger-width)]" avoidCollisions={false}>
                   {ROOM_TYPES.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
+                    <SelectItem key={type.value} value={type.value} className="cursor-pointer" >
                       {type.label}
                     </SelectItem>
                   ))}
@@ -194,7 +194,7 @@ export default function HeroSection() {
                   </SelectTrigger>
                   <SelectContent side="bottom" position="popper" sideOffset={3} className="w-[var(--radix-select-trigger-width)]" avoidCollisions={false}>
                     {GUEST_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
+                      <SelectItem key={opt.value} value={opt.value} className="cursor-pointer">
                         {opt.label}
                       </SelectItem>
                     ))}

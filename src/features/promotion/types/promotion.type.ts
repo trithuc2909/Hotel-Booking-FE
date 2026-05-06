@@ -20,5 +20,15 @@ export type PromotionResponse = {
   status: string;
 };
 
-export type DiscountType = (typeof discountType)[keyof typeof discountType];
+export type ValidatePromoResponse = {
+  promotionId: string;
+  title: string;
+  code: string;
+  discountType: string;
+  discountValue: number;
+  discountAmount: number;
+  originalAmount: number;
+  finalAmount: number;
+};
 
+export type DiscountType = (typeof discountType)[keyof typeof discountType];
