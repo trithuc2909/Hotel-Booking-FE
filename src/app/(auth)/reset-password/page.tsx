@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import ResetPasswordForm from "@/components/auth/reset-password-form";
+import ResetPasswordForm from "@/features/auth/components/reset-password-form";
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Đặt lại mật khẩu - BullManHotel",

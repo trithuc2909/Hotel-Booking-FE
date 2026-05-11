@@ -2,19 +2,11 @@
 
 import { useState } from "react";
 import { Star } from "lucide-react";
-import { BookingHistory, BookingHistoryStatus } from "@/features/user/mock/bookingHistoryMock";
+import { BookingHistoryItem } from "@/features/booking/types/booking.type";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
+import { STATUS_COLOR } from "@/constants/colors";
+import Link from "next/link";
 
-// ── Status badge config ────────────────────────────────────────
-const STATUS_CFG: Record<
-  BookingHistoryStatus,
-  { label: string; className: string }
-> = {
-  completed: { label: "Đã hoàn thành",       className: "bg-emerald-100 text-emerald-700" },
-  paid:      { label: "Đã thanh toán",        className: "bg-orange-100 text-orange-700"  },
-  cancelled: { label: "Đã huỷ và hoàn tiền", className: "bg-red-100 text-red-600"        },
-};
-
-// ── Star rating component ──────────────────────────────────────
 function StarRating({
   value,
   onChange,
@@ -23,6 +15,7 @@ function StarRating({
   onChange: (v: number) => void;
 }) {
   const [hovered, setHovered] = useState(0);
+
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((star) => (
@@ -32,7 +25,7 @@ function StarRating({
           onClick={() => onChange(star)}
           onMouseEnter={() => setHovered(star)}
           onMouseLeave={() => setHovered(0)}
-          className="p-0.5 transition-transform hover:scale-110"
+          className="transition-transform hover:scale-110"
         >
           <Star
             size={18}
@@ -48,7 +41,6 @@ function StarRating({
   );
 }
 
-// ── Review section (chỉ hiện khi completed) ───────────────────
 function ReviewSection({ bookingId }: { bookingId: string }) {
   const [rating, setRating] = useState(4);
   const [review, setReview] = useState("");
@@ -56,37 +48,47 @@ function ReviewSection({ bookingId }: { bookingId: string }) {
 
   const handleSubmit = () => {
     if (!review.trim()) return;
-    // TODO (BE): POST /bookings/:id/review { rating, comment }
-    console.log("TODO (BE): Submit review for", bookingId, { rating, review });
     setSubmitted(true);
   };
 
   if (submitted) {
     return (
-      <div className="mt-4 border-t border-gray-100 pt-4">
-        <p className="text-sm text-emerald-600 font-medium">✓ Cảm ơn bạn đã gửi đánh giá!</p>
+      <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+        <p className="text-sm font-medium text-emerald-700">
+          ✓ Cảm ơn bạn đã gửi đánh giá!
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="mt-4 border-t border-gray-100 pt-4 space-y-3">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-700">Trải nghiệm của bạn thế nào?</p>
+    <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h4 className="text-sm font-semibold text-gray-800">
+            Trải nghiệm của bạn thế nào?
+          </h4>
+
+          <p className="mt-1 text-xs text-gray-500">
+            Chia sẻ cảm nhận để giúp khách sạn cải thiện dịch vụ tốt hơn.
+          </p>
+        </div>
+
         <StarRating value={rating} onChange={setRating} />
       </div>
+
       <textarea
         value={review}
         onChange={(e) => setReview(e.target.value)}
         placeholder="Chia sẻ trải nghiệm của bạn tại khách sạn..."
-        rows={3}
-        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:border-[#0D99FF] focus:outline-none focus:ring-1 focus:ring-[#0D99FF] resize-none"
+        rows={4}
+        className="mt-4 w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[#0B30A7]"
       />
-      <div className="flex justify-end">
+
+      <div className="mt-4 flex justify-end">
         <button
           onClick={handleSubmit}
-          className="rounded-xl px-6 py-2 text-sm font-semibold text-white transition-colors"
-          style={{ backgroundColor: "#0B30A7" }}
+          className="cursor-pointer rounded-lg bg-[#083344] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
         >
           Gửi đánh giá
         </button>
@@ -95,59 +97,70 @@ function ReviewSection({ bookingId }: { bookingId: string }) {
   );
 }
 
-// ── Main card ──────────────────────────────────────────────────
-type Props = { booking: BookingHistory };
+type Props = {
+  booking: BookingHistoryItem;
+};
 
 export default function BookingHistoryCard({ booking }: Props) {
-  const status = STATUS_CFG[booking.status];
+  const colorClass =
+    STATUS_COLOR[booking.status.code] ||
+    "bg-gray-100 text-gray-700 border-gray-200";
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
-      {/* ── Card header ── */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
-        <div className="flex items-center gap-3">
-          <p className="font-semibold text-gray-800 text-sm">
-            Đơn đặt phòng {booking.id}
+    <div className="overflow-hidden rounded-md border border-gray-300 bg-white">
+      <div className="flex items-start justify-between border-b border-gray-200 px-5 py-4">
+        <div>
+          <div className="flex items-center gap-3">
+            <h3 className="text-[18px] font-bold text-[#1E3A5F]">
+              Đơn đặt phòng: {booking.bookingCode}
+            </h3>
+
+            <span
+              className={`rounded-full border px-3 py-1 text-xs font-semibold ${colorClass}`}
+            >
+              {booking.status.displayAs}
+            </span>
+          </div>
+
+          <p className="mt-1 text-xs text-gray-500">
+            {new Date(booking.checkInDate).toLocaleDateString("vi-VN")} -{" "}
+            {new Date(booking.checkOutDate).toLocaleDateString("vi-VN")}
           </p>
-          <span className={`inline-block rounded-full px-3 py-0.5 text-xs font-semibold ${status.className}`}>
-            {status.label}
-          </span>
         </div>
-        {/* TODO (BE): Navigate /bookings/:id hoặc mở modal chi tiết */}
-        <button className="rounded-lg border border-[#0D99FF] px-4 py-1.5 text-xs font-semibold text-[#0D99FF] hover:bg-blue-50 transition-colors">
+
+        <Link
+          href={`/booking-history/${booking.id}`}
+          className="cursor-pointer rounded-md bg-[#1696F9] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0D8AE9]"
+        >
           Xem chi tiết
-        </button>
+        </Link>
       </div>
 
-      {/* ── Card body ── */}
-      <div className="px-6 py-5">
-        {/* Date */}
-        <p className="text-xs text-gray-400 mb-4">
-          {booking.startDate} – {booking.endDate}
-        </p>
-
-        {/* Two-column: rooms | services */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* DANH SÁCH PHÒNG */}
-          <div>
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3">
+      <div className="px-5 py-5">
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
+          <div className="md:border-r md:border-gray-200 md:pr-6">
+            <p className="mb-4 text-sm font-bold uppercase tracking-wide text-gray-700">
               Danh sách phòng
             </p>
-            <div className="space-y-3">
-              {booking.rooms.map((room, i) => (
-                <div key={i} className="flex items-center gap-3">
+
+            <div className="space-y-4">
+              {booking.rooms.map((room) => (
+                <div key={room.roomId} className="flex items-start gap-3">
                   <img
-                    src={room.imageUrl}
-                    alt={room.name}
-                    className="h-10 w-14 rounded-lg object-cover shrink-0"
+                    src={room.thumbnailUrl || "/images/room-placeholder.png"}
+                    alt={room.roomName}
+                    className="h-12 w-12 rounded object-cover"
                   />
-                  <div className="flex-1 flex items-center justify-between">
-                    <p className="text-sm text-gray-700">
-                      {room.name}{" "}
-                      <span className="text-gray-400">({room.nights} đêm)</span>
-                    </p>
-                    <p className="text-sm font-semibold text-gray-800 whitespace-nowrap">
-                      {room.price.toLocaleString("vi-VN")}
+
+                  <div className="flex flex-1 items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">
+                        {room.roomName} ({room.nights} đêm)
+                      </p>
+                    </div>
+
+                    <p className="text-sm font-bold text-gray-800 whitespace-nowrap">
+                      {formatCurrency(room.pricePerNight)}
                     </p>
                   </div>
                 </div>
@@ -155,24 +168,26 @@ export default function BookingHistoryCard({ booking }: Props) {
             </div>
           </div>
 
-          {/* DỊCH VỤ ĐI KÈM */}
           <div>
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3">
+            <p className="mb-4 text-sm font-bold uppercase tracking-wide text-gray-700">
               Dịch vụ đi kèm
             </p>
-            <ul className="space-y-2">
-              {booking.services.map((svc, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                  <span className="h-1.5 w-1.5 rounded-full bg-gray-400 shrink-0" />
-                  {svc.quantity}x {svc.name}
-                </li>
-              ))}
-            </ul>
+
+            {booking.services.length > 0 ? (
+              <ul className="space-y-3">
+                {booking.services.map((svc, i) => (
+                  <li key={i} className="text-sm text-gray-700">
+                    • {svc.quantity}x {svc.serviceName}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-gray-400">Không có dịch vụ đi kèm</p>
+            )}
           </div>
         </div>
 
-        {/* Review section – chỉ hiện khi đã hoàn thành */}
-        {booking.status === "completed" && (
+        {booking.status.code === "CKO" && (
           <ReviewSection bookingId={booking.id} />
         )}
       </div>

@@ -60,5 +60,16 @@ export const borderColors = {
   error: colors.status.error,
 } as const;
 
+export const STATUS_COLOR: Record<string, string> = {
+  PND: "bg-yellow-100 text-yellow-700",
+  PPY: "bg-orange-100 text-orange-700",
+  CFM: "bg-blue-100 text-blue-700",
+  CHK: "bg-indigo-100 text-indigo-700",
+  CKO: "bg-emerald-100 text-emerald-700",
+  CAN: "bg-red-100 text-red-600",
+  NSW: "bg-gray-100 text-gray-600",
+  EXP: "bg-gray-100 text-gray-500",
+};
+
 // Export individual colors for convenience
 export const { primary, neutral, status, background } = colors;

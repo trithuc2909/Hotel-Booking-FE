@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
-import { useGetRoomsQuery } from "@/features/room/api/roomApi";
-import { RoomCard } from "../rooms/RoomCard";
+import { useGetRoomsQuery, RoomCard } from "@/features/room";
 
 export default function FeaturedRoomsSection() {
   const [type] = useQueryState("type", parseAsString.withDefault(""));

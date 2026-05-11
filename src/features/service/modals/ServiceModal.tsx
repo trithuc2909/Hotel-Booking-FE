@@ -1,11 +1,11 @@
 "use client";
 
 import { useGetServicesQuery } from "@/features/service/api/serviceApi";
-import { SelectedService } from "../types/booking.type";
 import { useEffect, useMemo, useState } from "react";
 import { X, Check } from "lucide-react";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { getIconComponent } from "@/lib/utils/icon";
+import type { SelectedService } from "@/features/booking/types/booking.type";
 
 type Props = {
   selected: SelectedService[];

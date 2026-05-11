@@ -3,11 +3,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { toast } from "sonner";
 import { loginSchema, type LoginFormData } from "@/features/auth/schemas/auth.schema";
-import { useLoginMutation } from "@/features/auth/api/authApi";
+import { useLogin } from "../hooks/useLogin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,16 +25,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Eye, EyeOff } from "lucide-react";
-import { useAppDispatch } from "@/store/hooks";
-import { setAuth } from "@/features/auth/slices/authSlice";
 
 export default function LoginForm() {
-  const router = useRouter();
-
-  const [login, { isLoading }] = useLoginMutation();
+  const { onSubmit, isLoading } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
-
-  const dispatch = useAppDispatch();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -48,28 +40,6 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      // Destructure data từ response
-      const { data: authData } = await login(data).unwrap();
-
-      dispatch(setAuth({
-        accessToken: authData.accessToken,
-        refreshToken: authData.refreshToken,
-      }))
-
-      // Success toast
-      toast.success("Đăng nhập thành công!");
-
-      router.push("/");
-    } catch (error: any) {
-      const errorMessage =
-        error?.data?.message || "Đăng nhập thất bại. Vui lòng thử lại.";
-      toast.error(errorMessage);
-    }
-  };
-
-  // Render ui
   return (
     <Card className="w-full max-w-md border border-gray-100 bg-white shadow-xl rounded-2xl">
       {/* Header */}

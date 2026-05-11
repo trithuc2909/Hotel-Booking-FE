@@ -16,10 +16,10 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
-import ServiceModal from "../components/ServiceModal";
-import { SelectedService } from "../types/booking.type";
+import { ServiceModal } from "@/features/service";
+import { SelectedService } from "@/features/booking";
 import { getIconComponent } from "@/lib/utils/icon";
-import RoomSuggestionModal from "../components/RoomSuggestionModal";
+import { RoomSuggestionModal } from "@/features/room";
 import { SelectedRoom } from "@/features/room/types/room.type";
 import { useGetMeQuery } from "@/features/user/api/userApi";
 import {
@@ -28,6 +28,7 @@ import {
 } from "@/features/booking/api/bookingApi";
 import { toast } from "sonner";
 import { useLazyValidatePromoCodeQuery } from "@/features/promotion/api/promotionApi";
+
 
 function BookingContent() {
   const params = useSearchParams();

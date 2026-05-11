@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import VerifyOTPForm from "@/components/auth/verify-otp-form";
+import { Suspense } from "react";
+import VerifyOTPForm from "@/features/auth/components/verify-otp-form";
 
 export const metadata: Metadata = {
   title: "Xác thực OTP - BullManHotel",
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function VerifyOTPPage() {
-  return <VerifyOTPForm />;
+  return (
+    <Suspense fallback={<div>Đang tải...</div>}>
+      <VerifyOTPForm />
+    </Suspense>
+  );
 }

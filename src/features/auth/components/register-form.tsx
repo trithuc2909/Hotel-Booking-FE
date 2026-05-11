@@ -3,17 +3,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { toast } from "sonner";
 
-// Import validation schema
 import { registerSchema, type RegisterFormData } from "@/features/auth/schemas/auth.schema";
-
-// Import Redux mutation
-import { useRegisterMutation } from "@/features/auth/api/authApi";
-
-// Import UI components
+import { useRegister } from "../hooks/useRegister";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,13 +28,10 @@ import {
 import { Eye, EyeOff } from "lucide-react";
 
 export default function RegisterForm() {
-  // State & Hooks
-  const router = useRouter();
+  const { onSubmit, isLoading } = useRegister();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Rudux mutation to call API
-  const [register, { isLoading }] = useRegisterMutation();
-
-  // Form
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     mode: "onBlur",
@@ -55,31 +45,6 @@ export default function RegisterForm() {
     },
   });
 
-  // Handle form submit
-  const onSubmit = async (data: RegisterFormData) => {
-    try {
-      const response = await register(data).unwrap();
-
-      // Success
-      toast.success(
-        "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.",
-      );
-
-      // Redirect to OTP verification page
-      router.push(`/verify-otp?userId=${response.data.userId}`);
-    } catch (error: any) {
-      const errorMessage =
-        error?.data?.message || "Đăng ký thất bại. Vui lòng thử lại.";
-
-      toast.error(errorMessage);
-    }
-  };
-
-  // Password visibility state
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // Render UI
   return (
     <Card className="w-full max-w-md border border-gray-100 bg-white shadow-xl rounded-2xl">
       {/* Header */}

@@ -15,7 +15,7 @@ import { useAppSelector } from "@/store/hooks";
 import { useGetMeQuery } from "@/features/user/api/userApi";
 import { colors } from "@/constants/colors";
 import { useAppDispatch } from "@/store/hooks";
-import { logout } from "@/features/auth/slices/authSlice";
+import { logout } from "@/features/auth";
 
 export default function NavbarUserMenu() {
   const router = useRouter();
