@@ -7,12 +7,7 @@ import { useGetAvailableRoomsQuery } from "@/features/room/api/roomApi";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { SelectedRoom } from "@/features/room/types/room.type";
 import RoomDetailModal from "./RoomDetailModal";
-
-const BED_TYPE_MAP: Record<string, string> = {
-  Single: "Giường đơn",
-  Double: "Giường đôi",
-  Triple: "Giường ba",
-};
+import { BED_TYPE_MAP } from "@/constants/common";
 
 const toBedTypeVi = (bedType: string | null) =>
   bedType ? (BED_TYPE_MAP[bedType] ?? bedType) : "";

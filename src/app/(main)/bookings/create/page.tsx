@@ -29,7 +29,6 @@ import {
 import { toast } from "sonner";
 import { useLazyValidatePromoCodeQuery } from "@/features/promotion/api/promotionApi";
 
-
 function BookingContent() {
   const params = useSearchParams();
   const roomId = params.get("roomId") ?? "";
@@ -139,7 +138,9 @@ function BookingContent() {
       setDiscount(promo.discountAmount);
       setPromotionId(promo.promotionId);
       setPromoCode(code);
-      toast.success(`Áp dụng "${promo.title}" - giảm ${formatCurrency(promo.discountAmount)}`);
+      toast.success(
+        `Áp dụng "${promo.title}" - giảm ${formatCurrency(promo.discountAmount)}`,
+      );
     } catch (err: any) {
       const msg = err?.data?.message ?? "Mã khuyến mãi không hợp lệ";
       toast.error(msg);
@@ -156,6 +157,8 @@ function BookingContent() {
       return;
     }
 
+    let bookingId: string;
+
     try {
       const bookingRes = await createBooking({
         checkInDate: checkInDate,
@@ -168,16 +171,28 @@ function BookingContent() {
           quantity: 1,
         })),
       }).unwrap();
+      bookingId = bookingRes.data.bookingId;
+    } catch (error: any) {
+      const code = error?.data?.code;
+      if (code === "ROOM_OCCUPIED" || code === "ROOM_RACE_CONDITION") {
+        toast.error(
+          "Phòng này vừa được đặt trong khoảng thời gian bạn chọn. Vui lòng chọn ngày hoặc phòng khác.",
+        );
+      } else {
+        toast.error(
+          error?.data?.message ?? "Không thể tạo booking. Vui lòng thử lại.",
+        );
+      }
+      return;
+    }
 
-      const bookingId = bookingRes.data.bookingId;
-
-      const paymentRes = await createVNPayPayment({
-        bookingId,
-      }).unwrap();
-
+    try {
+      const paymentRes = await createVNPayPayment({ bookingId }).unwrap();
       window.location.href = paymentRes.data.payUrl;
-    } catch (error) {
-      toast.error("Phòng này vừa được đặt bởi khách khác trong khoảng thời gian bạn chọn. Vui lòng chọn ngày hoặc phòng khác.");
+    } catch (error: any) {
+      toast.error(
+        "Không thể kết nối cổng thanh toán VNPay. Booking của bạn đã được lưu, vui lòng thử lại sau.",
+      );
     }
   };
 

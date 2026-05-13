@@ -12,7 +12,12 @@ import { useGetOccupiedDateRangesForRoomQuery } from "@/features/room/api/roomAp
 
 type Props = { room: RoomDetailResponse };
 
-const toStr = (d: Date) => d.toISOString().split("T")[0];
+const toStr = (d: Date) => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+};
 
 function hasConflict(
   reqIn: string,
@@ -66,7 +71,10 @@ export default function BookingWidget({ room }: Props) {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
+      if (
+        calendarRef.current &&
+        !e.composedPath().includes(calendarRef.current)
+      ) {
         setShowCalendar(false);
       }
     };
@@ -74,21 +82,34 @@ export default function BookingWidget({ room }: Props) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const nights =
+    range?.from && range?.to
+      ? Math.max(
+          1,
+          Math.round((range.to.getTime() - range.from.getTime()) / 86_400_000),
+        )
+      : 1;
+
   const checkIn = range?.from ? toStr(range.from) : "";
   const checkOut = range?.to ? toStr(range.to) : "";
-
-  const nights = range?.from && range?.to
-    ? Math.max(1, Math.round((range.to.getTime() - range.from.getTime()) / 86_400_000))
-    : 1;
 
   const subtotal = room.basePrice * nights;
   const tax = Math.round(subtotal * 0.1);
   const total = subtotal + tax;
 
+  const rangeRef = useRef(range);
+  useEffect(() => {
+    rangeRef.current = range;
+  }, [range]);
+
   const handleBook = () => {
+    const current = rangeRef.current;
+
     if (!checkIn || !checkOut) return;
     if (hasConflict(checkIn, checkOut, bookedRanges)) {
-      toast.error("Khoảng thời gian này đã có booking. Vui lòng chọn ngày khác.");
+      toast.error(
+        "Khoảng thời gian này đã có booking. Vui lòng chọn ngày khác.",
+      );
       return;
     }
     router.push(
@@ -98,7 +119,11 @@ export default function BookingWidget({ room }: Props) {
 
   const formatDate = (d: Date | undefined) =>
     d
-      ? d.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" })
+      ? d.toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
       : "Chọn ngày";
 
   return (
@@ -123,13 +148,17 @@ export default function BookingWidget({ room }: Props) {
             <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-0.5">
               Nhận phòng
             </p>
-            <p className="text-sm font-medium text-gray-800">{formatDate(range?.from)}</p>
+            <p className="text-sm font-medium text-gray-800">
+              {formatDate(range?.from)}
+            </p>
           </div>
           <div className="px-4 py-3">
             <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-0.5">
               Trả phòng
             </p>
-            <p className="text-sm font-medium text-gray-800">{formatDate(range?.to)}</p>
+            <p className="text-sm font-medium text-gray-800">
+              {formatDate(range?.to)}
+            </p>
           </div>
         </button>
 
@@ -142,18 +171,17 @@ export default function BookingWidget({ room }: Props) {
               onSelect={(r) => {
                 setRange(r);
                 if (r?.from && r?.to) {
-                  setShowCalendar(false);
+                  setTimeout(() => setShowCalendar(false), 0);
                   const inStr = toStr(r.from);
                   const outStr = toStr(r.to);
                   if (hasConflict(inStr, outStr, bookedRanges)) {
-                    toast.error("Khoảng thời gian này đã có booking. Vui lòng chọn ngày khác.");
+                    toast.error(
+                      "Khoảng thời gian này đã có booking. Vui lòng chọn ngày khác.",
+                    );
                   }
                 }
               }}
-              disabled={[
-                { before: today },
-                ...disabledDates,
-              ]}
+              disabled={[{ before: today }, ...disabledDates]}
               numberOfMonths={1}
               showOutsideDays={false}
               style={{ "--rdp-accent-color": "#0D99FF" } as React.CSSProperties}
@@ -164,7 +192,6 @@ export default function BookingWidget({ room }: Props) {
           </div>
         )}
       </div>
-
 
       {/* Number of guests */}
       <div className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700">
@@ -180,7 +207,9 @@ export default function BookingWidget({ room }: Props) {
       {/* Price table */}
       <div className="space-y-2 text-sm">
         <div className="flex justify-between text-gray-600">
-          <span>{formatCurrency(room.basePrice)} × {nights} đêm</span>
+          <span>
+            {formatCurrency(room.basePrice)} × {nights} đêm
+          </span>
           <span>{formatCurrency(subtotal)}</span>
         </div>
         <div className="flex justify-between text-gray-600">

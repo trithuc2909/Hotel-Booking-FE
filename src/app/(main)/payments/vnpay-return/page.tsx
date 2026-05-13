@@ -100,7 +100,7 @@ function VNPayReturnContent() {
           </button>
           {isSuccess && confirmed && (
             <button
-              onClick={() => router.push("/bookings")}
+              onClick={() => router.push("/booking-history")}
               className="cursor-pointer flex-1 rounded-xl bg-[#0D99FF] py-2.5 text-sm font-semibold text-white hover:bg-[#0B84E6] transition-colors"
             >
               Xem lịch sử đặt phòng

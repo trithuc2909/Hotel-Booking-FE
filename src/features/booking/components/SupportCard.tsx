@@ -10,7 +10,7 @@ export default function SupportCard() {
           Nếu bạn cần hỗ trợ hoặc có bất kỳ câu hỏi nào,
           đừng ngần ngại liên hệ với chúng tôi.
         </p>
-        <Button size="sm" variant="outline" className="mt-3 h-8 text-xs">
+        <Button size="sm" variant="outline" className="mt-3 h-8 cursor-pointer text-xs">
           <Phone size={12} className="mr-1.5" />
           Liên hệ ngay
         </Button>
