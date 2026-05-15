@@ -18,6 +18,6 @@ export { default as PromotionTable } from "./components/PromotionTable";
 export { default as PromotionStatsSection } from "./components/PromotionStatsSection";
 
 // Components — Service management
-export { default as ServiceTable } from "./components/ServiceTable";
-export { default as ServiceFilterBar } from "./components/ServiceFilterBar";
-export { default as ServiceStatsSection } from "./components/ServiceStatsSection";
+export { default as ServiceTable } from "../service/components/ServiceTable";
+export { default as ServiceFilterBar } from "../service/components/ServiceFilterBar";
+export { default as ServiceStatsSection } from "../service/components/ServiceStatsSection";

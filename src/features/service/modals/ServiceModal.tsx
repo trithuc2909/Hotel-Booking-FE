@@ -22,7 +22,7 @@ export default function ServiceModal({ selected, onSave, onClose }: Props) {
       Record<string, { icon: string; items: typeof services }>
     >((acc, svc) => {
       const cat = svc.category.name;
-      if (!acc[cat]) acc[cat] = { icon: svc.category.icon, items: [] };
+      if (!acc[cat]) acc[cat] = { icon: svc.category.icon ?? "", items: [] };
       acc[cat].items.push(svc);
       return acc;
     }, {});
@@ -56,7 +56,7 @@ export default function ServiceModal({ selected, onSave, onClose }: Props) {
           basePrice: Number(svc.basePrice),
           unit: svc.unit,
           categoryName: svc.category.name,
-          categoryIcon: svc.category.icon,
+          categoryIcon: svc.category.icon ?? "",
         },
       ];
     });
