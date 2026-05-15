@@ -7,3 +7,13 @@ export const BED_TYPE_MAP: Record<string, string> = {
   Double: "Giường đôi",
   Triple: "Giường ba",
 } as const;
+
+export const STATUS = {
+  ACTIVE: "ACT",
+  INACTIVE: "INA",
+  DELETED: "DEL",
+  PENDING: "PND",
+  EXPIRED: "EXP",
+  BANNED: "BAN",
+  SUSPENDED: "SUS",
+} as const;

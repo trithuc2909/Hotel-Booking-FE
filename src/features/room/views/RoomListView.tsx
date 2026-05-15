@@ -9,7 +9,16 @@ import RoomFilter from "../components/RoomFilter";
 import { useRooms } from "../hooks/useRooms";
 
 export default function RoomListView() {
-  const { rooms, isLoading, page, setPage, totalPages } = useRooms();
+    const {
+    rooms,
+    isLoading,
+    page,
+    setPage,
+    totalPages,
+    total,
+    pageSize,
+    setPageSize,
+  } = useRooms();
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -61,6 +70,13 @@ export default function RoomListView() {
               page={page}
               totalPages={totalPages}
               onPageChange={(p) => setPage(p)}
+              total={total}
+              pageSize={pageSize}
+              onPageSizeChange={(s) => {
+                setPageSize(s);
+                setPage(1);
+              }}
+              pageSizeOptions={[6, 9, 18]}
             />
 
             {/* Empty state */}

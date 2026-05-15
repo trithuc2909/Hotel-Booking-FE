@@ -17,7 +17,9 @@ export type PromotionResponse = {
   endDate: string | null;
   usageLimit: number | null;
   maxUsagePerUser: number | null;
+  usageCount: number;
   status: string;
+  displayAs?: string;
 };
 
 export type ValidatePromoResponse = {
@@ -29,6 +31,20 @@ export type ValidatePromoResponse = {
   discountAmount: number;
   originalAmount: number;
   finalAmount: number;
+};
+
+export type PromotionStatsResponse = {
+  total: number;
+  active: number;
+  totalUsage: number;
+};
+
+export type AdminPromotionFilter = {
+  search?: string;
+  status?: string;
+  discountType?: DiscountType;
+  pageNum?: number;
+  pageSize?: number;
 };
 
 export type DiscountType = (typeof discountType)[keyof typeof discountType];

@@ -57,18 +57,19 @@ export const customBaseQueryWithReauth: BaseQueryFn<
 
     isRefreshing = true;
     try {
+      const refreshToken = Cookies.get("refresh_token");
       // Attempt to refresh token
       const refreshResult = await baseQuery(
         {
           url: "/auth/refresh",
           method: "POST",
-          credentials: "include",
+          body: { refreshToken },
         },
         api,
         extraOptions,
       );
 
-      const accessToken = (refreshResult.data as any)?.accessToken;
+      const accessToken = (refreshResult.data as any)?.data?.accessToken;
 
       if (accessToken) {
         // Save new token

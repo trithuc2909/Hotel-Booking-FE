@@ -7,16 +7,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { MoreHorizontal, Eye, RefreshCw, Trash2 } from "lucide-react";
+import { MoreHorizontal, Eye, Power, Trash2 } from "lucide-react";
+import { ServiceResponse } from "../types/service.type";
 
 interface Props {
-  id: string;
+  service: ServiceResponse;
   onView?: () => void;
-  onUpdate?: () => void;
+  onToggleStatus?: () => void;
   onDelete?: () => void;
 }
 
-export const CellAction = ({ onView, onUpdate, onDelete }: Props) => {
+export const CellAction = ({
+  service,
+  onView,
+  onToggleStatus,
+  onDelete,
+}: Props) => {
+  const isActive = service.status === "ACT";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,7 +37,7 @@ export const CellAction = ({ onView, onUpdate, onDelete }: Props) => {
         align="end"
         sideOffset={4}
         alignOffset={-70}
-        className="z-50 w-44 overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md"
+        className="z-50 w-48 overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md"
       >
         <DropdownMenuItem
           onClick={onView}
@@ -40,17 +48,19 @@ export const CellAction = ({ onView, onUpdate, onDelete }: Props) => {
         </DropdownMenuItem>
 
         <DropdownMenuItem
-          onClick={onUpdate}
-          className="
+          onClick={onToggleStatus}
+          className={`
             flex cursor-pointer items-center gap-2 px-3 py-2 text-sm
             text-gray-700 outline-none transition-colors
-            [&_svg]:transition-colors
-            data-[highlighted]:bg-blue-50
-            data-[highlighted]:text-blue-600
-          "
+            ${
+              isActive
+                ? "data-[highlighted]:bg-orange-50 data-[highlighted]:text-orange-500"
+                : "data-[highlighted]:bg-green-50 data-[highlighted]:text-green-600"
+            }
+          `}
         >
-          <RefreshCw size={14} />
-          Cập nhật trạng thái
+          <Power size={14} />
+          {isActive ? "Ngưng hoạt động" : "Kích hoạt"}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator className="mx-2 my-1 h-px bg-gray-100" />
@@ -58,14 +68,14 @@ export const CellAction = ({ onView, onUpdate, onDelete }: Props) => {
         <DropdownMenuItem
           onClick={onDelete}
           className="
-            flex cursor-pointer items-center gap-2 px-3 py-2 text-sm
-            text-gray-700 outline-none transition-colors
-            data-[highlighted]:bg-red-50
-            data-[highlighted]:text-red-500
+                flex cursor-pointer items-center gap-2 px-3 py-2 text-sm
+                text-gray-700 outline-none transition-colors
+                data-[highlighted]:bg-red-50
+                data-[highlighted]:text-red-500
           "
         >
           <Trash2 size={14} />
-          Xóa Phòng
+          Xóa dịch vụ
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

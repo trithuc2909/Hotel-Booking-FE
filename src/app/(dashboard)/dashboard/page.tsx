@@ -5,16 +5,11 @@ import StatsSection from "@/features/dashboard/components/StatsSection";
 import RevenueChart from "@/features/dashboard/components/RevenueChart";
 import RoomTimeline from "@/features/dashboard/components/RoomTimeline";
 
-// ─────────────────────────────────────────────────────────────
-// TODO (BE): Truyền period vào API khi chọn "Tháng Này" / "Tháng Trước"
-// ─────────────────────────────────────────────────────────────
-
 export default function DashboardPage() {
   const [period, setPeriod] = useState<"current" | "previous">("current");
 
   return (
     <div className="space-y-6">
-      {/* ── Page header ── */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <p className="text-xs text-gray-400 mb-1">
@@ -25,7 +20,6 @@ export default function DashboardPage() {
           </h1>
         </div>
 
-        {/* Period toggle */}
         <div className="flex items-center rounded-lg border border-gray-200 bg-white overflow-hidden shadow-sm">
           <button
             onClick={() => setPeriod("current")}

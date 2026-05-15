@@ -6,7 +6,8 @@ type Props = {
   onPageChange: (page: number) => void;
   total?: number;
   pageSize?: number;
-  onPageSizeChange?: (pageSize: number) => void;
+  onPageSizeChange?: (size: number) => void;
+  pageSizeOptions?: number[];
 };
 
 export default function Pagination({
@@ -16,7 +17,10 @@ export default function Pagination({
   total,
   pageSize,
   onPageSizeChange,
+  pageSizeOptions,
 }: Props) {
+  const options = pageSizeOptions || PAGE_SIZE_OPTIONS;
+  
   const hasEnhanced =
     total !== undefined &&
     pageSize !== undefined &&
@@ -45,7 +49,7 @@ export default function Pagination({
               }}
               className="rounded-md border border-gray-200 px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0D99FF]"
             >
-              {PAGE_SIZE_OPTIONS.map((s) => (
+              {options.map((s) => (
                 <option key={s} value={s}>
                   {s} dòng
                 </option>

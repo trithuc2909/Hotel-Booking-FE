@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "../components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/components/providers";
 import { ToasterCustom } from "@/components/ui/toaster-custom";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-// Font chính: Open Sans
 const openSans = Open_Sans({
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],

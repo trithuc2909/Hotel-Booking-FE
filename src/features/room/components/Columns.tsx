@@ -3,6 +3,7 @@ import type { RoomResponse } from "@/features/room/types/room.type";
 import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 import { CellAction } from "./CellAction";
+import Link from "next/link";
 
 const DEFAULT_IMG =
   "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200";
@@ -29,21 +30,26 @@ export const createRoomColumns = (
     cell: ({ row }) => {
       const room = row.original;
       return (
-        <div className="flex items-center gap-3">
-          <Image
-            src={room.thumbnailUrl || DEFAULT_IMG}
-            alt={room.roomName}
-            width={64}
-            height={48}
-            className="rounded-lg object-cover"
-          />
+        <Link
+          href={`/dashboard/rooms/${room.id}`}
+          className="group flex items-center gap-3 transition-colors hover:text-[#0D99FF]"
+        >
+          <div className="overflow-hidden rounded-lg">
+            <Image
+              src={room.thumbnailUrl || DEFAULT_IMG}
+              alt={room.roomName}
+              width={64}
+              height={48}
+              className="object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
           <div>
-            <p className="text-sm font-semibold text-gray-800">
+            <p className="text-sm font-semibold text-gray-800 transition-colors group-hover:text-[#0D99FF]">
               {room.roomName}
             </p>
             <p className="text-xs text-gray-400">Phòng {room.roomNumber}</p>
           </div>
-        </div>
+        </Link>
       );
     },
   },
