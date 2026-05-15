@@ -1,74 +1,147 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import ServiceStatsSection from "@/features/dashboard/components/ServiceStatsSection";
-import ServiceFilterBar from "@/features/dashboard/components/ServiceFilterBar";
-import ServiceTable from "@/features/dashboard/components/ServiceTable";
+import Breadcrumb from "@/components/shared/Breadcrumb";
+import Pagination from "@/components/shared/Pagination";
+import ServiceTable from "@/features/service/components/ServiceTable";
+import ServiceFilterBar from "@/features/service/components/ServiceFilterBar";
+import ServiceStatsSection from "@/features/service/components/ServiceStatsSection";
+import { ServiceDeleteModal } from "@/features/service/modals/ServiceDeleteModal";
 import {
-  MOCK_SERVICES,
-  Service,
-  ServiceCategory,
-} from "@/features/dashboard/mock/servicesMock";
+  useGetAdminServicesQuery,
+  useDeleteServiceMutation,
+  useUpdateServiceStatusMutation,
+} from "@/features/service/api/serviceApi";
+import type { ServiceResponse } from "@/features/service/types/service.type";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-export default function ServicesPage() {
-  const [search, setSearch]       = useState("");
-  const [category, setCategory]   = useState("all");
-  // Local state để toggle trạng thái mà không cần reload
-  // TODO (BE): Xoá services state, dùng RTK Query invalidate tags thay thế
-  const [services, setServices]   = useState<Service[]>(MOCK_SERVICES);
+type ModalType = "delete" | null;
 
-  // ── Filter client-side (TODO (BE): chuyển thành query params) ──
-  const filtered = useMemo(() => {
-    return services.filter((svc) => {
-      const matchSearch   = svc.name.toLowerCase().includes(search.toLowerCase());
-      const matchCategory = category === "all" || svc.category === (category as ServiceCategory);
-      return matchSearch && matchCategory;
-    });
-  }, [services, search, category]);
+export default function AdminServicesPage() {
+  const router = useRouter();
 
-  // Toggle active/inactive locally
-  // TODO (BE): Gọi PATCH /admin/services/:id/toggle-status
-  const handleStatusToggle = (id: string) => {
-    setServices((prev) =>
-      prev.map((svc) =>
-        svc.id === id
-          ? { ...svc, status: svc.status === "active" ? "inactive" : "active" }
-          : svc
-      )
-    );
+  const [search, setSearch] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [status, setStatus] = useState("");
+  const [pageNum, setPageNum] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+
+  const [selectedService, setSelectedService] =
+    useState<ServiceResponse | null>(null);
+  const [modalType, setModalType] = useState<ModalType>(null);
+
+  const { data, isLoading, isError } = useGetAdminServicesQuery({
+    search: search || undefined,
+    categoryId: categoryId || undefined,
+    status: status || undefined,
+    pageNum,
+    pageSize,
+  });
+
+  const [deleteService, { isLoading: isDeleting }] = useDeleteServiceMutation();
+  const [updateServiceStatus] = useUpdateServiceStatusMutation();
+
+  const services = data?.data ?? [];
+  const meta = data?.meta;
+
+  const closeModal = () => {
+    setModalType(null);
+    setSelectedService(null);
   };
 
-  // TODO (BE): Mở modal / navigate sang trang tạo dịch vụ mới
-  const handleAdd = () => {
-    alert("TODO: Mở form thêm dịch vụ mới");
+  const handleToggleStatus = async (service: ServiceResponse) => {
+    const newStatus = service.status === "ACT" ? "INA" : "ACT";
+    try {
+      await updateServiceStatus({ id: service.id, status: newStatus }).unwrap();
+      toast.success(
+        newStatus === "ACT"
+          ? "Đã kích hoạt dịch vụ"
+          : "Đã ngưng hoạt động dịch vụ",
+      );
+    } catch (err: any) {
+      toast.error(err?.data?.message ?? "Có lỗi xảy ra");
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedService) return;
+    try {
+      await deleteService({ id: selectedService.id }).unwrap();
+      toast.success("Xóa dịch vụ thành công");
+      closeModal();
+    } catch (err: any) {
+      toast.error(err?.data?.message ?? "Có lỗi xảy ra");
+    }
   };
 
   return (
     <div className="space-y-5">
-      {/* ── Breadcrumb + Title ── */}
-      <div>
-        <p className="text-xs text-gray-400 mb-1">
-          Quản trị &rsaquo;{" "}
-          <span className="text-[#0D99FF]">Quản lý dịch vụ</span>
-        </p>
-        <h1 className="text-2xl font-extrabold text-gray-900">Quản lý dịch vụ</h1>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: "Quản lý dịch vụ", href: "/dashboard/services" },
+          { label: "Danh sách dịch vụ" },
+        ]}
+      />
+      <h1 className="text-2xl font-bold text-gray-900">Quản lý dịch vụ</h1>
 
-      {/* ── Stat cards ── */}
       <ServiceStatsSection />
 
-      {/* ── Filter bar + nút thêm ── */}
       <ServiceFilterBar
         search={search}
-        category={category}
+        categoryId={categoryId}
+        status={status}
         onSearchChange={setSearch}
-        onCategoryChange={setCategory}
-        onSearch={() => {}} // client-side filter, không cần trigger thêm
-        onAdd={handleAdd}
+        onCategoryChange={(v) => {
+          setCategoryId(v);
+          setPageNum(1);
+        }}
+        onStatusChange={(v) => {
+          setStatus(v);
+          setPageNum(1);
+        }}
+        onAdd={() => router.push("/dashboard/services/create")}
       />
 
-      {/* ── Bảng dịch vụ ── */}
-      <ServiceTable services={filtered} onStatusToggle={handleStatusToggle} />
+      {isLoading ? (
+        <p className="py-16 text-center text-sm text-gray-400">Đang tải...</p>
+      ) : isError ? (
+        <p className="py-16 text-center text-sm text-red-400">
+          Lỗi khi tải dữ liệu
+        </p>
+      ) : (
+        <>
+          <ServiceTable
+            data={services}
+            onView={(s) => router.push(`/dashboard/services/${s.id}`)}
+            onToggleStatus={handleToggleStatus}
+            onDelete={(s) => {
+              setSelectedService(s);
+              setModalType("delete");
+            }}
+          />
+          <Pagination
+            page={pageNum}
+            totalPages={meta?.totalPages || 1}
+            onPageChange={setPageNum}
+            total={meta?.total}
+            pageSize={pageSize}
+            onPageSizeChange={(s) => {
+              setPageSize(s);
+              setPageNum(1);
+            }}
+          />
+        </>
+      )}
+
+      {selectedService && modalType === "delete" && (
+        <ServiceDeleteModal
+          service={selectedService}
+          onClose={closeModal}
+          onConfirm={handleDeleteConfirm}
+          isDeleting={isDeleting}
+        />
+      )}
     </div>
   );
 }
