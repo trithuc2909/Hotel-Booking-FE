@@ -90,4 +90,5 @@ export const {
   useDeletePromotionMutation,
   useGetAllPromotionsQuery,
   useValidatePromoCodeQuery,
+  useLazyValidatePromoCodeQuery,
 } = promotionApi;
