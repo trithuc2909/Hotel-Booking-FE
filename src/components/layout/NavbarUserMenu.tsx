@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, LogOut, User, CalendarDays } from "lucide-react";
+import { ChevronDown, LogOut, User, CalendarDays, LayoutDashboard } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -16,10 +16,12 @@ import { useGetMeQuery } from "@/features/user/api/userApi";
 import { colors } from "@/constants/colors";
 import { useAppDispatch } from "@/store/hooks";
 import { logout } from "@/features/auth";
+import { ROLE } from "@/constants/common";
 
 export default function NavbarUserMenu() {
   const router = useRouter();
   const isLoggedIn = useAppSelector((state) => state.auth.isAuthenticated);
+  const role = useAppSelector((state) => state.auth.role);
   const { data: meData } = useGetMeQuery(undefined, { skip: !isLoggedIn });
   const user = meData?.data;
 
@@ -91,6 +93,16 @@ export default function NavbarUserMenu() {
           </div>
         </div>
 
+        {role === ROLE.ADMIN && (
+          <DropdownMenuItem asChild>
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 px-3 py-2 cursor-pointer"
+            >
+              <LayoutDashboard size={16} /> Trang quản trị
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
           <Link
             href="/profiles"

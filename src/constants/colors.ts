@@ -1,3 +1,12 @@
+import {
+  CheckCircle2,
+  Clock,
+  XCircle,
+  LogIn,
+  LogOut,
+  AlertOctagon,
+} from "lucide-react";
+
 export const colors = {
   // Primary Colors
   primary: {
@@ -71,5 +80,59 @@ export const STATUS_COLOR: Record<string, string> = {
   EXP: "bg-gray-100 text-gray-500",
 };
 
-// Export individual colors for convenience
+export const STATUS_CONFIG: Record<
+  string,
+  { color: string; bg: string; text: string; Icon: any }
+> = {
+  PND: {
+    color: "#F59E0B",
+    bg: "bg-yellow-50",
+    text: "text-yellow-600",
+    Icon: Clock,
+  },
+  PPY: {
+    color: "#F59E0B",
+    bg: "bg-orange-50",
+    text: "text-orange-600",
+    Icon: Clock,
+  },
+  CFM: {
+    color: "#0D99FF",
+    bg: "bg-blue-50",
+    text: "text-blue-600",
+    Icon: CheckCircle2,
+  },
+  CHK: {
+    color: "#10B981",
+    bg: "bg-green-50",
+    text: "text-green-600",
+    Icon: LogIn,
+  },
+  CKO: {
+    color: "#059669",
+    bg: "bg-emerald-50",
+    text: "text-emerald-600",
+    Icon: LogOut,
+  },
+  CAN: {
+    color: "#EF4444",
+    bg: "bg-red-50",
+    text: "text-red-600",
+    Icon: XCircle,
+  },
+  NSW: {
+    color: "#DC2626",
+    bg: "bg-red-100",
+    text: "text-red-700",
+    Icon: AlertOctagon,
+  },
+};
+
+export const DEFAULT_CONFIG = {
+  color: "#9CA3AF",
+  bg: "bg-gray-50",
+  text: "text-gray-500",
+  Icon: Clock,
+};
+
 export const { primary, neutral, status, background } = colors;

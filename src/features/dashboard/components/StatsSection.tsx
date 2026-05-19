@@ -1,27 +1,18 @@
 "use client";
 
-import { TrendingUp, BedDouble, DollarSign } from "lucide-react";
-
-// ─────────────────────────────────────────────────────────────
-// TODO (BE): Thay MOCK_STATS bằng data thực từ API
-// GET /admin/dashboard/stats?period=current|previous
-// ─────────────────────────────────────────────────────────────
-const MOCK_STATS = {
-  totalRevenue: { value: "482.5M", unit: "VND", change: 12.5 },
-  totalBookings: { value: "1,248", change: 8.3 },
-  avgRoomRate: { value: "1.8M", unit: "VND", change: -2.1 },
-};
+import { TrendingUp, BedDouble, DollarSign, Loader2 } from "lucide-react";
+import { useGetDashboardStatsQuery } from "../api/dashboardApi";
+import { format } from "date-fns";
 
 type StatCardProps = {
   title: string;
   value: string;
-  unit?: string;
   change?: number;
   icon: React.ReactNode;
   highlight?: boolean;
 };
 
-function StatCard({ title, value, unit, change, icon, highlight }: StatCardProps) {
+function StatCard({ title, value, change, icon, highlight }: StatCardProps) {
   const isPositive = (change ?? 0) >= 0;
 
   return (
@@ -45,19 +36,18 @@ function StatCard({ title, value, unit, change, icon, highlight }: StatCardProps
             highlight ? "bg-white/20" : "bg-blue-50"
           }`}
         >
-          <span className={highlight ? "text-white" : "text-[#0D99FF]"}>{icon}</span>
+          <span className={highlight ? "text-white" : "text-[#0D99FF]"}>
+            {icon}
+          </span>
         </div>
       </div>
 
       <div className="flex items-end gap-2">
-        <span className={`text-3xl font-bold ${highlight ? "text-white" : "text-gray-900"}`}>
+        <span
+          className={`text-3xl font-bold ${highlight ? "text-white" : "text-gray-900"}`}
+        >
           {value}
         </span>
-        {unit && (
-          <span className={`text-sm mb-1 ${highlight ? "text-blue-200" : "text-gray-400"}`}>
-            {unit}
-          </span>
-        )}
       </div>
 
       {change !== undefined && (
@@ -82,7 +72,7 @@ function StatCard({ title, value, unit, change, icon, highlight }: StatCardProps
             }`}
           >
             {isPositive ? "+" : ""}
-            {change}% so với tháng trước
+            {change}% so với kỳ trước
           </span>
         </div>
       )}
@@ -90,28 +80,60 @@ function StatCard({ title, value, unit, change, icon, highlight }: StatCardProps
   );
 }
 
-export default function StatsSection() {
+export default function StatsSection({
+  currentDate,
+}: {
+  currentDate: Date;
+}) {
+  const { data, isLoading } = useGetDashboardStatsQuery({
+    month: format(currentDate, "yyyy-MM")
+  });
+
+  if (isLoading || !data) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="h-32 rounded-xl bg-gray-100 animate-pulse flex items-center justify-center"
+          >
+            <Loader2 className="animate-spin text-gray-400" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const formatMoney = (val: number) => {
+    if (val >= 1000000) return (val / 1000000).toFixed(1) + "M VNĐ";
+    if (val >= 1000) return (val / 1000).toFixed(1) + "K VNĐ";
+    return val.toString() + " VNĐ";
+  };
+
+  const formatNumber = (val: number) =>
+    new Intl.NumberFormat("vi-VN").format(val);
+
+  const stats = data.data;
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <StatCard
         title="Tổng doanh thu"
-        value={MOCK_STATS.totalRevenue.value}
-        unit={MOCK_STATS.totalRevenue.unit}
-        change={MOCK_STATS.totalRevenue.change}
+        value={formatMoney(stats.totalRevenue.value)}
+        change={stats.totalRevenue.change}
         icon={<DollarSign size={18} />}
         highlight
       />
       <StatCard
         title="Tổng đặt phòng"
-        value={MOCK_STATS.totalBookings.value}
-        change={MOCK_STATS.totalBookings.change}
+        value={formatNumber(stats.totalBookings.value)}
+        change={stats.totalBookings.change}
         icon={<BedDouble size={18} />}
       />
       <StatCard
         title="Giá thuê trung bình"
-        value={MOCK_STATS.avgRoomRate.value}
-        unit={MOCK_STATS.avgRoomRate.unit}
-        change={MOCK_STATS.avgRoomRate.change}
+        value={formatMoney(stats.avgRoomRate.value)}
+        change={stats.avgRoomRate.change}
         icon={<TrendingUp size={18} />}
       />
     </div>

@@ -3,18 +3,28 @@
 import DashboardHeader from "@/components/layout/DashboardHeader";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 import { useEffect } from "react";
+import { useAppSelector } from "@/store/hooks";
+import { notFound } from "next/navigation";
+import { ROLE } from "@/constants/common";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
     };
   }, []);
+
+  if (!isAuthenticated || role !== ROLE.ADMIN) {
+    notFound();
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
       <DashboardSidebar />

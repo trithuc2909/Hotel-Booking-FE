@@ -127,3 +127,58 @@ export type SelectedService = {
   categoryName: string;
   categoryIcon: string;
 };
+
+export type AdminBookingsFilter = {
+  pageNum?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDirection?: "asc" | "desc";
+  status?: string;
+  search?: string;
+  checkInDate?: string;
+  checkOutDate?: string;
+};
+
+export type AdminBookingResponse = {
+  id: string;
+  bookingCode: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  checkInDate: string;
+  checkOutDate: string;
+  totalAmount: number;
+  status: string;
+  displayAs: string | null;
+  createdOn: string | null;
+
+  rooms: { roomName: string }[];
+  services: { serviceName: string; quantity: number }[];
+};
+
+export type FindAdminBookingsResponse = {
+  data: AdminBookingResponse[];
+  total: number;
+  pageNum: number;
+  pageSize: number;
+};
+
+export type BookingActivityResponse = {
+  id: string;
+  bookingCode: string;
+  customerName: string;
+  status: string;
+  displayAs: string | null;
+  modifiedOn: string | null;
+};
+
+export type BookingAllocationResponse = {
+  status: string;
+  displayAs: string | null;
+  count: number;
+};
+
+export type BookingAnalyticsResponse = {
+  recentActivities: BookingActivityResponse[];
+  allocation: BookingAllocationResponse[];
+};

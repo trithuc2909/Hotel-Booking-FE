@@ -2,11 +2,14 @@ import { customBaseQueryWithReauth } from "@/lib/api/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiResponse } from "@/types/common";
 import {
+  AdminBookingsFilter,
+  BookingAnalyticsResponse,
   BookingDetailItem,
   BookingHistoryItem,
   CreateBookingRequest,
   CreateBookingResponse,
   CreateVNPayPaymentResponse,
+  FindAdminBookingsResponse,
 } from "../types/booking.type";
 
 export const bookingApi = createApi({
@@ -81,6 +84,44 @@ export const bookingApi = createApi({
         { type: "Booking", id: "LIST" },
       ],
     }),
+    getAdminBookings: builder.query<
+      ApiResponse<FindAdminBookingsResponse>,
+      AdminBookingsFilter
+    >({
+      query: (filter) => ({
+        url: "/admin/bookings",
+        params: filter,
+      }),
+      providesTags: ["Booking"],
+    }),
+    getBookingAnalytics: builder.query<
+      ApiResponse<BookingAnalyticsResponse>,
+      void
+    >({
+      query: () => "/admin/bookings/analytics",
+      providesTags: ["Booking"],
+    }),
+    updateBookingStatus: builder.mutation<
+      ApiResponse<any>,
+      { id: string; status: string }
+    >({
+      query: ({ id, status }) => ({
+        url: `/bookings/${id}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["Booking"],
+    }),
+    getAdminBookingsExport: builder.query<
+      ApiResponse<any[]>,
+      AdminBookingsFilter
+    >({
+      query: (filter) => ({
+        url: "/admin/bookings/export",
+        params: filter,
+      }),
+      providesTags: ["Booking"],
+    }),
   }),
 });
 
@@ -92,4 +133,8 @@ export const {
   useGetBookingHistoryQuery,
   useGetBookingByIdQuery,
   useCancelBookingMutation,
+  useGetAdminBookingsQuery,
+  useGetBookingAnalyticsQuery,
+  useUpdateBookingStatusMutation,
+  useLazyGetAdminBookingsExportQuery,
 } = bookingApi;

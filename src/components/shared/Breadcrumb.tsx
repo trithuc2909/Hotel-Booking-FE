@@ -1,5 +1,8 @@
+"use client";
+
 import { ChevronRight, Home } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export type BreadcrumbItem = {
   label: string;
@@ -9,22 +12,30 @@ export type BreadcrumbItem = {
 type BreadCrumbProps = {
   items: BreadcrumbItem[];
   showHomeIcon?: boolean;
+  homeHref?: string;
+  homeLabel?: string;
 };
 
 export default function Breadcrumb({
   items,
   showHomeIcon = true,
+  homeHref,
+  homeLabel = "Trang chủ",
 }: BreadCrumbProps) {
+  const pathname = usePathname();
+  const resolvedHomeHref =
+    homeHref || (pathname?.startsWith("/dashboard") ? "/dashboard" : "/");
+
   return (
     <nav aria-label="breadcrumb">
       <ol className="flex items-center gap-1.5 text-sm text-gray-500 flex-wrap">
         <li>
           <Link
-            href="/"
+            href={resolvedHomeHref}
             className="flex items-center gap-1 transition-colors hover:text-[#0D99FF]"
           >
             {showHomeIcon && <Home size={14} />}
-            <span>Trang chủ</span>
+            <span>{homeLabel}</span>
           </Link>
         </li>
 

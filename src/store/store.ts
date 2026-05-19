@@ -8,6 +8,7 @@ import { lookupApi } from "@/features/room/api/lookupApi";
 import { serviceApi } from "@/features/service/api/serviceApi";
 import { promotionApi } from "@/features/promotion/api/promotionApi";
 import { bookingApi } from "@/features/booking/api/bookingApi";
+import { dashboardApi } from "@/features/dashboard/api/dashboardApi";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     [serviceApi.reducerPath]: serviceApi.reducer,
     [promotionApi.reducerPath]: promotionApi.reducer,
     [bookingApi.reducerPath]: bookingApi.reducer,
+    [dashboardApi.reducerPath]: dashboardApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -32,6 +34,7 @@ export const store = configureStore({
       serviceApi.middleware,
       promotionApi.middleware,
       bookingApi.middleware,
+      dashboardApi.middleware,
     ),
 });
 

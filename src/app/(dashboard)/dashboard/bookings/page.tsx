@@ -1,94 +1,144 @@
 "use client";
 
 import { useState } from "react";
-import { Download, PlusCircle } from "lucide-react";
-import Link from "next/link";
+import Breadcrumb from "@/components/shared/Breadcrumb";
+import Pagination from "@/components/shared/Pagination";
+import { columns } from "@/features/booking/admin/components/Columns";
+import BookingTable from "@/features/booking/admin/components/BookingTable";
+import BookingFilterBar from "@/features/booking/admin/components/BookingFilterBar";
+import {
+  useGetAdminBookingsQuery,
+  useLazyGetAdminBookingsExportQuery,
+} from "@/features/booking/api/bookingApi";
+import { AdminBookingsFilter } from "@/features/booking/types/booking.type";
 import { Button } from "@/components/ui/button";
-import { colors } from "@/constants/colors";
-import BookingFilterBar from "@/features/dashboard/components/BookingFilterBar";
-import BookingTable from "@/features/dashboard/components/BookingTable";
-import BookingBottomSection from "@/features/dashboard/components/BookingBottomSection";
-import { MOCK_BOOKINGS } from "@/features/dashboard/mock/bookingsMock";
+import { Download, PlusCircle } from "lucide-react";
+import BookingAnalytics from "@/features/booking/admin/components/BookingAnalytics";
+import Link from "next/link";
+import { exportBookingsToExcel } from "@/features/booking/admin/export/exportExcel";
+import { toast } from "sonner";
 
-const PAGE_SIZE = 5;
+export default function AdminBookingsPage() {
+  const [filter, setFilter] = useState<AdminBookingsFilter>({
+    pageNum: 1,
+    pageSize: 5,
+    search: "",
+    status: undefined,
+  });
 
-export default function BookingsPage() {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+  const { data, isLoading, isError } = useGetAdminBookingsQuery(filter, {
+    refetchOnMountOrArgChange: true,
+  });
 
-  // TODO (BE): Thay logic filter dưới đây bằng query params gửi lên API
-  const filtered = MOCK_BOOKINGS.filter(
-    (b) =>
-      b.id.toLowerCase().includes(search.toLowerCase()) ||
-      b.guestName.toLowerCase().includes(search.toLowerCase())
-  );
+  const [triggerExport, { isFetching: isExporting }] =
+    useLazyGetAdminBookingsExportQuery();
 
-  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const bookings = data?.data?.data || [];
+  const total = data?.data?.total || 0;
+  const totalPages = Math.ceil(total / (filter.pageSize || 5));
 
-  const handleSearch = () => {
-    setPage(1); // reset về trang đầu khi tìm kiếm
+  const handlePageChange = (page: number) => {
+    setFilter((prev) => ({ ...prev, pageNum: page }));
   };
 
+  const handlePageSizeChange = (size: number) => {
+    setFilter((prev) => ({ ...prev, pageSize: size, pageNum: 1 }));
+  };
+
+  const handleExport = async () => {
+    try {
+      const res = await triggerExport(filter).unwrap();
+      if (res?.data) {
+        exportBookingsToExcel(res.data);
+        toast.success("Xuất file Excel thành công");
+      }
+    } catch (error) {
+      toast.error("Xuất file Excel thất bại. Vui lòng hử lại.");
+    }
+  };
+
+  const breadcrumbItems = [
+    { label: "Quản lý đặt phòng", href: "/dashboard/bookings" },
+    { label: "Danh sách đặt phòng" },
+  ];
+
   return (
-    <div className="space-y-5">
-      {/* ── Page header ── */}
+    <div className="space-y-4">
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <p className="text-xs text-gray-400 mb-1">
-            Quản trị &rsaquo; Quản lý đặt phòng
-          </p>
-          <h1 className="text-2xl font-extrabold text-gray-900">
+          <Breadcrumb items={breadcrumbItems} />
+          <h1 className="text-2xl font-extrabold text-gray-900 mt-2">
             Quản lý đặt phòng
           </h1>
           <p className="text-sm text-gray-500 mt-1">
             Giám sát các lượt lưu trú hiện tại và khách sắp đến.
           </p>
         </div>
+      </div>
 
-        {/* Action buttons */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {/* TODO (BE): Xuất excel gọi GET /admin/bookings/export */}
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+        <BookingFilterBar
+          filter={filter}
+          onFilterChange={setFilter}
+          onClearFilter={() =>
+            setFilter({
+              pageNum: 1,
+              pageSize: 5,
+              search: "",
+              status: undefined,
+              checkInDate: undefined,
+              checkOutDate: undefined,
+            })
+          }
+        />
+
+        <div className="flex items-center gap-2.5 flex-wrap shrink-0">
           <Button
-            id="export-excel-btn"
             variant="outline"
-            className="flex items-center gap-2 border-[#0D99FF] text-[#0D99FF] hover:bg-blue-50 rounded-lg"
+            className="flex items-center gap-2 border-[#0D99FF] text-[#0D99FF] hover:bg-blue-50 rounded-lg cursor-pointer h-9 text-xs"
+            onClick={handleExport}
+            disabled={isExporting}
           >
-            <Download size={15} />
-            Xuất excel
+            <Download size={14} />
+            {isExporting ? "Đang tải dữ liệu..." : "Xuất excel"}
           </Button>
 
           <Button
-            id="new-booking-btn"
             asChild
-            className="flex items-center gap-2 text-white rounded-lg"
-            style={{ backgroundColor: colors.primary.blue }}
+            className="flex items-center gap-2 text-white rounded-lg bg-[#0D99FF] hover:bg-[#0B84E6] cursor-pointer h-9 text-xs"
           >
-            <Link href="/dashboard/bookings/new">
-              <PlusCircle size={15} />
-              Đặt Phòng Mới
+            <Link href="/dashboard/bookings/create">
+              <PlusCircle size={14} />
+              Đặt Phòng Ngay
             </Link>
           </Button>
         </div>
       </div>
 
-      {/* ── Filter bar ── */}
-      <BookingFilterBar
-        search={search}
-        onSearchChange={setSearch}
-        onSearch={handleSearch}
-      />
+      {isLoading ? (
+        <p className="py-16 text-center text-sm text-gray-400">
+          Đang tải dữ liệu...
+        </p>
+      ) : isError ? (
+        <p className="py-16 text-center text-sm text-red-400">
+          Lỗi khi tải dữ liệu từ máy chủ
+        </p>
+      ) : (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
+          <BookingTable bookings={bookings} columns={columns} />
 
-      {/* ── Bookings table ── */}
-      <BookingTable
-        bookings={paginated}
-        totalCount={filtered.length}
-        page={page}
-        pageSize={PAGE_SIZE}
-        onPageChange={setPage}
-      />
+          <Pagination
+            page={filter.pageNum || 1}
+            totalPages={totalPages || 1}
+            onPageChange={handlePageChange}
+            total={total}
+            pageSize={filter.pageSize || 5}
+            onPageSizeChange={handlePageSizeChange}
+          />
+        </div>
+      )}
 
-      {/* ── Bottom: Recent services + Room capacity ── */}
-      <BookingBottomSection />
+      <BookingAnalytics />
     </div>
   );
 }

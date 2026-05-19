@@ -140,6 +140,7 @@ export default function BookingDetailView({ id }: Props) {
               bookingId={id}
               bookingCode={booking.bookingCode}
               canCancel={canCancel}
+              bookingData={booking}
             />
           </div>
         </div>
