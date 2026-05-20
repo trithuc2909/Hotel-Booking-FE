@@ -38,6 +38,9 @@ export const roomApi = createApi({
           params.set("maxPrice", String(filter.maxPrice));
         if (filter.pageNum) params.set("pageNum", String(filter.pageNum));
         if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
+        if (filter.amenities && filter.amenities.length > 0) {
+          params.set("amenities", filter.amenities.join(","));
+        }
         return { url: `/rooms?${params.toString()}` };
       },
       providesTags: ["Rooms"],

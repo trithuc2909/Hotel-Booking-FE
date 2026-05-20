@@ -57,6 +57,7 @@ export type RoomsFilter = {
   maxPrice?: number;
   pageNum?: number;
   pageSize?: number;
+  amenities?: string[];
 };
 
 export type RoomsPagedResponse = {

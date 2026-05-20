@@ -8,6 +8,7 @@ export function useRooms() {
   const [type] = useQueryState("type", parseAsString.withDefault(""));
   const [guests] = useQueryState("guests", parseAsString.withDefault(""));
   const [price] = useQueryState("price", parseAsString.withDefault("0-2200000"));
+  const [amenities] = useQueryState("amenities", parseAsString.withDefault(""));
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [pageSize, setPageSize] = useQueryState("limit", parseAsInteger.withDefault(9));
   
@@ -26,6 +27,7 @@ export function useRooms() {
     maxPrice: isDefault ? undefined : maxPrice,
     pageNum: page,
     pageSize,
+    amenities: amenities ? amenities.split(",") : undefined,
   });
 
   const rooms: RoomResponse[] = data?.data ?? [];
@@ -35,7 +37,7 @@ export function useRooms() {
 
   useEffect(() => {
     if (page !== 1) setPage(1);
-  }, [type, guests, price]);
+  }, [type, guests, price, amenities]);
 
   return { rooms, isLoading, page, setPage, totalPages, total, pageSize, setPageSize };
 }

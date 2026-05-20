@@ -48,6 +48,16 @@ export default function ProfileInfoForm() {
   };
 
   const handleSubmit = async () => {
+    if (form.dateOfBirth) {
+      const dob = new Date(form.dateOfBirth);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (dob >= today) {
+        toast.error("Ngày sinh phải nhỏ hơn ngày hiện tại");
+        return;
+      }
+    }
+
     try {
       await updateProfile(form).unwrap();
       toast.success("Cập nhật hồ sơ thành công");
@@ -195,6 +205,7 @@ export default function ProfileInfoForm() {
             type="date"
             value={form.dateOfBirth}
             onChange={(e) => handleChange("dateOfBirth", e.target.value)}
+            max={new Date().toISOString().split("T")[0]}
             className="border-gray-300 focus:border-[#0D99FF] focus:ring-[#0D99FF]"
           />
         </div>

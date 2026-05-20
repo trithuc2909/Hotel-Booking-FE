@@ -13,7 +13,7 @@ export default function FeaturedRoomsSection() {
   const hasFilter = !!(type || guests || checkIn || checkOut);
 
   const { data, isLoading } = useGetRoomsQuery({
-    roomTypeCode: type ? type.toUpperCase() : "VIP",
+    roomTypeCode: type ? type.toUpperCase() : (hasFilter ? undefined : "VIP"),
     guests: guests ? Number(guests) : undefined,
     checkIn: checkIn || undefined,
     checkOut: checkOut || undefined,
@@ -23,7 +23,7 @@ export default function FeaturedRoomsSection() {
   const rooms = data?.data ?? [];
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <section id="featured-rooms" className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="mb-8 text-center">
         <p className="text-sm font-semibold uppercase tracking-widest text-[#0D99FF]">
           {type === "vip" || !type

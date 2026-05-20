@@ -26,6 +26,11 @@ export default function RoomFilter() {
     parseAsString.withDefault("0-2200000"),
   );
 
+  const [amenities, setAmenities] = useQueryState(
+    "amenities",
+    parseAsString.withDefault(""),
+  );
+
   const [minPrice, maxPrice] = price.split("-").map(Number);
 
   const [localRange, setLocalRange] = useState<[number, number]>([
@@ -40,6 +45,7 @@ export default function RoomFilter() {
     setGuests(null);
     setPrice("0-2200000");
     setLocalRange(PRICE_DEFAULT);
+    setAmenities(null);
   };
 
   const Checkbox = ({ checked }: { checked: boolean }) => (
@@ -127,12 +133,31 @@ export default function RoomFilter() {
         </h4>
 
         <div className="space-y-2">
-          {AMENITIES.map((item) => (
-            <div key={item} className="flex items-center gap-2 cursor-pointer">
-              <Checkbox checked={false} />
-              <span className="text-sm text-gray-700">{item}</span>
-            </div>
-          ))}
+          {AMENITIES.map((item) => {
+            const selectedList = amenities ? amenities.split(",") : [];
+            const checked = selectedList.includes(item);
+
+            const handleAmenityClick = () => {
+              let newList: string[];
+              if (checked) {
+                newList = selectedList.filter((x) => x !== item);
+              } else {
+                newList = [...selectedList, item];
+              }
+              setAmenities(newList.length > 0 ? newList.join(",") : null);
+            };
+
+            return (
+              <div
+                key={item}
+                onClick={handleAmenityClick}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <Checkbox checked={checked} />
+                <span className="text-sm text-gray-700">{item}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
       {/* Guest quantity */}

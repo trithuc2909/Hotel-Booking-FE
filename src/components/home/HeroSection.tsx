@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Users, BedDouble } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQueryState, parseAsString } from "nuqs";
@@ -36,22 +36,41 @@ const GUEST_OPTIONS = [
 ] as const;
 
 export default function HeroSection() {
-  const [roomType, setRoomType] = useQueryState("type", parseAsString.withDefault(""));
-  const [checkIn, setCheckIn] = useQueryState("checkIn", parseAsString.withDefault(""));
-  const [checkOut, setCheckOut] = useQueryState("checkOut", parseAsString.withDefault(""));
-  const [guests, setGuests] = useQueryState("guests", parseAsString.withDefault(""));
+  const [typeQuery, setTypeQuery] = useQueryState("type", parseAsString.withDefault(""));
+  const [checkInQuery, setCheckInQuery] = useQueryState("checkIn", parseAsString.withDefault(""));
+  const [checkOutQuery, setCheckOutQuery] = useQueryState("checkOut", parseAsString.withDefault(""));
+  const [guestsQuery, setGuestsQuery] = useQueryState("guests", parseAsString.withDefault(""));
+
+  const [localRoomType, setLocalRoomType] = useState(typeQuery);
+  const [localCheckIn, setLocalCheckIn] = useState(checkInQuery);
+  const [localCheckOut, setLocalCheckOut] = useState(checkOutQuery);
+  const [localGuests, setLocalGuests] = useState(guestsQuery);
+
+  // Sync local states if query parameters change (e.g. back navigation or reset)
+  useEffect(() => {
+    setLocalRoomType(typeQuery);
+    setLocalCheckIn(checkInQuery);
+    setLocalCheckOut(checkOutQuery);
+    setLocalGuests(guestsQuery);
+  }, [typeQuery, checkInQuery, checkOutQuery, guestsQuery]);
 
   const handleSearch = () => {
-    const params = new URLSearchParams();
-    if (roomType) params.set("type", roomType);
-    if (checkIn) params.set("checkIn", format(checkIn, "yyyy-MM-dd"));
-    if (checkOut) params.set("checkOut", format(checkOut, "yyyy-MM-dd"));
-    if (guests) params.set("guests", guests);
+    setTypeQuery(localRoomType || null, { scroll: false });
+    setCheckInQuery(localCheckIn || null, { scroll: false });
+    setCheckOutQuery(localCheckOut || null, { scroll: false });
+    setGuestsQuery(localGuests || null, { scroll: false });
+
+    // Tự động scroll mượt mà xuống khu vực danh sách phòng
+    setTimeout(() => {
+      document.getElementById("featured-rooms")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
   };
 
   return (
     <section className="relative w-full">
-      {/* Section 1: background image */}
       <div className="relative h-[480px] w-full overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -61,10 +80,8 @@ export default function HeroSection() {
           }}
         />
 
-        {/* overlay dark */}
         <div className="absolute inset-0 bg-black/40" />
 
-        {/* title */}
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center px-4">
           <h1 className="text-4xl font-bold text-white leading-tight max-w-2xl">
             Khám phá thiên đường tại
@@ -74,7 +91,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Section 2: search bar */}
       <div className="relative z-20 mx-auto -mt-30 max-w-5xl px-4">
         <div className="rounded-2xl bg-white shadow-xl px-6 py-5">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr_1fr_1.2fr]">
@@ -84,7 +100,7 @@ export default function HeroSection() {
                 <BedDouble size={13} />
                 Loại phòng
               </label>
-              <Select value={roomType} onValueChange={setRoomType}>
+              <Select value={localRoomType} onValueChange={setLocalRoomType}>
                 <SelectTrigger className="h-11 w-full border-gray-200 rounded-lg cursor-pointer">
                   <SelectValue placeholder="Chọn loại phòng" />
                 </SelectTrigger>
@@ -108,11 +124,11 @@ export default function HeroSection() {
                   <button
                     className={cn(
                       "relative h-9 w-full rounded-lg border border-gray-200 px-3 pr-10 text-left text-sm flex items-center focus:outline-none focus:ring-2 focus:ring-[#0D99FF] cursor-pointer",
-                      !checkIn && "text-gray-400",
+                      !localCheckIn && "text-gray-400",
                     )}
                   >
-                    {checkIn
-                      ? format(checkIn, "dd/MM/yyyy", { locale: vi })
+                    {localCheckIn
+                      ? format(new Date(localCheckIn), "dd/MM/yyyy", { locale: vi })
                       : "Chọn ngày nhận"}
 
                     <CalendarIcon
@@ -126,13 +142,15 @@ export default function HeroSection() {
                   <Calendar
                     mode="single"
                     onSelect={(date) => {
-                      setCheckIn(date ? format(date, "yyyy-MM-dd") : null);
+                      const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
+                      setLocalCheckIn(formattedDate);
 
                       // reset checkout if checkout < checkin
-                      if (checkOut && date && new Date(checkOut) < date) {
-                        setCheckOut(null);
+                      if (localCheckOut && date && new Date(localCheckOut) < date) {
+                        setLocalCheckOut("");
                       }
                     }}
+                    selected={localCheckIn ? new Date(localCheckIn) : undefined}
                     disabled={(date) =>
                       date < new Date(new Date().setHours(0, 0, 0, 0))
                     }
@@ -153,11 +171,11 @@ export default function HeroSection() {
                   <button
                     className={cn(
                       "relative h-9 w-full rounded-lg border border-gray-200 px-3 pr-10 text-left text-sm flex items-center focus:outline-none focus:ring-2 focus:ring-[#0D99FF] cursor-pointer",
-                      !checkOut && "text-gray-400",
+                      !localCheckOut && "text-gray-400",
                     )}
                   >
-                    {checkOut
-                      ? format(checkOut, "dd/MM/yyyy", { locale: vi })
+                    {localCheckOut
+                      ? format(new Date(localCheckOut), "dd/MM/yyyy", { locale: vi })
                       : "Chọn ngày trả"}
 
                     <CalendarIcon
@@ -170,10 +188,10 @@ export default function HeroSection() {
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" avoidCollisions={false}>
                   <Calendar
                     mode="single"
-                    onSelect={(date) => setCheckOut(date ? format(date, "yyyy-MM-dd") : null)}
-                    selected={checkOut ? new Date(checkOut) : undefined}
+                    onSelect={(date) => setLocalCheckOut(date ? format(date, "yyyy-MM-dd") : "")}
+                    selected={localCheckOut ? new Date(localCheckOut) : undefined}
                     disabled={(date) =>
-                      date < (checkIn ? new Date(checkIn) : new Date(new Date().setHours(0, 0, 0, 0)))
+                      date < (localCheckIn ? new Date(localCheckIn) : new Date(new Date().setHours(0, 0, 0, 0)))
                     }
                     initialFocus
                     locale={vi}
@@ -188,7 +206,7 @@ export default function HeroSection() {
                 Số lượng khách
               </label>
               <div className="flex gap-2">
-                <Select value={guests} onValueChange={setGuests}>
+                <Select value={localGuests} onValueChange={setLocalGuests}>
                   <SelectTrigger className="h-11 flex-1 border-gray-200 rounded-lg cursor-pointer">
                     <SelectValue placeholder="Chọn khách" />
                   </SelectTrigger>
@@ -203,7 +221,7 @@ export default function HeroSection() {
                 {/* search button */}
                 <Button
                   onClick={handleSearch}
-                  className="h-9 w-11 rounded-lg bg-[#0D99FF] p-0 hover:bg-[#0B84E6] flex-shrink-0 cursor-pointer"
+                  className="h-9 w-12 rounded-lg bg-[#0D99FF] p-0 hover:bg-[#0B84E6] flex-shrink-0 cursor-pointer flex items-center justify-center"
                   aria-label="Tìm kiếm phòng"
                 >
                   <Search size={18} className="text-white" />
