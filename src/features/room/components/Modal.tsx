@@ -8,7 +8,7 @@ import type { RoomResponse } from "@/features/room/types/room.type";
 const DEFAULT_IMG =
   "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200";
 
-type RoomStatus = "AVL" | "CLN" | "OCP" | "RSV";
+type RoomStatus = "AVL" | "CLN" | "MNT";
 
 interface BaseModalProps {
   room: RoomResponse;
@@ -127,28 +127,19 @@ const STATUSES: {
     text: "text-orange-500",
   },
   {
-    code: "OCP",
-    label: "Đang ở",
-    emoji: "🏨",
-    border: "border-red-400",
-    bg: "bg-red-50",
-    text: "text-red-500",
-  },
-  {
-    code: "RSV",
-    label: "Đã đặt trước",
-    emoji: "📋",
-    border: "border-blue-400",
-    bg: "bg-blue-50",
-    text: "text-blue-500",
+    code: "MNT",
+    label: "Bảo trì",
+    emoji: "🔧",
+    border: "border-violet-400",
+    bg: "bg-violet-50",
+    text: "text-violet-700",
   },
 ];
 
 const TRANSITIONS: { from: string; fromEmoji: string; to: string[] }[] = [
-  { from: "Còn trống", fromEmoji: "✅", to: ["Đang ở", "Đã đặt trước"] },
-  { from: "Đang ở", fromEmoji: "🏨", to: ["Đang dọn dẹp"] },
+  { from: "Còn trống", fromEmoji: "✅", to: ["Đang dọn dẹp", "Bảo trì"] },
   { from: "Đang dọn dẹp", fromEmoji: "🧹", to: ["Còn trống"] },
-  { from: "Đã đặt trước", fromEmoji: "📋", to: ["Đang ở", "Còn trống"] },
+  { from: "Bảo trì", fromEmoji: "🔧", to: ["Còn trống"] },
 ];
 
 function StatusGuideModal({ onClose }: { onClose: () => void }) {
@@ -172,8 +163,12 @@ function StatusGuideModal({ onClose }: { onClose: () => void }) {
               <span className="text-base">🗺️</span>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-gray-900">Hướng dẫn chuyển trạng thái</h3>
-              <p className="text-xs text-gray-400">Các luồng chuyển đổi hợp lệ</p>
+              <h3 className="text-sm font-bold text-gray-900">
+                Hướng dẫn chuyển trạng thái
+              </h3>
+              <p className="text-xs text-gray-400">
+                Các luồng chuyển đổi hợp lệ
+              </p>
             </div>
           </div>
           <button

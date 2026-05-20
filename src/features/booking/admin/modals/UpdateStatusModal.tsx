@@ -37,6 +37,8 @@ export default function UpdateStatusModal({
     { value: "CONFIRMED", label: "Đã thanh toán" },
     { value: "PENDING_PAYMENT", label: "Chờ thanh toán" },
     { value: "CANCELLED", label: "Đã hủy & hoàn tiền" },
+    { value: "CHECKED_IN", label: "Đã nhận phòng" },
+    { value: "CHECKED_OUT", label: "Đã trả phòng" },
   ];
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -49,7 +51,7 @@ export default function UpdateStatusModal({
             Mã đặt phòng: {bookingCode}
           </p>
         </DialogHeader>
-        <div className="py-4">
+        <div>
           <p className="text-xs font-bold text-gray-400 mb-3 tracking-wider">
             CHỌN TRẠNG THÁI MỚI
           </p>

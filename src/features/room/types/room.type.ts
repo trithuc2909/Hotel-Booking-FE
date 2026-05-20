@@ -32,6 +32,8 @@ export type RoomResponse = {
   rating: number | null;
   status: string;
   statusLabel: string | null;
+  displayStatus?: string;
+  displayStatusLabel?: string | null;
   amenities: AmenityResponse[];
 };
 
@@ -95,9 +97,17 @@ export type SelectedRoom = {
 
 export const ROOM_STATUS = {
   AVAILABLE: "AVL",
-  OCCUPIED: "OCP",
   CLEANING: "CLN",
-  RESERVED: "RSV",
+  MAINTENANCE: "MNT",
 } as const;
 
 export type RoomStatusCode = (typeof ROOM_STATUS)[keyof typeof ROOM_STATUS];
+
+export const ROOM_DISPLAY_STATUS = {
+  AVAILABLE: "AVL",
+  CLEANING: "CLN",
+  MAINTENANCE: "MNT",
+  OCCUPIED: "OCP",
+  RESERVED: "RSV",
+} as const;
+
