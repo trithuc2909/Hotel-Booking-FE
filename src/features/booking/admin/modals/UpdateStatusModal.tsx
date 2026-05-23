@@ -8,31 +8,39 @@ import {
 import { Button } from "@/components/ui/button";
 import { useUpdateBookingStatusMutation } from "../../api/bookingApi";
 import { toast } from "sonner";
+
 interface UpdateStatusModalProps {
   isOpen: boolean;
   onClose: () => void;
   bookingCode: string;
   bookingId: string;
   currentStatus: string;
+  onSuccess?: () => void;
 }
+
 export default function UpdateStatusModal({
   isOpen,
   onClose,
   bookingCode,
   bookingId,
   currentStatus,
+  onSuccess,
 }: UpdateStatusModalProps) {
+
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
   const [updateStatus, { isLoading }] = useUpdateBookingStatusMutation();
+
   const handleUpdate = async () => {
     try {
       await updateStatus({ id: bookingId, status: selectedStatus }).unwrap();
       toast.success("Cập nhật trạng thái thành công!");
+      onSuccess?.();
       onClose();
     } catch (error) {
       toast.error("Không thể cập nhật trạng thái");
     }
   };
+
   const statuses = [
     { value: "CONFIRMED", label: "Đã thanh toán" },
     { value: "PENDING_PAYMENT", label: "Chờ thanh toán" },
@@ -59,21 +67,19 @@ export default function UpdateStatusModal({
             {statuses.map((status) => (
               <label
                 key={status.value}
-                className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${
-                  selectedStatus === status.value
-                    ? "border-[#0D99FF] bg-blue-50/50"
-                    : "border-gray-200 hover:bg-gray-50"
-                }`}
+                className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${selectedStatus === status.value
+                  ? "border-[#0D99FF] bg-blue-50/50"
+                  : "border-gray-200 hover:bg-gray-50"
+                  }`}
               >
                 <span className="text-sm font-semibold text-gray-800">
                   {status.label}
                 </span>
                 <div
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    selectedStatus === status.value
-                      ? "border-[#0D99FF]"
-                      : "border-gray-300"
-                  }`}
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedStatus === status.value
+                    ? "border-[#0D99FF]"
+                    : "border-gray-300"
+                    }`}
                 >
                   {selectedStatus === status.value && (
                     <div className="w-2.5 h-2.5 rounded-full bg-[#0D99FF]" />

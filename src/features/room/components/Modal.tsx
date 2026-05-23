@@ -110,31 +110,31 @@ const STATUSES: {
   bg: string;
   text: string;
 }[] = [
-  {
-    code: "AVL",
-    label: "Còn trống",
-    emoji: "✅",
-    border: "border-green-400",
-    bg: "bg-green-50",
-    text: "text-green-600",
-  },
-  {
-    code: "CLN",
-    label: "Đang dọn dẹp",
-    emoji: "🧹",
-    border: "border-orange-400",
-    bg: "bg-orange-50",
-    text: "text-orange-500",
-  },
-  {
-    code: "MNT",
-    label: "Bảo trì",
-    emoji: "🔧",
-    border: "border-violet-400",
-    bg: "bg-violet-50",
-    text: "text-violet-700",
-  },
-];
+    {
+      code: "AVL",
+      label: "Còn trống",
+      emoji: "✅",
+      border: "border-green-400",
+      bg: "bg-green-50",
+      text: "text-green-600",
+    },
+    {
+      code: "CLN",
+      label: "Đang dọn dẹp",
+      emoji: "🧹",
+      border: "border-orange-400",
+      bg: "bg-orange-50",
+      text: "text-orange-500",
+    },
+    {
+      code: "MNT",
+      label: "Bảo trì",
+      emoji: "🔧",
+      border: "border-violet-400",
+      bg: "bg-violet-50",
+      text: "text-violet-700",
+    },
+  ];
 
 const TRANSITIONS: { from: string; fromEmoji: string; to: string[] }[] = [
   { from: "Còn trống", fromEmoji: "✅", to: ["Đang dọn dẹp", "Bảo trì"] },
@@ -273,8 +273,8 @@ export function UpdateStatusModal({
             className="rounded-lg object-cover"
           />
           <div>
-            <p className="text-xs font-semibold uppercase text-[#0D99FF]">
-              {room.roomNumber}
+            <p className="text-xs font-semibold text-[#0D99FF]">
+              Phòng {room.roomNumber}
             </p>
             <p className="text-sm font-semibold text-gray-800">
               {room.roomName}
@@ -305,17 +305,15 @@ export function UpdateStatusModal({
               <button
                 key={s.code}
                 onClick={() => setSelected(s.code)}
-                className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition cursor-pointer ${
-                  isSelected
+                className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition cursor-pointer ${isSelected
                     ? `${s.border} ${s.bg}`
                     : "border-gray-100 hover:border-gray-200"
-                }`}
+                  }`}
               >
                 <span className="text-2xl">{s.emoji}</span>
                 <span
-                  className={`text-xs font-semibold ${
-                    isSelected ? s.text : "text-gray-500"
-                  }`}
+                  className={`text-xs font-semibold ${isSelected ? s.text : "text-gray-500"
+                    }`}
                 >
                   {s.label}
                 </span>

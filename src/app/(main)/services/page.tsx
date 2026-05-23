@@ -14,7 +14,7 @@ const FALLBACK =
 
 const CATEGORY_COLORS: Record<string, string> = {
   "Di chuyển": "bg-blue-50 text-blue-600",
-  "Trang trí nội thất": "bg-pink-50 text-pink-600",
+  "Trang trí sự kiện": "bg-pink-50 text-pink-600",
   "Thư giãn": "bg-green-50 text-green-600",
   "Khám phá": "bg-amber-50 text-amber-600",
 };
@@ -41,7 +41,7 @@ export default function ServicesPage() {
       <div className="bg-white border-b border-gray-100 shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
           <Breadcrumb
-            items={[{ label: "Trang chủ", href: "/" }, { label: "Dịch vụ" }]}
+            items={[{ label: "Trang dịch vụ" }]}
           />
         </div>
       </div>
@@ -72,11 +72,10 @@ export default function ServicesPage() {
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
-                activeTab === cat
-                  ? "bg-[#0D99FF] text-white shadow-sm"
-                  : "bg-white text-gray-600 border border-gray-200 hover:border-[#0D99FF] hover:text-[#0D99FF]"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${activeTab === cat
+                ? "bg-[#0D99FF] text-white shadow-sm"
+                : "bg-white text-gray-600 border border-gray-200 hover:border-[#0D99FF] hover:text-[#0D99FF]"
+                }`}
             >
               {cat}
             </button>

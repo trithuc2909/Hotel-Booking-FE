@@ -64,9 +64,7 @@ export default function RoomDetailView() {
             />
 
             <div className="flex gap-8 items-start">
-              {/* LEFT: information */}
               <div className="flex-1 min-w-0 space-y-8">
-                {/* Name + rating */}
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900">
                     {room.roomName}

@@ -111,7 +111,7 @@ export const columns: ColumnDef<AdminBookingResponse>[] = [
 
       return (
         <span
-          className={`inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold ${className}`}
+          className={`inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${className}`}
         >
           {statusLabel}
         </span>

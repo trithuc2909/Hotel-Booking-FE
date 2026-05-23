@@ -47,8 +47,8 @@ const authSlice = createSlice({
       state,
       action: PayloadAction<{ accessToken: string; refreshToken: string }>,
     ) => {
-      Cookies.set("access_token", action.payload.accessToken);
-      Cookies.set("refresh_token", action.payload.refreshToken);
+      Cookies.set("access_token", action.payload.accessToken, { path: "/" });
+      Cookies.set("refresh_token", action.payload.refreshToken, { path: "/" });
       state.isAuthenticated = true;
       const decoded = decodeToken(action.payload.accessToken);
       state.userId = decoded?.userId || null;
@@ -60,8 +60,8 @@ const authSlice = createSlice({
     },
 
     logout: (state) => {
-      Cookies.remove("access_token");
-      Cookies.remove("refresh_token");
+      Cookies.remove("access_token", { path: "/" });
+      Cookies.remove("refresh_token", { path: "/" });
       state.isAuthenticated = false;
       state.userId = null;
       state.role = null;

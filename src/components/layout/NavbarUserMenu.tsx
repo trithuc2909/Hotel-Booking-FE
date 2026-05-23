@@ -29,7 +29,7 @@ export default function NavbarUserMenu() {
 
   const handleLogout = () => {
     dispatch(logout());
-    router.push("/");
+    window.location.href = "/";
   };
 
   if (!isLoggedIn) {

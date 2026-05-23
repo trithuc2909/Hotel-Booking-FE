@@ -81,7 +81,7 @@ export default function PromotionsPage() {
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-100 shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <Breadcrumb items={[{ label: "Trang chủ", href: "/" }, { label: "Ưu đãi" }]} />
+          <Breadcrumb items={[{ label: "Trang ưu đãi" }]} />
         </div>
       </div>
 

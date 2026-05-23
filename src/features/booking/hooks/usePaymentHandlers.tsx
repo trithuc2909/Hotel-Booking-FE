@@ -49,6 +49,8 @@ export const usePaymentHandlers = ({
           quantity: s.quantity,
         })),
         paymentMethod,
+        fullName: guestName,
+        phone: guestPhone,
       };
       const response = await createBooking(payload).unwrap();
       if (response.succeeded) {

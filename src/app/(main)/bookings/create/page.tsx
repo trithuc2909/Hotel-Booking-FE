@@ -80,7 +80,7 @@ function BookingContent() {
     1,
     Math.round(
       (new Date(checkOutDate).getTime() - new Date(checkInDate).getTime()) /
-        86_400_000,
+      86_400_000,
     ),
   );
 
@@ -157,6 +157,16 @@ function BookingContent() {
       return;
     }
 
+    if (!fullName.trim()) {
+      toast.error("Vui lòng nhập họ và tên");
+      return;
+    }
+    const vnPhoneRegex = /^(0[3|5|7|8|9])[0-9]{8}$/;
+    if (!vnPhoneRegex.test(phoneNumber.trim())) {
+      toast.error("Số điện thoại không hợp lệ (phải là 10 số, bắt đầu bằng 03/05/07/08/09)");
+      return;
+    }
+
     let bookingId: string;
 
     try {
@@ -165,6 +175,8 @@ function BookingContent() {
         checkOutDate: checkOutDate,
         numberOfGuests: guests,
         promotionId: promotionId ?? undefined,
+        fullName: fullName.trim() || undefined,
+        phone: phoneNumber.trim() || undefined,
         rooms: selectedRooms.map((r) => ({ roomId: r.roomId })),
         services: selectedServices.map((s) => ({
           serviceId: s.id,

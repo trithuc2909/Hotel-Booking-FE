@@ -60,7 +60,6 @@ export default function HeroSection() {
     setCheckOutQuery(localCheckOut || null, { scroll: false });
     setGuestsQuery(localGuests || null, { scroll: false });
 
-    // Tự động scroll mượt mà xuống khu vực danh sách phòng
     setTimeout(() => {
       document.getElementById("featured-rooms")?.scrollIntoView({
         behavior: "smooth",
@@ -76,7 +75,7 @@ export default function HeroSection() {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600')",
+              "url('https://pub-0c514fde58c44894b9361fd99116f89a.r2.dev/defaults/hero-background.jpg?w=1600')",
           }}
         />
 

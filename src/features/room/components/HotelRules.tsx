@@ -1,4 +1,4 @@
-import { Clock, Cigarette, Volume2, CreditCard, Dog } from "lucide-react";
+import { Clock, Cigarette, Volume2, CreditCard, Dog, ShieldCheck } from "lucide-react";
 
 const RULES = [
   { icon: Clock, title: "Nhận và trả phòng", desc: "Nhận phòng từ 12:00 – Trả phòng trước 12:00 ngày hôm sau." },
@@ -6,6 +6,7 @@ const RULES = [
   { icon: Volume2, title: "Không gây ồn ào", desc: "Không làm ồn từ 23:00 – 6:00 để tôn trọng khách khác." },
   { icon: CreditCard, title: "Xuất trình giấy tờ khi nhận phòng", desc: "Cung cấp CCCD hoặc hộ chiếu để làm thủ tục check-in." },
   { icon: Dog, title: "Không mang thú nuôi", desc: "Khách không được phép mang vật nuôi vào phòng." },
+  { icon: ShieldCheck, title: "Giữ gìn tài sản khách sạn ", desc: "Nếu làm hư hỏng phải bồi thường theo giá trị." },
 ];
 
 export default function HotelRules() {

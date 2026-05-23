@@ -114,9 +114,10 @@ export default function BookingFilterBar({
         <Button
           variant="ghost"
           onClick={onClearFilter}
-          className="group h-9 px-2 lg:px-3 text-xs text-muted-foreground cursor-pointer"
+          className="group h-9 w-9 p-0 text-muted-foreground hover:bg-slate-100 hover:text-slate-700 rounded-lg cursor-pointer flex items-center justify-center shrink-0"
+          title="Xóa bộ lọc"
         >
-          <X className="ml-2 h-4 w-4 transition-colors group-hover:text-red-500" />
+          <X className="h-4 w-4 transition-colors group-hover:text-red-500" />
         </Button>
       )}
     </div>

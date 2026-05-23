@@ -70,9 +70,6 @@ export default function AdminBookingsPage() {
           <h1 className="text-2xl font-extrabold text-gray-900 mt-2">
             Quản lý đặt phòng
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Giám sát các lượt lưu trú hiện tại và khách sắp đến.
-          </p>
         </div>
       </div>
 

@@ -87,7 +87,6 @@ export function RoomCard({ room }: { room: RoomResponse }) {
           </div>
         )}
 
-        {/* Giá + nút */}
         <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-4">
           <div>
             <p className="text-xs text-gray-400">Từ</p>
@@ -98,7 +97,7 @@ export function RoomCard({ room }: { room: RoomResponse }) {
           </div>
           <Link
             href={`/rooms/${room.id}`}
-            className="rounded-lg bg-[#0D99FF] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0B84E6]"
+            className="rounded-xl bg-[#0D99FF] px-4 py-2.5 text-xs font-bold text-white transition-all duration-200 hover:bg-[#0B84E6] hover:shadow-md hover:shadow-blue-100 flex items-center justify-center"
           >
             Đặt ngay
           </Link>

@@ -1,4 +1,4 @@
-const MINIO_URL = process.env.NEXT_PUBLIC_MINIO_URL ?? "http://localhost:9000";
+const MINIO_URL = process.env.NEXT_PUBLIC_MINIO_URL ?? "http://localhost:9000/images";
 
 export const ASSETS = {
   logoDefault: `${MINIO_URL}/defaults/logo-default.png`,

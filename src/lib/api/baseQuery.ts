@@ -73,12 +73,13 @@ export const customBaseQueryWithReauth: BaseQueryFn<
 
       if (accessToken) {
         // Save new token
-        Cookies.set("access_token", accessToken);
+        Cookies.set("access_token", accessToken, { path: "/" });
         processQueue(null, accessToken);
-        // Retry original request
         result = await baseQuery(args, api, extraOptions);
       } else {
-        // Refresh token failed - redirect to login
+        Cookies.remove("access_token", { path: "/" });
+        Cookies.remove("refresh_token", { path: "/" });
+        api.dispatch({ type: "auth/logout" });
         processQueue(new Error("Authentication failed"));
         if (
           typeof window !== "undefined" &&

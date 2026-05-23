@@ -17,6 +17,7 @@ import {
   Calendar as CalendarIcon,
   Lightbulb,
 } from "lucide-react";
+import UpdateStatusModal from "../../booking/admin/modals/UpdateStatusModal";
 
 const COLS_PER_DAY = 2;
 const ROOM_NAME_COL_WIDTH = "128px";
@@ -25,18 +26,18 @@ const SCROLL_HEIGHT_OFFSET = "260px";
 const GRID_COLS = `${ROOM_NAME_COL_WIDTH} repeat(${7 * COLS_PER_DAY}, 1fr)`;
 
 const STATUS_STYLES: Record<string, { bar: string; dot: string }> = {
-  CHECKED_IN:      { bar: "bg-blue-500 text-white",   dot: "bg-blue-500" },
-  CONFIRMED:       { bar: "bg-amber-400 text-white",  dot: "bg-amber-400" },
-  PENDING:         { bar: "bg-amber-400 text-white",  dot: "bg-amber-400" },
+  CHECKED_IN: { bar: "bg-blue-500 text-white", dot: "bg-blue-500" },
+  CONFIRMED: { bar: "bg-amber-400 text-white", dot: "bg-amber-400" },
+  PENDING: { bar: "bg-amber-400 text-white", dot: "bg-amber-400" },
   PENDING_PAYMENT: { bar: "bg-orange-400 text-white", dot: "bg-orange-400" },
-  CHECKED_OUT:     { bar: "bg-gray-200 text-gray-600 border border-gray-300", dot: "bg-gray-400" },
+  CHECKED_OUT: { bar: "bg-gray-200 text-gray-600 border border-gray-300", dot: "bg-gray-400" },
 };
 
 const LEGEND = [
-  { label: "Đang ở",           status: "CHECKED_IN" },
-  { label: "Chờ nhận phòng",   status: "CONFIRMED" },
-  { label: "Chờ thanh toán",   status: "PENDING_PAYMENT" },
-  { label: "Đã trả phòng",     status: "CHECKED_OUT" },
+  { label: "Đang ở", status: "CHECKED_IN" },
+  { label: "Chờ nhận phòng", status: "CONFIRMED" },
+  { label: "Chờ thanh toán", status: "PENDING_PAYMENT" },
+  { label: "Đã trả phòng", status: "CHECKED_OUT" },
 ];
 
 const TIMELINE_TEXTS = {
@@ -51,7 +52,7 @@ const TIMELINE_TEXTS = {
   checkOut: "Trả",
   duration: "Thời gian lưu trú:",
   nightUnit: "đêm",
-  
+
   status: {
     CHECKED_IN: "Đang ở",
     CONFIRMED: "Chờ nhận",
@@ -80,13 +81,15 @@ export default function RoomTimeline({
     return options;
   }, []);
 
+  const [activeBookingUpdate, setActiveBookingUpdate] = useState<any | null>(null);
+
   const handleDateChange = (newDate: Date) => {
     onChangeDate(newDate);
   };
 
   const { fromDate, toDate, days } = useMemo(() => {
     const start = startOfWeek(currentDate, { weekStartsOn: 1 });
-    const end   = endOfWeek(currentDate,   { weekStartsOn: 1 });
+    const end = endOfWeek(currentDate, { weekStartsOn: 1 });
     const daysArr = Array.from({ length: 7 }, (_, i) => {
       const d = addDays(start, i);
       return { label: format(d, "EEE").toUpperCase(), date: parseInt(format(d, "d")), fullDate: d };
@@ -94,9 +97,9 @@ export default function RoomTimeline({
     return { fromDate: start, toDate: end, days: daysArr };
   }, [currentDate]);
 
-  const { data, isLoading, isFetching } = useGetRoomTimelineQuery({
+  const { data, isLoading, isFetching, refetch } = useGetRoomTimelineQuery({
     from: format(fromDate, "yyyy-MM-dd"),
-    to:   format(toDate,   "yyyy-MM-dd"),
+    to: format(toDate, "yyyy-MM-dd"),
   });
 
   const rooms = useMemo(() => {
@@ -109,15 +112,15 @@ export default function RoomTimeline({
   const today = new Date();
 
   const getGridColumn = (checkInDate: string, checkOutDate: string) => {
-    const checkIn  = new Date(checkInDate);
+    const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
 
     let startCol = differenceInCalendarDays(checkIn, fromDate) * COLS_PER_DAY + 3;
-    let endCol   = differenceInCalendarDays(checkOut, fromDate) * COLS_PER_DAY + 3;
+    let endCol = differenceInCalendarDays(checkOut, fromDate) * COLS_PER_DAY + 3;
 
-    const maxCols = 7 * COLS_PER_DAY + 2; 
+    const maxCols = 7 * COLS_PER_DAY + 2;
     if (startCol < 2) startCol = 2;
-    if (endCol > maxCols)  endCol   = maxCols;
+    if (endCol > maxCols) endCol = maxCols;
 
     if (startCol >= endCol) {
       endCol = startCol + 1;
@@ -128,7 +131,8 @@ export default function RoomTimeline({
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm relative overflow-hidden">
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .scrollbar-none::-webkit-scrollbar {
           display: none;
         }
@@ -155,7 +159,7 @@ export default function RoomTimeline({
               <h3 className="font-semibold text-gray-800 text-base">{TIMELINE_TEXTS.title}</h3>
               <div className="flex items-center gap-3 mt-1.5">
                 <div className="flex items-center rounded-md border border-gray-200 bg-white overflow-hidden shadow-sm">
-                   <button
+                  <button
                     onClick={() => handleDateChange(addDays(currentDate, -7))}
                     className="cursor-pointer p-1 hover:bg-gray-50 text-gray-600 transition-colors"
                     title={TIMELINE_TEXTS.prevWeek}
@@ -228,9 +232,8 @@ export default function RoomTimeline({
                   <div className="text-[10px] font-semibold tracking-widest uppercase">
                     {d.label}
                   </div>
-                  <div className={`text-sm font-bold mt-0.5 w-7 h-7 mx-auto flex items-center justify-center rounded-full ${
-                    isToday ? "bg-blue-500 text-white" : "text-gray-800"
-                  }`}>
+                  <div className={`text-sm font-bold mt-0.5 w-7 h-7 mx-auto flex items-center justify-center rounded-full ${isToday ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`}>
                     {d.date}
                   </div>
                 </div>
@@ -278,7 +281,7 @@ export default function RoomTimeline({
               ))}
 
               {room.bookings.map((booking) => {
-                const checkIn  = new Date(booking.checkInDate);
+                const checkIn = new Date(booking.checkInDate);
                 const checkOut = new Date(booking.checkOutDate);
 
                 if (
@@ -290,7 +293,7 @@ export default function RoomTimeline({
                 const style = STATUS_STYLES[booking.status] ?? STATUS_STYLES.CONFIRMED;
 
                 const startColVal = differenceInCalendarDays(checkIn, fromDate) * COLS_PER_DAY + 3;
-                const endColVal   = differenceInCalendarDays(checkOut, fromDate) * COLS_PER_DAY + 3;
+                const endColVal = differenceInCalendarDays(checkOut, fromDate) * COLS_PER_DAY + 3;
 
                 const isTopRow = roomIdx < 2;
                 const isNearLeft = startColVal < 6;
@@ -322,6 +325,7 @@ export default function RoomTimeline({
                     style={{ gridColumn, gridRow: 1, zIndex: 1 }}
                   >
                     <div
+                      onClick={() => setActiveBookingUpdate(booking)}
                       className={`h-10 rounded-md px-2.5 flex flex-col justify-center overflow-hidden cursor-pointer hover:opacity-90 transition-opacity ${style.bar}`}
                     >
                       <p className="font-semibold truncate text-[11px] leading-tight">
@@ -335,12 +339,11 @@ export default function RoomTimeline({
                     <div className={`absolute ${tooltipVerticalClass} ${tooltipAlignClass} hidden group-hover:flex flex-col gap-1.5 bg-slate-900/95 text-white p-3 rounded-lg shadow-xl text-xs w-60 z-50 pointer-events-none backdrop-blur-sm border border-slate-700/60 transition-all`}>
                       <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-0.5">
                         <span className="font-bold text-[#0D99FF]">{booking.bookingCode}</span>
-                        <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ${
-                          booking.status === 'CHECKED_IN' ? 'bg-blue-500/20 text-blue-300' :
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ${booking.status === 'CHECKED_IN' ? 'bg-blue-500/20 text-blue-300' :
                           booking.status === 'CONFIRMED' ? 'bg-amber-500/20 text-amber-300' :
-                          booking.status === 'PENDING_PAYMENT' ? 'bg-orange-500/20 text-orange-300' :
-                          'bg-gray-500/20 text-gray-300'
-                        }`}>
+                            booking.status === 'PENDING_PAYMENT' ? 'bg-orange-500/20 text-orange-300' :
+                              'bg-gray-500/20 text-gray-300'
+                          }`}>
                           {TIMELINE_TEXTS.status[booking.status] || booking.status}
                         </span>
                       </div>
@@ -380,7 +383,7 @@ export default function RoomTimeline({
                 <p className="text-[9px] text-gray-400 mt-0.5">Khách đã nhận phòng</p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-2">
               <span className="w-5 h-5 rounded bg-amber-400 flex-shrink-0" />
               <div>
@@ -421,6 +424,16 @@ export default function RoomTimeline({
           </div>
         </div>
       </div>
+      {activeBookingUpdate && (
+        <UpdateStatusModal
+          isOpen={!!activeBookingUpdate}
+          onClose={() => setActiveBookingUpdate(null)}
+          bookingId={activeBookingUpdate.id}
+          bookingCode={activeBookingUpdate.bookingCode}
+          currentStatus={activeBookingUpdate.status}
+          onSuccess={refetch}
+        />
+      )}
     </div>
   );
 }

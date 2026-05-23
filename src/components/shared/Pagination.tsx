@@ -20,7 +20,7 @@ export default function Pagination({
   pageSizeOptions,
 }: Props) {
   const options = pageSizeOptions || PAGE_SIZE_OPTIONS;
-  
+
   const hasEnhanced =
     total !== undefined &&
     pageSize !== undefined &&
@@ -30,8 +30,38 @@ export default function Pagination({
 
   if (totalPages <= 1) return null;
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-
+  const getVisiblePages = () => {
+    const range: (number | string)[] = [];
+    const maxVisible = 7;
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        range.push(i);
+      }
+    } else {
+      if (page <= 4) {
+        for (let i = 1; i <= 5; i++) {
+          range.push(i);
+        }
+        range.push("...");
+        range.push(totalPages);
+      } else if (page >= totalPages - 3) {
+        range.push(1);
+        range.push("...");
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          range.push(i);
+        }
+      } else {
+        range.push(1);
+        range.push("...");
+        range.push(page - 1);
+        range.push(page);
+        range.push(page + 1);
+        range.push("...");
+        range.push(totalPages);
+      }
+    }
+    return range;
+  }
   return (
     <div className="mt-4 flex items-center justify-between w-full">
       {hasEnhanced && (
@@ -63,29 +93,41 @@ export default function Pagination({
         <button
           disabled={page === 1}
           onClick={() => onPageChange(page - 1)}
-          className="rounded-lg border px-3 py-1.5 text-sm disabled:opacity-40 hover:bg-gray-50 cursor-pointer"
+          className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-sm disabled:opacity-40 hover:bg-slate-50 transition-all cursor-pointer bg-white"
         >
           ‹
         </button>
 
-        {pages.map((p) => (
-          <button
-            key={p}
-            onClick={() => onPageChange(p)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium cursor-pointer ${
-              p === page
-                ? "bg-[#0D99FF] text-white"
-                : "border hover:bg-gray-50 text-gray-600"
-            }`}
-          >
-            {p}
-          </button>
-        ))}
+        {getVisiblePages().map((p, idx) => {
+          if (p === "...") {
+            return (
+              <span
+                key={`ellipsis-${idx}`}
+                className="px-2.5 py-1 text-sm text-gray-400 font-medium select-none"
+              >
+                ...
+              </span>
+            );
+          }
+          const pageNum = p as number;
+          return (
+            <button
+              key={pageNum}
+              onClick={() => onPageChange(pageNum)}
+              className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 cursor-pointer ${pageNum === page
+                ? "bg-[#0D99FF] text-white shadow-md shadow-blue-100"
+                : "border border-gray-200 hover:bg-slate-50 hover:text-blue-500 hover:border-blue-300 text-gray-600 bg-white"
+                }`}
+            >
+              {pageNum}
+            </button>
+          );
+        })}
 
         <button
           disabled={page === totalPages}
           onClick={() => onPageChange(page + 1)}
-          className="rounded-lg border px-3 py-1.5 text-sm disabled:opacity-40 hover:bg-gray-50 cursor-pointer"
+          className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-sm disabled:opacity-40 hover:bg-slate-50 transition-all cursor-pointer bg-white"
         >
           ›
         </button>

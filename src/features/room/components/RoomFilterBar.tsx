@@ -57,7 +57,7 @@ function FilterSelect({
           className="pointer-events-none absolute right-2 h-3 w-3 text-gray-400"
           viewBox="0 0 12 12" fill="none"
         >
-          <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
     </div>
@@ -84,7 +84,7 @@ export default function RoomFilterBar({
         {[
           { color: "bg-green-400", label: "Còn trống" },
           { color: "bg-orange-400", label: "Dọn dẹp" },
-          { color: "bg-red-400", label: "Đang ở" },
+          { color: "bg-blue-400", label: "Đang ở" },
         ].map(({ color, label }) => (
           <span key={label} className="flex items-center gap-1.5 text-[11px] text-gray-400">
             <span className={`h-1.5 w-1.5 rounded-full ${color}`} />

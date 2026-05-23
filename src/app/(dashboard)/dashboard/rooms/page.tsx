@@ -135,11 +135,12 @@ export default function AdminRoomsPage() {
         />
         <button
           onClick={() => router.push("/dashboard/rooms/create")}
-          className="flex cursor-pointer shrink-0 items-center gap-2 rounded-lg bg-[#0D99FF] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0B84E6] transition-colors"
+          className="flex cursor-pointer shrink-0 items-center justify-center gap-2 rounded-lg bg-[#0D99FF] px-4 h-9 text-xs font-semibold text-white hover:bg-[#0B84E6] shadow-sm shadow-blue-100 transition-all duration-200"
         >
-          <Plus size={16} />
+          <Plus size={14} />
           Thêm Phòng Mới
         </button>
+
       </div>
 
       <RoomFilterBar
@@ -167,7 +168,7 @@ export default function AdminRoomsPage() {
           Lỗi khi tải dữ liệu
         </p>
       ) : (
-        <>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 space-y-4">
           <RoomTable rooms={rooms} columns={columns} />
           <Pagination
             page={pageNum}
@@ -180,7 +181,7 @@ export default function AdminRoomsPage() {
               setPageNum(1);
             }}
           />
-        </>
+        </div>
       )}
 
       {/* Modals */}
