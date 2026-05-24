@@ -26,7 +26,7 @@ function PromotionCard({ promo }: { promo: any }) {
       : `Giảm ${promo.discountValue}%`;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+    <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
       {/* Banner image */}
       <div className="relative h-44 w-full bg-gray-100">
         <Image
@@ -34,32 +34,30 @@ function PromotionCard({ promo }: { promo: any }) {
           alt={promo.title}
           fill
           className="object-cover"
-          onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK; }}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = FALLBACK;
+          }}
         />
         {/* Discount badge */}
-        <div className="absolute top-3 left-3 bg-[#0D99FF] text-white text-xs font-bold px-2.5 py-1 rounded-full">
+        <div className="absolute top-3 left-3 rounded-full bg-[#0D99FF] px-2.5 py-1 text-xs font-bold text-white">
           {discountLabel}
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-2">
-        <h3 className="font-bold text-gray-900 text-base">{promo.title}</h3>
-        <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
-          {promo.description}
-        </p>
+      <div className="space-y-2 p-4">
+        <h3 className="text-base font-bold text-gray-900">{promo.title}</h3>
+        <p className="line-clamp-2 text-xs leading-relaxed text-gray-500">{promo.description}</p>
 
         {/* Promo code */}
         <div className="flex items-center justify-between pt-1">
           <div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-0.5">Mã ưu đãi</p>
-            <span className="text-sm font-bold text-[#0D99FF] tracking-widest">
-              {promo.code}
-            </span>
+            <p className="mb-0.5 text-[10px] tracking-wide text-gray-400 uppercase">Mã ưu đãi</p>
+            <span className="text-sm font-bold tracking-widest text-[#0D99FF]">{promo.code}</span>
           </div>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-[#0D99FF] text-[#0D99FF] hover:bg-blue-50 transition cursor-pointer"
+            className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#0D99FF] px-3 py-1.5 text-xs font-medium text-[#0D99FF] transition hover:bg-blue-50"
           >
             {copied ? <Check size={13} /> : <Copy size={13} />}
             {copied ? "Đã copy" : "Copy"}
@@ -75,11 +73,11 @@ export default function PromotionsPage() {
   const promotions = data?.data ?? [];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-gray-50">
       <Navbar />
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100 shadow-sm">
+      <div className="border-b border-gray-100 bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
           <Breadcrumb items={[{ label: "Trang ưu đãi" }]} />
         </div>
@@ -89,26 +87,26 @@ export default function PromotionsPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Ưu đãi đặc biệt từ{" "}
-            <span className="text-[#0D99FF]">BullMan Hotel</span>
+            Ưu đãi đặc biệt từ <span className="text-[#0D99FF]">BullMan Hotel</span>
           </h1>
           <p className="mt-2 text-gray-500">
-            Tận hưởng những trải nghiệm nghỉ dưỡng xa hoa với các gói ưu đãi được thiết kế riêng cho kỳ nghỉ hoàn hảo của bạn.
+            Tận hưởng những trải nghiệm nghỉ dưỡng xa hoa với các gói ưu đãi được thiết kế riêng cho kỳ nghỉ hoàn hảo
+            của bạn.
           </p>
         </div>
 
         {/* Skeleton */}
         {isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+              <div key={i} className="h-64 animate-pulse rounded-2xl bg-gray-100" />
             ))}
           </div>
         )}
 
         {/* Grid */}
         {!isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {promotions.map((promo) => (
               <PromotionCard key={promo.id} promo={promo} />
             ))}

@@ -5,13 +5,11 @@ export default function Footer() {
     <footer className="bg-gray-900 pt-16 pb-8 text-gray-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          
           <div>
-            <span className="text-2xl font-bold tracking-tight text-white">
-              BULLMAN HOTEL
-            </span>
+            <span className="text-2xl font-bold tracking-tight text-white">BULLMAN HOTEL</span>
             <p className="mt-4 text-sm leading-relaxed text-gray-400">
-              Trải nghiệm kỳ nghỉ dưỡng đẳng cấp giữa lòng Đà Lạt mộng mơ. Nơi thiên nhiên và kiến trúc sang trọng hòa quyện hoàn hảo.
+              Trải nghiệm kỳ nghỉ dưỡng đẳng cấp giữa lòng Đà Lạt mộng mơ. Nơi thiên nhiên và kiến trúc sang trọng hòa
+              quyện hoàn hảo.
             </p>
             <div className="mt-6 flex gap-4">
               <a href="#" className="text-gray-400 transition-colors hover:text-white">
@@ -26,9 +24,7 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Khám phá
-            </h3>
+            <h3 className="text-sm font-semibold tracking-wider text-white uppercase">Khám phá</h3>
             <ul className="mt-4 space-y-3 text-sm text-gray-400">
               <li>
                 <Link href="/rooms" className="transition-colors hover:text-[#0D99FF]">
@@ -53,9 +49,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Chính sách
-            </h3>
+            <h3 className="text-sm font-semibold tracking-wider text-white uppercase">Chính sách</h3>
             <ul className="mt-4 space-y-3 text-sm text-gray-400">
               <li>
                 <Link href="#" className="transition-colors hover:text-[#0D99FF]">
@@ -80,9 +74,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Liên hệ
-            </h3>
+            <h3 className="text-sm font-semibold tracking-wider text-white uppercase">Liên hệ</h3>
             <ul className="mt-4 space-y-4 text-sm text-gray-400">
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="mt-0.5 shrink-0 text-[#0D99FF]" />
@@ -98,9 +90,8 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          
         </div>
-        <div className="mt-12 border-t border-gray-800 pt-8 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
+        <div className="mt-12 flex flex-col items-center justify-between border-t border-gray-800 pt-8 text-center text-sm text-gray-500 md:flex-row">
           <p>© {new Date().getFullYear()} Bullman Hotel. All rights reserved.</p>
           <p className="mt-2 md:mt-0">
             Thiết kế & phát triển với <span className="text-red-500">❤</span>

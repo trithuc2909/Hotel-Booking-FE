@@ -17,54 +17,39 @@ function StatCard({ title, value, change, icon, highlight }: StatCardProps) {
 
   return (
     <div
-      className={`rounded-xl border p-5 flex flex-col gap-3 shadow-sm transition-shadow hover:shadow-md ${highlight
-          ? "bg-gradient-to-br from-[#0D99FF] to-[#0B30A7] border-transparent text-white"
-          : "bg-white border-gray-100 text-gray-800"
-        }`}
+      className={`flex flex-col gap-3 rounded-xl border p-5 shadow-sm transition-shadow hover:shadow-md ${
+        highlight
+          ? "border-transparent bg-gradient-to-br from-[#0D99FF] to-[#0B30A7] text-white"
+          : "border-gray-100 bg-white text-gray-800"
+      }`}
     >
       <div className="flex items-center justify-between">
         <p
-          className={`text-xs font-semibold uppercase tracking-wider ${highlight ? "text-blue-100" : "text-gray-500"
-            }`}
+          className={`text-xs font-semibold tracking-wider uppercase ${highlight ? "text-blue-100" : "text-gray-500"}`}
         >
           {title}
         </p>
         <div
-          className={`flex h-8 w-8 items-center justify-center rounded-lg ${highlight ? "bg-white/20" : "bg-blue-50"
-            }`}
+          className={`flex h-8 w-8 items-center justify-center rounded-lg ${highlight ? "bg-white/20" : "bg-blue-50"}`}
         >
-          <span className={highlight ? "text-white" : "text-[#0D99FF]"}>
-            {icon}
-          </span>
+          <span className={highlight ? "text-white" : "text-[#0D99FF]"}>{icon}</span>
         </div>
       </div>
 
       <div className="flex items-end gap-2">
-        <span
-          className={`text-3xl font-bold ${highlight ? "text-white" : "text-gray-900"}`}
-        >
-          {value}
-        </span>
+        <span className={`text-3xl font-bold ${highlight ? "text-white" : "text-gray-900"}`}>{value}</span>
       </div>
 
       {change !== undefined && (
         <div className="flex items-center gap-1">
           <TrendingUp
             size={13}
-            className={`${isPositive
-                ? highlight
-                  ? "text-green-300"
-                  : "text-green-500"
-                : "text-red-400 rotate-180"
-              }`}
+            className={`${isPositive ? (highlight ? "text-green-300" : "text-green-500") : "rotate-180 text-red-400"}`}
           />
           <span
-            className={`text-xs font-medium ${isPositive
-                ? highlight
-                  ? "text-green-300"
-                  : "text-green-600"
-                : "text-red-500"
-              }`}
+            className={`text-xs font-medium ${
+              isPositive ? (highlight ? "text-green-300" : "text-green-600") : "text-red-500"
+            }`}
           >
             {isPositive ? "+" : ""}
             {change}% so với kỳ trước
@@ -75,23 +60,16 @@ function StatCard({ title, value, change, icon, highlight }: StatCardProps) {
   );
 }
 
-export default function StatsSection({
-  currentDate,
-}: {
-  currentDate: Date;
-}) {
+export default function StatsSection({ currentDate }: { currentDate: Date }) {
   const { data, isLoading } = useGetDashboardStatsQuery({
-    month: format(currentDate, "yyyy-MM")
+    month: format(currentDate, "yyyy-MM"),
   });
 
   if (isLoading || !data) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="h-32 rounded-xl bg-gray-100 animate-pulse flex items-center justify-center"
-          >
+          <div key={i} className="flex h-32 animate-pulse items-center justify-center rounded-xl bg-gray-100">
             <Loader2 className="animate-spin text-gray-400" />
           </div>
         ))}
@@ -105,13 +83,12 @@ export default function StatsSection({
     return val.toString() + " VNĐ";
   };
 
-  const formatNumber = (val: number) =>
-    new Intl.NumberFormat("vi-VN").format(val);
+  const formatNumber = (val: number) => new Intl.NumberFormat("vi-VN").format(val);
 
   const stats = data.data;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <StatCard
         title="Tổng doanh thu"
         value={formatMoney(stats.totalRevenue.value)}

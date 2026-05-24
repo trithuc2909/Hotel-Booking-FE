@@ -8,9 +8,7 @@ export type BookingDetailViewModel = BookingDetailItem & {
   customerName: string;
 };
 
-export function mapBookingDetailToViewModel(
-  dto: BookingDetailItem,
-): BookingDetailViewModel {
+export function mapBookingDetailToViewModel(dto: BookingDetailItem): BookingDetailViewModel {
   return {
     ...dto,
     customerName: dto.customer?.fullName ?? "Khách vãng lai",

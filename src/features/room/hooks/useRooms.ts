@@ -11,7 +11,7 @@ export function useRooms() {
   const [amenities] = useQueryState("amenities", parseAsString.withDefault(""));
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [pageSize, setPageSize] = useQueryState("limit", parseAsInteger.withDefault(9));
-  
+
   const [, setOldPageSize] = useQueryState("pageSize");
   useEffect(() => {
     setOldPageSize(null);

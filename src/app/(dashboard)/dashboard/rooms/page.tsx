@@ -4,17 +4,10 @@ import Breadcrumb from "@/components/shared/Breadcrumb";
 import Pagination from "@/components/shared/Pagination";
 import SearchInput from "@/components/shared/SearchInput";
 import { createRoomColumns } from "@/features/room/components/Columns";
-import {
-  DeleteRoomModal,
-  UpdateStatusModal,
-} from "@/features/room/components/Modal";
+import { DeleteRoomModal, UpdateStatusModal } from "@/features/room/components/Modal";
 import RoomFilterBar from "@/features/room/components/RoomFilterBar";
 import RoomTable from "@/features/room/components/RoomTable";
-import {
-  useGetAdminRoomsQuery,
-  useUpdateRoomStatusMutation,
-  useDeleteRoomMutation,
-} from "@/features/room/api/roomApi";
+import { useGetAdminRoomsQuery, useUpdateRoomStatusMutation, useDeleteRoomMutation } from "@/features/room/api/roomApi";
 import type { RoomResponse, RoomStatusCode } from "@/features/room/types/room.type";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -44,8 +37,7 @@ export default function AdminRoomsPage() {
     pageSize,
   });
 
-  const [updateRoomStatus, { isLoading: isUpdating }] =
-    useUpdateRoomStatusMutation();
+  const [updateRoomStatus, { isLoading: isUpdating }] = useUpdateRoomStatusMutation();
 
   const [deleteRoom, { isLoading: isDeleting }] = useDeleteRoomMutation();
 
@@ -69,9 +61,7 @@ export default function AdminRoomsPage() {
       const code = err?.data?.code;
 
       if (code === "INVALID_TRANSITION") {
-        toast.error(
-          "Không thể chuyển trạng thái này. Xem hướng dẫn để biết thứ tự hợp lệ.",
-        );
+        toast.error("Không thể chuyển trạng thái này. Xem hướng dẫn để biết thứ tự hợp lệ.");
       } else {
         toast.error(err?.data?.message ?? "Có lỗi xảy ra");
       }
@@ -114,12 +104,7 @@ export default function AdminRoomsPage() {
 
   return (
     <div className="space-y-5">
-      <Breadcrumb
-        items={[
-          { label: "Quản lý phòng", href: "/dashboard/rooms" },
-          { label: "Danh sách phòng" },
-        ]}
-      />
+      <Breadcrumb items={[{ label: "Quản lý phòng", href: "/dashboard/rooms" }, { label: "Danh sách phòng" }]} />
 
       <h1 className="text-2xl font-bold text-gray-900">Quản lý phòng</h1>
 
@@ -131,16 +116,15 @@ export default function AdminRoomsPage() {
             setPageNum(1);
           }}
           placeholder="Tìm kiếm theo tên phòng, mã phòng..."
-          className="flex-1 max-w-md"
+          className="max-w-md flex-1"
         />
         <button
           onClick={() => router.push("/dashboard/rooms/create")}
-          className="flex cursor-pointer shrink-0 items-center justify-center gap-2 rounded-lg bg-[#0D99FF] px-4 h-9 text-xs font-semibold text-white hover:bg-[#0B84E6] shadow-sm shadow-blue-100 transition-all duration-200"
+          className="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#0D99FF] px-4 text-xs font-semibold text-white shadow-sm shadow-blue-100 transition-all duration-200 hover:bg-[#0B84E6]"
         >
           <Plus size={14} />
           Thêm Phòng Mới
         </button>
-
       </div>
 
       <RoomFilterBar
@@ -164,11 +148,9 @@ export default function AdminRoomsPage() {
       {isLoading ? (
         <p className="py-16 text-center text-sm text-gray-400">Đang tải...</p>
       ) : isError ? (
-        <p className="py-16 text-center text-sm text-red-400">
-          Lỗi khi tải dữ liệu
-        </p>
+        <p className="py-16 text-center text-sm text-red-400">Lỗi khi tải dữ liệu</p>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 space-y-4">
+        <div className="space-y-4 rounded-xl border border-slate-100 bg-white p-5 shadow-sm">
           <RoomTable rooms={rooms} columns={columns} />
           <Pagination
             page={pageNum}
@@ -194,12 +176,7 @@ export default function AdminRoomsPage() {
         />
       )}
       {selectedRoom && modalType === "update" && (
-        <UpdateStatusModal
-          room={selectedRoom}
-          onClose={closeModal}
-          isSaving={isUpdating}
-          onSave={handleUpdateStatus}
-        />
+        <UpdateStatusModal room={selectedRoom} onClose={closeModal} isSaving={isUpdating} onSave={handleUpdateStatus} />
       )}
     </div>
   );

@@ -17,13 +17,15 @@ export default function PromotionDeleteModal({ promotion, isDeleting, onConfirm,
   const isDeletable = promotion.status !== STATUS.ACTIVE;
 
   useEffect(() => {
-    const fn = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const fn = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
     window.addEventListener("keydown", fn);
     return () => window.removeEventListener("keydown", fn);
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -32,22 +34,22 @@ export default function PromotionDeleteModal({ promotion, isDeleting, onConfirm,
             </div>
             <h2 className="text-base font-bold text-gray-800">Xóa ưu đãi</h2>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition cursor-pointer">
+          <button onClick={onClose} className="cursor-pointer text-gray-400 transition hover:text-gray-600">
             <X size={18} />
           </button>
         </div>
 
         <p className="mb-6 text-sm text-gray-500">
           Bạn có chắc muốn xóa ưu đãi{" "}
-          <span className="font-semibold text-gray-800">&ldquo;{promotion.code}&rdquo;</span>?
-          Hành động này không thể hoàn tác.
+          <span className="font-semibold text-gray-800">&ldquo;{promotion.code}&rdquo;</span>? Hành động này không thể
+          hoàn tác.
         </p>
 
         <div className="flex gap-3">
           <button
             onClick={onClose}
             disabled={isDeleting}
-            className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50"
           >
             Hủy
           </button>
@@ -61,7 +63,7 @@ export default function PromotionDeleteModal({ promotion, isDeleting, onConfirm,
               onConfirm();
             }}
             disabled={isDeleting}
-            className="flex-1 rounded-xl bg-red-500 py-2.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-60 cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl bg-red-500 py-2.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-60"
           >
             {isDeleting ? "Đang xóa..." : "Xóa"}
           </button>

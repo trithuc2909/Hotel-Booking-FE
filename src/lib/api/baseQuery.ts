@@ -1,9 +1,5 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query";
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import Cookies from "js-cookie";
 
 // Token refresh logic
@@ -24,11 +20,11 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-export const customBaseQueryWithReauth: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
+export const customBaseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions,
+) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const baseQuery = fetchBaseQuery({
@@ -81,10 +77,7 @@ export const customBaseQueryWithReauth: BaseQueryFn<
         Cookies.remove("refresh_token", { path: "/" });
         api.dispatch({ type: "auth/logout" });
         processQueue(new Error("Authentication failed"));
-        if (
-          typeof window !== "undefined" &&
-          window.location.pathname !== "/login"
-        ) {
+        if (typeof window !== "undefined" && window.location.pathname !== "/login") {
           window.location.href = "/login";
         }
       }

@@ -6,9 +6,7 @@ export function useBookingDetail(id: string) {
   const { data, isLoading, isError } = useGetBookingByIdQuery(id);
   const booking = data?.data;
 
-  const canCancel = booking
-    ? canCancelBooking(booking.status.code, booking.checkInDate)
-    : false;
+  const canCancel = booking ? canCancelBooking(booking.status.code, booking.checkInDate) : false;
 
   const roomTotal = booking ? calculateRoomTotal(booking.rooms) : 0;
 

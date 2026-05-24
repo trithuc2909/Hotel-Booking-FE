@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { RoomResponse } from "@/features/room/types/room.type";
 
-const DEFAULT_IMG =
-  "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200";
+const DEFAULT_IMG = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200";
 
 type RoomStatus = "AVL" | "CLN" | "MNT";
 
@@ -30,24 +29,19 @@ interface DeleteModalProps extends BaseModalProps {
   isDeleting?: boolean;
 }
 
-export function DeleteRoomModal({
-  room,
-  onClose,
-  onConfirm,
-  isDeleting = false,
-}: DeleteModalProps) {
+export function DeleteRoomModal({ room, onClose, onConfirm, isDeleting = false }: DeleteModalProps) {
   useCloseOnEsc(onClose);
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in"
+      className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[380px] rounded-2xl bg-white p-6 shadow-xl animate-in zoom-in-95"
+        className="animate-in zoom-in-95 w-[380px] rounded-2xl bg-white p-6 shadow-xl"
       >
         {/* Header */}
         <div className="mb-4 flex items-start justify-between">
@@ -57,26 +51,17 @@ export function DeleteRoomModal({
             </div>
             <div>
               <h2 className="text-base font-bold text-gray-900">Xóa phòng</h2>
-              <p className="mt-0.5 text-xs text-gray-400">
-                Hành động không thể hoàn tác
-              </p>
+              <p className="mt-0.5 text-xs text-gray-400">Hành động không thể hoàn tác</p>
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
-          >
+          <button onClick={onClose} className="cursor-pointer text-gray-400 transition hover:text-gray-600">
             <X size={18} />
           </button>
         </div>
 
         <p className="mb-6 text-sm text-gray-500">
-          Bạn có chắc muốn xóa{" "}
-          <span className="font-semibold text-gray-800">
-            &ldquo;{room.roomName}&rdquo;
-          </span>
-          ?
+          Bạn có chắc muốn xóa <span className="font-semibold text-gray-800">&ldquo;{room.roomName}&rdquo;</span>?
         </p>
 
         {/* Actions */}
@@ -84,7 +69,7 @@ export function DeleteRoomModal({
           <button
             onClick={onClose}
             disabled={isDeleting}
-            className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50"
           >
             Hủy
           </button>
@@ -92,7 +77,7 @@ export function DeleteRoomModal({
           <button
             onClick={onConfirm}
             disabled={isDeleting}
-            className="flex-1 rounded-xl bg-red-500 py-2.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-60 cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl bg-red-500 py-2.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-60"
           >
             {isDeleting ? "Đang xóa..." : "Xóa"}
           </button>
@@ -110,31 +95,31 @@ const STATUSES: {
   bg: string;
   text: string;
 }[] = [
-    {
-      code: "AVL",
-      label: "Còn trống",
-      emoji: "✅",
-      border: "border-green-400",
-      bg: "bg-green-50",
-      text: "text-green-600",
-    },
-    {
-      code: "CLN",
-      label: "Đang dọn dẹp",
-      emoji: "🧹",
-      border: "border-orange-400",
-      bg: "bg-orange-50",
-      text: "text-orange-500",
-    },
-    {
-      code: "MNT",
-      label: "Bảo trì",
-      emoji: "🔧",
-      border: "border-violet-400",
-      bg: "bg-violet-50",
-      text: "text-violet-700",
-    },
-  ];
+  {
+    code: "AVL",
+    label: "Còn trống",
+    emoji: "✅",
+    border: "border-green-400",
+    bg: "bg-green-50",
+    text: "text-green-600",
+  },
+  {
+    code: "CLN",
+    label: "Đang dọn dẹp",
+    emoji: "🧹",
+    border: "border-orange-400",
+    bg: "bg-orange-50",
+    text: "text-orange-500",
+  },
+  {
+    code: "MNT",
+    label: "Bảo trì",
+    emoji: "🔧",
+    border: "border-violet-400",
+    bg: "bg-violet-50",
+    text: "text-violet-700",
+  },
+];
 
 const TRANSITIONS: { from: string; fromEmoji: string; to: string[] }[] = [
   { from: "Còn trống", fromEmoji: "✅", to: ["Đang dọn dẹp", "Bảo trì"] },
@@ -149,12 +134,12 @@ function StatusGuideModal({ onClose }: { onClose: () => void }) {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-60 flex items-center justify-center bg-black/50 backdrop-blur-[2px] animate-in fade-in"
+      className="animate-in fade-in fixed inset-0 z-60 flex items-center justify-center bg-black/50 backdrop-blur-[2px]"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[420px] rounded-2xl bg-white p-6 shadow-2xl animate-in zoom-in-95"
+        className="animate-in zoom-in-95 w-[420px] rounded-2xl bg-white p-6 shadow-2xl"
       >
         {/* Header */}
         <div className="mb-5 flex items-start justify-between">
@@ -163,18 +148,11 @@ function StatusGuideModal({ onClose }: { onClose: () => void }) {
               <span className="text-base">🗺️</span>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-gray-900">
-                Hướng dẫn chuyển trạng thái
-              </h3>
-              <p className="text-xs text-gray-400">
-                Các luồng chuyển đổi hợp lệ
-              </p>
+              <h3 className="text-sm font-bold text-gray-900">Hướng dẫn chuyển trạng thái</h3>
+              <p className="text-xs text-gray-400">Các luồng chuyển đổi hợp lệ</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
-          >
+          <button onClick={onClose} className="cursor-pointer text-gray-400 transition hover:text-gray-600">
             <X size={16} />
           </button>
         </div>
@@ -186,11 +164,9 @@ function StatusGuideModal({ onClose }: { onClose: () => void }) {
               key={t.from}
               className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3"
             >
-              <span className="text-xl shrink-0">{t.fromEmoji}</span>
-              <span className="text-sm font-semibold text-gray-700 w-28 shrink-0">
-                {t.from}
-              </span>
-              <span className="text-gray-500 text-sm shrink-0">→</span>
+              <span className="shrink-0 text-xl">{t.fromEmoji}</span>
+              <span className="w-28 shrink-0 text-sm font-semibold text-gray-700">{t.from}</span>
+              <span className="shrink-0 text-sm text-gray-500">→</span>
               <div className="flex flex-wrap gap-1.5">
                 {t.to.map((target) => (
                   <span
@@ -219,15 +195,8 @@ interface UpdateStatusModalProps extends BaseModalProps {
   isSaving?: boolean;
 }
 
-export function UpdateStatusModal({
-  room,
-  onClose,
-  onSave,
-  isSaving = false,
-}: UpdateStatusModalProps) {
-  const [selected, setSelected] = useState<RoomStatus>(
-    room.status as RoomStatus,
-  );
+export function UpdateStatusModal({ room, onClose, onSave, isSaving = false }: UpdateStatusModalProps) {
+  const [selected, setSelected] = useState<RoomStatus>(room.status as RoomStatus);
 
   const [showGuide, setShowGuide] = useState(false);
 
@@ -237,28 +206,21 @@ export function UpdateStatusModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in"
+      className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[440px] rounded-2xl bg-white p-6 shadow-xl animate-in zoom-in-95"
+        className="animate-in zoom-in-95 w-[440px] rounded-2xl bg-white p-6 shadow-xl"
       >
         {/* Header */}
         <div className="mb-4 flex items-start justify-between">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">
-              Cập nhật trạng thái
-            </h2>
-            <p className="mt-0.5 text-xs text-gray-400">
-              Thay đổi tình trạng phòng
-            </p>
+            <h2 className="text-lg font-bold text-gray-900">Cập nhật trạng thái</h2>
+            <p className="mt-0.5 text-xs text-gray-400">Thay đổi tình trạng phòng</p>
           </div>
 
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
-          >
+          <button onClick={onClose} className="cursor-pointer text-gray-400 transition hover:text-gray-600">
             <X size={18} />
           </button>
         </div>
@@ -273,23 +235,17 @@ export function UpdateStatusModal({
             className="rounded-lg object-cover"
           />
           <div>
-            <p className="text-xs font-semibold text-[#0D99FF]">
-              Phòng {room.roomNumber}
-            </p>
-            <p className="text-sm font-semibold text-gray-800">
-              {room.roomName}
-            </p>
+            <p className="text-xs font-semibold text-[#0D99FF]">Phòng {room.roomNumber}</p>
+            <p className="text-sm font-semibold text-gray-800">{room.roomName}</p>
           </div>
         </div>
 
         {/* Status */}
         <div className="mb-3 flex items-center justify-between">
-          <p className="text-xs font-semibold uppercase text-gray-400">
-            Chọn trạng thái
-          </p>
+          <p className="text-xs font-semibold text-gray-400 uppercase">Chọn trạng thái</p>
           <button
             onClick={() => setShowGuide(true)}
-            className="text-xs text-[#0D99FF] hover:underline cursor-pointer flex items-center gap-1"
+            className="flex cursor-pointer items-center gap-1 text-xs text-[#0D99FF] hover:underline"
           >
             🗺️ Xem hướng dẫn
           </button>
@@ -305,18 +261,12 @@ export function UpdateStatusModal({
               <button
                 key={s.code}
                 onClick={() => setSelected(s.code)}
-                className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition cursor-pointer ${isSelected
-                    ? `${s.border} ${s.bg}`
-                    : "border-gray-100 hover:border-gray-200"
-                  }`}
+                className={`flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 p-4 transition ${
+                  isSelected ? `${s.border} ${s.bg}` : "border-gray-100 hover:border-gray-200"
+                }`}
               >
                 <span className="text-2xl">{s.emoji}</span>
-                <span
-                  className={`text-xs font-semibold ${isSelected ? s.text : "text-gray-500"
-                    }`}
-                >
-                  {s.label}
-                </span>
+                <span className={`text-xs font-semibold ${isSelected ? s.text : "text-gray-500"}`}>{s.label}</span>
               </button>
             );
           })}
@@ -326,7 +276,7 @@ export function UpdateStatusModal({
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
           >
             Hủy
           </button>
@@ -334,7 +284,7 @@ export function UpdateStatusModal({
           <button
             onClick={() => onSave(selected)}
             disabled={isSaving}
-            className="flex-1 rounded-xl bg-[#0D99FF] py-2.5 text-sm font-semibold text-white hover:bg-[#0B84E6] disabled:opacity-60 cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl bg-[#0D99FF] py-2.5 text-sm font-semibold text-white hover:bg-[#0B84E6] disabled:opacity-60"
           >
             {isSaving ? "Đang lưu..." : "Lưu"}
           </button>

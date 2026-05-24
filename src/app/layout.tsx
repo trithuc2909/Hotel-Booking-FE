@@ -29,11 +29,7 @@ export default function RootLayout({
       <body className={openSans.className}>
         <NuqsAdapter>
           <Providers>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="light"
-              disableTransitionOnChange
-            >
+            <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
               {children}
               <ToasterCustom />
             </ThemeProvider>

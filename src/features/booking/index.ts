@@ -39,8 +39,4 @@ export type {
 } from "./types/booking.type";
 
 // Constants
-export {
-  BOOKING_STATUS_LABEL,
-  BOOKING_HISTORY_TABS,
-  CANCELLABLE_STATUSES,
-} from "./constants/booking.constants";
+export { BOOKING_STATUS_LABEL, BOOKING_HISTORY_TABS, CANCELLABLE_STATUSES } from "./constants/booking.constants";

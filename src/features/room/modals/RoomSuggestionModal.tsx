@@ -9,8 +9,7 @@ import { SelectedRoom } from "@/features/room/types/room.type";
 import RoomDetailModal from "./RoomDetailModal";
 import { BED_TYPE_MAP } from "@/constants/common";
 
-const toBedTypeVi = (bedType: string | null) =>
-  bedType ? (BED_TYPE_MAP[bedType] ?? bedType) : "";
+const toBedTypeVi = (bedType: string | null) => (bedType ? (BED_TYPE_MAP[bedType] ?? bedType) : "");
 
 type Props = {
   checkInDate: string;
@@ -61,21 +60,16 @@ export default function RoomSuggestionModal({
   const [previewRoomId, setPreviewRoomId] = useState<string | null>(null);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" onClick={onClose}>
       <div
-        className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden"
+        className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <div>
             <h3 className="font-bold text-gray-900">Chọn phòng</h3>
-            <p className="text-xs text-gray-400 mt-0.5">
-              Đã chọn {draft.length} phòng
-            </p>
+            <p className="mt-0.5 text-xs text-gray-400">Đã chọn {draft.length} phòng</p>
           </div>
           <button onClick={onClose}>
             <X size={18} className="cursor-pointer text-gray-400" />
@@ -83,16 +77,10 @@ export default function RoomSuggestionModal({
         </div>
 
         {/* Room list */}
-        <div className="overflow-y-auto max-h-[60vh] px-6 py-4 space-y-3">
-          {isLoading && (
-            <p className="text-sm text-gray-400 text-center py-6">
-              Đang tải...
-            </p>
-          )}
+        <div className="max-h-[60vh] space-y-3 overflow-y-auto px-6 py-4">
+          {isLoading && <p className="py-6 text-center text-sm text-gray-400">Đang tải...</p>}
           {!isLoading && rooms.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-6">
-              Không còn phòng trống trong thời gian này
-            </p>
+            <p className="py-6 text-center text-sm text-gray-400">Không còn phòng trống trong thời gian này</p>
           )}
           {rooms.map((room) => {
             const isSelected = draftIds.has(room.id);
@@ -100,43 +88,34 @@ export default function RoomSuggestionModal({
               <div
                 key={room.id}
                 className={`flex gap-3 rounded-xl border p-3 transition-colors ${
-                  isSelected
-                    ? "border-blue-200 bg-blue-50"
-                    : "border-gray-100 bg-gray-50"
+                  isSelected ? "border-blue-200 bg-blue-50" : "border-gray-100 bg-gray-50"
                 }`}
               >
                 {/* Thumbnail */}
                 <div
                   onClick={() => setPreviewRoomId(room.id)}
-                  className="relative w-29 h-23 shrink-0 rounded-lg overflow-hidden bg-gray-200 cursor-pointer"
+                  className="relative h-23 w-29 shrink-0 cursor-pointer overflow-hidden rounded-lg bg-gray-200"
                 >
                   {room.thumbnailUrl && (
-                    <Image
-                      src={room.thumbnailUrl}
-                      alt={room.roomName}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={room.thumbnailUrl} alt={room.roomName} fill className="object-cover" />
                   )}
                 </div>
 
                 {/* Info */}
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
                   <p
                     onClick={() => setPreviewRoomId(room.id)}
-                    className="text-sm font-semibold text-gray-900 truncate cursor-pointer hover:underline"
+                    className="cursor-pointer truncate text-sm font-semibold text-gray-900 hover:underline"
                   >
                     {room.roomName}
                   </p>
                   <p className="text-xs text-gray-400">{room.roomTypeName}</p>
-                  <p className="text-xs text-gray-400">
-                    {toBedTypeVi(room.bedType)}
-                  </p>
-                  <div className="flex items-center gap-1 text-xs text-gray-400 mt-0.5">
+                  <p className="text-xs text-gray-400">{toBedTypeVi(room.bedType)}</p>
+                  <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400">
                     <Users size={10} />
                     <span>Tối đa {room.maxGuests} người</span>
                   </div>
-                  <p className="text-xs font-semibold text-[#0D99FF] mt-1">
+                  <p className="mt-1 text-xs font-semibold text-[#0D99FF]">
                     {formatCurrency(Number(room.basePrice))} / đêm
                   </p>
                 </div>
@@ -144,9 +123,9 @@ export default function RoomSuggestionModal({
                 {/* Toggle button */}
                 <button
                   onClick={() => toggle(room)}
-                  className={`cursor-pointer self-center text-xs font-semibold px-3 py-1.5 rounded-lg transition-all shrink-0 flex items-center gap-1 border ${
+                  className={`flex shrink-0 cursor-pointer items-center gap-1 self-center rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
                     isSelected
-                      ? "border-[#0D99FF] text-[#0D99FF] bg-white hover:bg-blue-50"
+                      ? "border-[#0D99FF] bg-white text-[#0D99FF] hover:bg-blue-50"
                       : "border-[#0D99FF] bg-[#0D99FF] text-white hover:bg-[#0B84E6]"
                   }`}
                 >
@@ -162,25 +141,20 @@ export default function RoomSuggestionModal({
               </div>
             );
           })}
-          {previewRoomId && (
-            <RoomDetailModal
-              roomId={previewRoomId}
-              onClose={() => setPreviewRoomId(null)}
-            />
-          )}
+          {previewRoomId && <RoomDetailModal roomId={previewRoomId} onClose={() => setPreviewRoomId(null)} />}
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 px-6 py-4 border-t border-gray-100">
+        <div className="flex gap-3 border-t border-gray-100 px-6 py-4">
           <button
             onClick={onClose}
-            className="cursor-pointer flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            className="flex-1 cursor-pointer rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
           >
             Hủy
           </button>
           <button
             onClick={() => onConfirm(draft)}
-            className="cursor-pointer flex-1 rounded-xl bg-[#0D99FF] py-2.5 text-sm font-semibold text-white hover:bg-[#0B84E6] transition-colors"
+            className="flex-1 cursor-pointer rounded-xl bg-[#0D99FF] py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B84E6]"
           >
             Xác nhận ({draft.length} phòng)
           </button>

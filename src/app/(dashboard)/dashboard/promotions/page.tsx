@@ -28,8 +28,7 @@ export default function PromotionsPage() {
   const [pageNum, setPageNum] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const [selectedPromotion, setSelectedPromotion] =
-    useState<PromotionResponse | null>(null);
+  const [selectedPromotion, setSelectedPromotion] = useState<PromotionResponse | null>(null);
   const [modalType, setModalType] = useState<ModalType>(null);
 
   const { data, isLoading, isError } = useGetAdminPromotionsQuery({
@@ -41,8 +40,7 @@ export default function PromotionsPage() {
   });
 
   const [updateStatus] = useUpdatePromotionStatusMutation();
-  const [deletePromotion, { isLoading: isDeleting }] =
-    useDeletePromotionMutation();
+  const [deletePromotion, { isLoading: isDeleting }] = useDeletePromotionMutation();
 
   const promotions = data?.data ?? [];
   const meta = data?.meta;
@@ -53,13 +51,10 @@ export default function PromotionsPage() {
   };
 
   const handleToggleStatus = async (p: PromotionResponse) => {
-    const newStatus =
-      p.status === STATUS.ACTIVE ? STATUS.INACTIVE : STATUS.ACTIVE;
+    const newStatus = p.status === STATUS.ACTIVE ? STATUS.INACTIVE : STATUS.ACTIVE;
     try {
       await updateStatus({ id: p.id, status: newStatus }).unwrap();
-      toast.success(
-        newStatus === STATUS.ACTIVE ? "Đã kích hoạt ưu đãi" : "Đã ngưng ưu đãi",
-      );
+      toast.success(newStatus === STATUS.ACTIVE ? "Đã kích hoạt ưu đãi" : "Đã ngưng ưu đãi");
     } catch {
       toast.error("Cập nhật trạng thái thất bại");
     }
@@ -78,12 +73,7 @@ export default function PromotionsPage() {
 
   return (
     <div className="space-y-5">
-      <Breadcrumb
-        items={[
-          { label: "Quản lý ưu đãi", href: "/dashboard/promotions" },
-          { label: "Danh sách ưu đãi" },
-        ]}
-      />
+      <Breadcrumb items={[{ label: "Quản lý ưu đãi", href: "/dashboard/promotions" }, { label: "Danh sách ưu đãi" }]} />
       <h1 className="text-2xl font-bold text-gray-900">Quản lý ưu đãi</h1>
 
       <PromotionStatsSection />
@@ -107,9 +97,7 @@ export default function PromotionsPage() {
       {isLoading ? (
         <p className="py-16 text-center text-sm text-gray-400">Đang tải...</p>
       ) : isError ? (
-        <p className="py-16 text-center text-sm text-red-400">
-          Lỗi khi tải dữ liệu
-        </p>
+        <p className="py-16 text-center text-sm text-red-400">Lỗi khi tải dữ liệu</p>
       ) : (
         <>
           <PromotionTable

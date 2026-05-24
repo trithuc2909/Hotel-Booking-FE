@@ -1,10 +1,6 @@
 import { customBaseQueryWithReauth } from "@/lib/api/baseQuery";
 import { ApiResponse } from "@/types/common";
-import {
-    ChangePasswordRequest,
-  UpdateUserProfileRequest,
-  UserProfileResponse,
-} from "@/features/user/types/user.type";
+import { ChangePasswordRequest, UpdateUserProfileRequest, UserProfileResponse } from "@/features/user/types/user.type";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const userApi = createApi({
@@ -19,10 +15,7 @@ export const userApi = createApi({
       }),
       providesTags: ["Me"],
     }),
-    updateUserProfile: builder.mutation<
-      ApiResponse<UserProfileResponse>,
-      UpdateUserProfileRequest
-    >({
+    updateUserProfile: builder.mutation<ApiResponse<UserProfileResponse>, UpdateUserProfileRequest>({
       query: (body) => ({
         url: "/users/profile",
         method: "PATCH",
@@ -30,10 +23,7 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["Me"],
     }),
-    uploadUserAvatar: builder.mutation<
-      ApiResponse<{ avatarUrl: string }>,
-      FormData
-    >({
+    uploadUserAvatar: builder.mutation<ApiResponse<{ avatarUrl: string }>, FormData>({
       query: (formData) => ({
         url: "/users/profile/avatar",
         method: "POST",
@@ -51,9 +41,5 @@ export const userApi = createApi({
   }),
 });
 
-export const {
-  useGetMeQuery,
-  useUpdateUserProfileMutation,
-  useUploadUserAvatarMutation,
-  useChangePasswordMutation,
-} = userApi;
+export const { useGetMeQuery, useUpdateUserProfileMutation, useUploadUserAvatarMutation, useChangePasswordMutation } =
+  userApi;

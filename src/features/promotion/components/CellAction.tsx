@@ -17,17 +17,12 @@ interface Props {
   onDelete?: () => void;
 }
 
-export const CellAction = ({
-  promotion,
-  onView,
-  onToggleStatus,
-  onDelete,
-}: Props) => {
+export const CellAction = ({ promotion, onView, onToggleStatus, onDelete }: Props) => {
   const isActive = promotion.status === STATUS.ACTIVE;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-600 transition">
+        <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-gray-200 text-gray-400 transition hover:border-gray-300 hover:text-gray-600">
           <MoreHorizontal size={16} />
         </button>
       </DropdownMenuTrigger>
@@ -39,33 +34,24 @@ export const CellAction = ({
       >
         <DropdownMenuItem
           onClick={onView}
-          className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 outline-none"
+          className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 outline-none hover:bg-gray-100"
         >
           <Eye size={14} /> Xem chi tiết
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={onToggleStatus}
-          className={`
-                flex cursor-pointer items-center gap-2 px-3 py-2 text-sm
-                text-gray-700 outline-none transition-colors
-                ${
-                  isActive
-                    ? "data-[highlighted]:bg-orange-50 data-[highlighted]:text-orange-500"
-                    : "data-[highlighted]:bg-green-50 data-[highlighted]:text-green-600"
-                }
-            `}
+          className={`flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 transition-colors outline-none ${
+            isActive
+              ? "data-[highlighted]:bg-orange-50 data-[highlighted]:text-orange-500"
+              : "data-[highlighted]:bg-green-50 data-[highlighted]:text-green-600"
+          } `}
         >
           <RefreshCw size={14} />
           {isActive ? "Ngưng hoạt động" : "Kích hoạt"}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={onDelete}
-          className="
-                flex cursor-pointer items-center gap-2 px-3 py-2 text-sm
-                text-gray-700 outline-none transition-colors
-                data-[highlighted]:bg-red-50
-                data-[highlighted]:text-red-500
-          "
+          className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 transition-colors outline-none data-[highlighted]:bg-red-50 data-[highlighted]:text-red-500"
         >
           <Trash2 size={14} />
           Xóa

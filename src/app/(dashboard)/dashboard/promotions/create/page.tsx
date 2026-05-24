@@ -18,15 +18,12 @@ export default function CreatePromotionPage() {
     formData.append("discountType", data.discountType);
     formData.append("discountValue", String(data.discountValue));
     if (data.description) formData.append("description", data.description);
-    if (data.minOrderValue)
-      formData.append("minOrderValue", String(data.minOrderValue));
-    if (data.maxDiscount)
-      formData.append("maxDiscount", String(data.maxDiscount));
+    if (data.minOrderValue) formData.append("minOrderValue", String(data.minOrderValue));
+    if (data.maxDiscount) formData.append("maxDiscount", String(data.maxDiscount));
     if (data.startDate) formData.append("startDate", data.startDate);
     if (data.endDate) formData.append("endDate", data.endDate);
     if (data.usageLimit) formData.append("usageLimit", String(data.usageLimit));
-    if (data.maxUsagePerUser)
-      formData.append("maxUsagePerUser", String(data.maxUsagePerUser));
+    if (data.maxUsagePerUser) formData.append("maxUsagePerUser", String(data.maxUsagePerUser));
     if (data.imageUrl) formData.append("imageUrl", data.imageUrl);
 
     try {
@@ -45,24 +42,12 @@ export default function CreatePromotionPage() {
 
   return (
     <div className="space-y-5">
-      <Breadcrumb
-        items={[
-          { label: "Quản lý ưu đãi", href: "/dashboard/promotions" },
-          { label: "Thêm ưu đãi mới" },
-        ]}
-      />
+      <Breadcrumb items={[{ label: "Quản lý ưu đãi", href: "/dashboard/promotions" }, { label: "Thêm ưu đãi mới" }]} />
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Thêm ưu đãi mới</h1>
-        <p className="mt-0.5 text-sm text-gray-400">
-          Điền thông tin để tạo ưu đãi mới
-        </p>
+        <p className="mt-0.5 text-sm text-gray-400">Điền thông tin để tạo ưu đãi mới</p>
       </div>
-      <PromotionForm
-        mode="create"
-        onSubmit={handleSubmit}
-        onCancel={() => router.back()}
-        isSubmitting={isLoading}
-      />
+      <PromotionForm mode="create" onSubmit={handleSubmit} onCancel={() => router.back()} isSubmitting={isLoading} />
     </div>
   );
 }

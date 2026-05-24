@@ -1,16 +1,15 @@
 "use client";
 import { useState, useMemo } from "react";
-import RoomSearchFilter from "@/features/booking/admin/components/RoomSearchFilter";
-import RoomGrid from "@/features/booking/admin/components/RoomGrid";
-import BookingSummaryPanel from "@/features/booking/admin/components/BookingSummaryPanel";
+import RoomSearchFilter from "@/features/booking/admin/booking-list/components/RoomSearchFilter";
+import RoomGrid from "@/features/booking/admin/booking-list/components/RoomGrid";
+import BookingSummaryPanel from "@/features/booking/admin/booking-list/components/BookingSummaryPanel";
 import { useGetAvailableRoomsQuery } from "@/features/room/api/roomApi";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { useGetRoomTypesQuery } from "@/features/room";
 
 function calcNights(checkInDate: string, checkOutDate: string): number {
   if (!checkInDate || !checkOutDate) return 1;
-  const diff =
-    new Date(checkOutDate).getTime() - new Date(checkInDate).getTime();
+  const diff = new Date(checkOutDate).getTime() - new Date(checkInDate).getTime();
   return Math.max(1, Math.round(diff / (1000 * 60 * 60 * 24)));
 }
 
@@ -48,24 +47,17 @@ export default function NewBookingPage() {
     [selectedIds, availableRooms],
   );
   const handleToggleRoom = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-    );
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
   const nights = calcNights(checkInDate, checkOutDate);
 
-  const breadcrumbItems = [
-    { label: "Quản lý đặt phòng", href: "/dashboard/bookings" },
-    { label: "Đặt phòng ngay" },
-  ];
+  const breadcrumbItems = [{ label: "Quản lý đặt phòng", href: "/dashboard/bookings" }, { label: "Đặt phòng ngay" }];
 
   return (
     <div className="space-y-5">
       <div>
         <Breadcrumb items={breadcrumbItems} />
-        <h1 className="text-2xl font-extrabold text-gray-900 mt-2">
-          Đặt phòng ngay
-        </h1>
+        <h1 className="mt-2 text-2xl font-extrabold text-gray-900">Đặt phòng ngay</h1>
       </div>
       <RoomSearchFilter
         checkInDate={checkInDate}
@@ -77,12 +69,10 @@ export default function NewBookingPage() {
         onGuestsChange={setGuests}
         onRoomTypeChange={setRoomType}
       />
-      <div className="flex gap-5 items-start">
-        <div className="flex-1 min-w-0">
+      <div className="flex items-start gap-5">
+        <div className="min-w-0 flex-1">
           {isLoading ? (
-            <div className="text-center py-10 text-gray-500">
-              Đang tìm phòng trống...
-            </div>
+            <div className="py-10 text-center text-gray-500">Đang tìm phòng trống...</div>
           ) : (
             <RoomGrid
               rooms={filteredRooms}
@@ -96,7 +86,7 @@ export default function NewBookingPage() {
             />
           )}
         </div>
-        <div className="w-80 shrink-0 sticky top-4">
+        <div className="sticky top-4 w-80 shrink-0">
           <BookingSummaryPanel
             selectedRooms={selectedRooms}
             checkInDate={checkInDate}

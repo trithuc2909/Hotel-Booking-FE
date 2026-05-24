@@ -16,9 +16,7 @@ const NAV_LINKS = [
 
 const NavbarUserMenu = dynamic(() => import("./NavbarUserMenu"), {
   ssr: false,
-  loading: () => (
-    <div className="h-9 w-24 rounded-full bg-gray-100 animate-pulse" />
-  ),
+  loading: () => <div className="h-9 w-24 animate-pulse rounded-full bg-gray-100" />,
 });
 
 export default function Navbar() {
@@ -32,22 +30,15 @@ export default function Navbar() {
     >
       {" "}
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-          <img
-            src={ASSETS.logoDefault}
-            alt="BullmanHotel"
-            className="h-10 w-10 object-contain"
-          />
-          <span
-            className="text-lg font-bold"
-            style={{ color: colors.primary.blue }}
-          >
+        <Link href="/" className="flex flex-shrink-0 items-center gap-2">
+          <img src={ASSETS.logoDefault} alt="BullmanHotel" className="h-10 w-10 object-contain" />
+          <span className="text-lg font-bold" style={{ color: colors.primary.blue }}>
             BullmanHotel
           </span>
         </Link>
 
         {/* Navigation links */}
-        <ul className="hidden md:flex items-center gap-8 list-none">
+        <ul className="hidden list-none items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
 
@@ -56,9 +47,7 @@ export default function Navbar() {
                 <Link
                   href={link.href}
                   className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive
-                      ? "text-[#0D99FF]"
-                      : "text-gray-700 hover:text-[#0D99FF]"
+                    isActive ? "text-[#0D99FF]" : "text-gray-700 hover:text-[#0D99FF]"
                   }`}
                 >
                   {link.label}

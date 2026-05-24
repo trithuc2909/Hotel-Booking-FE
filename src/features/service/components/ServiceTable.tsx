@@ -11,19 +11,9 @@ interface Props {
 
 const GRID = "2fr 1fr 1fr 1fr 80px";
 
-export default function ServiceTable({
-  data,
-  onView,
-  onToggleStatus,
-  onDelete,
-}: Props) {
+export default function ServiceTable({ data, onView, onToggleStatus, onDelete }: Props) {
   const columns = ServiceColumns({ onView, onToggleStatus, onDelete });
   return (
-    <DataTable
-      columns={columns}
-      data={data}
-      gridTemplateColumns={GRID}
-      emptyMessage="Không tìm thấy dịch vụ nào"
-    />
+    <DataTable columns={columns} data={data} gridTemplateColumns={GRID} emptyMessage="Không tìm thấy dịch vụ nào" />
   );
 }

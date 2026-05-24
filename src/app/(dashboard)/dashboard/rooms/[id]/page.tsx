@@ -1,10 +1,7 @@
 "use client";
 
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import {
-  useGetAdminRoomByIdQuery,
-  useUpdateRoomByIdMutation,
-} from "@/features/room/api/roomApi";
+import { useGetAdminRoomByIdQuery, useUpdateRoomByIdMutation } from "@/features/room/api/roomApi";
 import RoomForm from "@/features/room/components/RoomForm";
 import { RoomFormValues } from "@/features/room/schemas/room.schema";
 import { useParams, useRouter } from "next/navigation";
@@ -39,9 +36,7 @@ export default function RoomDetailPage() {
             description: room.description ?? undefined,
             notes: room.notes ?? undefined,
             amenityIds: room.amenities?.map((a) => a.id) ?? [],
-            existingThumbnail: room.thumbnailUrl
-              ? `${room.thumbnailUrl}?v=${Date.now()}`
-              : undefined,
+            existingThumbnail: room.thumbnailUrl ? `${room.thumbnailUrl}?v=${Date.now()}` : undefined,
             existingImages: room.imageUrls ?? [],
           }
         : {},
@@ -57,19 +52,11 @@ export default function RoomDetailPage() {
   }
 
   if (isError) {
-    return (
-      <div className="py-32 text-center text-gray-400">
-        Lỗi khi tải dữ liệu phòng
-      </div>
-    );
+    return <div className="py-32 text-center text-gray-400">Lỗi khi tải dữ liệu phòng</div>;
   }
 
   if (!room) {
-    return (
-      <div className="py-32 text-center text-gray-400">
-        Không tìm thấy phòng
-      </div>
-    );
+    return <div className="py-32 text-center text-gray-400">Không tìm thấy phòng</div>;
   }
 
   const handleSubmit = async (formData: RoomFormValues) => {

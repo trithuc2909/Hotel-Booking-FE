@@ -27,8 +27,7 @@ export default function AdminServicesPage() {
   const [pageNum, setPageNum] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const [selectedService, setSelectedService] =
-    useState<ServiceResponse | null>(null);
+  const [selectedService, setSelectedService] = useState<ServiceResponse | null>(null);
   const [modalType, setModalType] = useState<ModalType>(null);
 
   const { data, isLoading, isError } = useGetAdminServicesQuery({
@@ -54,11 +53,7 @@ export default function AdminServicesPage() {
     const newStatus = service.status === "ACT" ? "INA" : "ACT";
     try {
       await updateServiceStatus({ id: service.id, status: newStatus }).unwrap();
-      toast.success(
-        newStatus === "ACT"
-          ? "Đã kích hoạt dịch vụ"
-          : "Đã ngưng hoạt động dịch vụ",
-      );
+      toast.success(newStatus === "ACT" ? "Đã kích hoạt dịch vụ" : "Đã ngưng hoạt động dịch vụ");
     } catch (err: any) {
       toast.error(err?.data?.message ?? "Có lỗi xảy ra");
     }
@@ -77,12 +72,7 @@ export default function AdminServicesPage() {
 
   return (
     <div className="space-y-5">
-      <Breadcrumb
-        items={[
-          { label: "Quản lý dịch vụ", href: "/dashboard/services" },
-          { label: "Danh sách dịch vụ" },
-        ]}
-      />
+      <Breadcrumb items={[{ label: "Quản lý dịch vụ", href: "/dashboard/services" }, { label: "Danh sách dịch vụ" }]} />
       <h1 className="text-2xl font-bold text-gray-900">Quản lý dịch vụ</h1>
 
       <ServiceStatsSection />
@@ -106,9 +96,7 @@ export default function AdminServicesPage() {
       {isLoading ? (
         <p className="py-16 text-center text-sm text-gray-400">Đang tải...</p>
       ) : isError ? (
-        <p className="py-16 text-center text-sm text-red-400">
-          Lỗi khi tải dữ liệu
-        </p>
+        <p className="py-16 text-center text-sm text-red-400">Lỗi khi tải dữ liệu</p>
       ) : (
         <>
           <ServiceTable

@@ -3,24 +3,14 @@ import { z } from "zod";
 
 export const roomSchema = z
   .object({
-    roomName: z
-      .string()
-      .trim()
-      .min(3, "Tên phòng phải từ 3 ký tự")
-      .max(100, "Tối đa 100 ký tự"),
+    roomName: z.string().trim().min(3, "Tên phòng phải từ 3 ký tự").max(100, "Tối đa 100 ký tự"),
     roomNumber: z.string().regex(/^[0-9]{3}$/, "Mã phòng phải gồm 3 chữ số"),
     roomTypeId: z.string().min(1, "Vui lòng chọn loại phòng"),
-    basePrice: z.coerce
-      .number()
-      .positive("Giá phòng phải lớn hơn 0")
-      .max(100_000_000, "Giá tối đa 100 triệu"),
+    basePrice: z.coerce.number().positive("Giá phòng phải lớn hơn 0").max(100_000_000, "Giá tối đa 100 triệu"),
     description: z.string().max(1000).optional(),
     notes: z.string().max(255).optional(),
     maxGuests: z.coerce.number().min(1).max(10),
-    floor: z.coerce
-      .number()
-      .min(1, "Tầng phải lớn hơn 0")
-      .max(10, "Số tầng vượt quá giới hạn của khách sạn"),
+    floor: z.coerce.number().min(1, "Tầng phải lớn hơn 0").max(10, "Số tầng vượt quá giới hạn của khách sạn"),
     size: z.coerce.number().min(10).max(200).optional(),
     bedType: z.string().optional(),
     view: z.string().optional(),
@@ -33,8 +23,7 @@ export const roomSchema = z
           .instanceof(File)
           .refine((file) => file.size <= IMAGE_MAX_SIZE, "Ảnh tối đa 5MB")
           .refine(
-            (file) =>
-              ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+            (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
             "Chỉ chấp nhận JPG/PNG/WEBP",
           ),
       )

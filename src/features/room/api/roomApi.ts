@@ -26,16 +26,12 @@ export const roomApi = createApi({
     getRooms: builder.query<ApiResponse<RoomResponse[]>, RoomsFilter>({
       query: (filter = {}) => {
         const params = new URLSearchParams();
-        if (filter.roomTypeCode)
-          params.set("roomTypeCode", filter.roomTypeCode);
+        if (filter.roomTypeCode) params.set("roomTypeCode", filter.roomTypeCode);
         if (filter.guests) params.set("guests", String(filter.guests));
-        if (filter.limit) params.set("limit", String(filter.limit));
         if (filter.checkIn) params.set("checkIn", filter.checkIn);
         if (filter.checkOut) params.set("checkOut", filter.checkOut);
-        if (filter.minPrice !== undefined)
-          params.set("minPrice", String(filter.minPrice));
-        if (filter.maxPrice !== undefined)
-          params.set("maxPrice", String(filter.maxPrice));
+        if (filter.minPrice !== undefined) params.set("minPrice", String(filter.minPrice));
+        if (filter.maxPrice !== undefined) params.set("maxPrice", String(filter.maxPrice));
         if (filter.pageNum) params.set("pageNum", String(filter.pageNum));
         if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
         if (filter.amenities && filter.amenities.length > 0) {
@@ -45,42 +41,28 @@ export const roomApi = createApi({
       },
       providesTags: ["Rooms"],
     }),
-    getAdminRoomById: builder.query<
-      ApiResponse<RoomDetailResponse>,
-      { id: string }
-    >({
+    getAdminRoomById: builder.query<ApiResponse<RoomDetailResponse>, { id: string }>({
       query: ({ id }) => `admin/rooms/${id}`,
-      providesTags: (result, error, { id }) => [
-        { type: "AdminRoomDetail", id },
-      ],
+      providesTags: (result, error, { id }) => [{ type: "AdminRoomDetail", id }],
       keepUnusedDataFor: 0,
     }),
-    getAdminRooms: builder.query<ApiResponse<RoomResponse[]>, AdminRoomsFilter>(
-      {
-        query: (filter = {}) => {
-          const params = new URLSearchParams();
-          if (filter.search) params.set("search", filter.search);
-          if (filter.roomTypeCode)
-            params.set("roomTypeCode", filter.roomTypeCode);
-          if (filter.status) params.set("status", filter.status);
-          if (filter.sortBy) params.set("sortBy", filter.sortBy);
-          if (filter.sortDirection)
-            params.set("sortDirection", filter.sortDirection);
-          if (filter.pageNum) params.set("pageNum", String(filter.pageNum));
-          if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
-          if (filter.minPrice !== undefined)
-            params.set("minPrice", String(filter.minPrice));
-          if (filter.maxPrice !== undefined)
-            params.set("maxPrice", String(filter.maxPrice));
-          return { url: `/admin/rooms?${params.toString()}` };
-        },
-        providesTags: ["AdminRooms"],
+    getAdminRooms: builder.query<ApiResponse<RoomResponse[]>, AdminRoomsFilter>({
+      query: (filter = {}) => {
+        const params = new URLSearchParams();
+        if (filter.search) params.set("search", filter.search);
+        if (filter.roomTypeCode) params.set("roomTypeCode", filter.roomTypeCode);
+        if (filter.status) params.set("status", filter.status);
+        if (filter.sortBy) params.set("sortBy", filter.sortBy);
+        if (filter.sortDirection) params.set("sortDirection", filter.sortDirection);
+        if (filter.pageNum) params.set("pageNum", String(filter.pageNum));
+        if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
+        if (filter.minPrice !== undefined) params.set("minPrice", String(filter.minPrice));
+        if (filter.maxPrice !== undefined) params.set("maxPrice", String(filter.maxPrice));
+        return { url: `/admin/rooms?${params.toString()}` };
       },
-    ),
-    updateRoomStatus: builder.mutation<
-      ApiResponse<null>,
-      { id: string; status: string }
-    >({
+      providesTags: ["AdminRooms"],
+    }),
+    updateRoomStatus: builder.mutation<ApiResponse<null>, { id: string; status: string }>({
       query: ({ id, status }) => ({
         url: `/admin/rooms/${id}/status`,
         method: "PATCH",
@@ -93,10 +75,7 @@ export const roomApi = createApi({
         url: `/admin/rooms/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: "AdminRoomDetail", id },
-        "AdminRooms",
-      ],
+      invalidatesTags: (result, error, { id }) => [{ type: "AdminRoomDetail", id }, "AdminRooms"],
     }),
     createRoom: builder.mutation<ApiResponse<null>, FormData>({
       query: (body) => ({
@@ -106,10 +85,7 @@ export const roomApi = createApi({
       }),
       invalidatesTags: ["AdminRooms"],
     }),
-    updateRoomById: builder.mutation<
-      ApiResponse<null>,
-      { id: string; data: FormData }
-    >({
+    updateRoomById: builder.mutation<ApiResponse<null>, { id: string; data: FormData }>({
       query: ({ id, data }) => ({
         url: `/admin/rooms/${id}`,
         method: "PATCH",
@@ -131,10 +107,7 @@ export const roomApi = createApi({
         params: { checkInDate, checkOutDate, guests, excludeRoomId },
       }),
     }),
-    getOccupiedDateRangesForRoom: builder.query<
-      ApiResponse<{ checkInDate: string; checkOutDate: string }[]>,
-      string
-    >({
+    getOccupiedDateRangesForRoom: builder.query<ApiResponse<{ checkInDate: string; checkOutDate: string }[]>, string>({
       query: (roomId) => `/rooms/${roomId}/availability`,
     }),
   }),

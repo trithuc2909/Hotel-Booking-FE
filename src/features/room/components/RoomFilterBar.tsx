@@ -42,22 +42,23 @@ function FilterSelect({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs font-medium text-gray-400 whitespace-nowrap">{label}</span>
+      <span className="text-xs font-medium whitespace-nowrap text-gray-400">{label}</span>
       <div className="relative flex items-center">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={selectClass}
-        >
+        <select value={value} onChange={(e) => onChange(e.target.value)} className={selectClass}>
           {options.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
           ))}
         </select>
-        <svg
-          className="pointer-events-none absolute right-2 h-3 w-3 text-gray-400"
-          viewBox="0 0 12 12" fill="none"
-        >
-          <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <svg className="pointer-events-none absolute right-2 h-3 w-3 text-gray-400" viewBox="0 0 12 12" fill="none">
+          <path
+            d="M2.5 4.5L6 8L9.5 4.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </div>
     </div>
@@ -65,8 +66,12 @@ function FilterSelect({
 }
 
 export default function RoomFilterBar({
-  type, status, sortPrice,
-  onTypeChange, onStatusChange, onSortPriceChange,
+  type,
+  status,
+  sortPrice,
+  onTypeChange,
+  onStatusChange,
+  onSortPriceChange,
 }: Props) {
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-xl border border-gray-100 bg-white px-5 py-2.5 shadow-sm">

@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  useCreateVNPayPaymentMutation,
-  useCreateBookingMutation,
-} from "@/features/booking/api/bookingApi";
+import { useCreateVNPayPaymentMutation, useCreateBookingMutation } from "@/features/booking/api/bookingApi";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ConfirmBookingModal from "../admin/modals/ConfirmBookingModal";
@@ -64,9 +61,7 @@ export const usePaymentHandlers = ({
             const paymentRes = await createVNPayPayment({ bookingId }).unwrap();
             window.location.href = paymentRes.data.payUrl;
           } catch (error: any) {
-            toast.error(
-              "Không thể kết nối cổng thanh toán VNPay. Booking đã được lưu!",
-            );
+            toast.error("Không thể kết nối cổng thanh toán VNPay. Booking đã được lưu!");
           }
         }
       }

@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
-import {
-  useGetPaymentStatusQuery,
-  useProcessVNPayReturnMutation,
-} from "@/features/booking/api/bookingApi";
+import { useGetPaymentStatusQuery, useProcessVNPayReturnMutation } from "@/features/booking/api/bookingApi";
 
 function VNPayReturnContent() {
   const params = useSearchParams();
@@ -46,26 +43,22 @@ function VNPayReturnContent() {
   const shouldPoll = isSuccess && !confirmed;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 max-w-md w-full text-center space-y-5">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md space-y-5 rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm">
         {/* Icon */}
         {!isSuccess ? (
           <XCircle size={56} className="mx-auto text-red-400" />
         ) : isLoading || shouldPoll ? (
-          <Loader2 size={56} className="mx-auto text-[#0D99FF] animate-spin" />
+          <Loader2 size={56} className="mx-auto animate-spin text-[#0D99FF]" />
         ) : (
           <CheckCircle size={56} className="mx-auto text-green-500" />
         )}
         {/* Title */}
         <div>
           <h1 className="text-xl font-bold text-gray-900">
-            {!isSuccess
-              ? "Thanh toán thất bại"
-              : confirmed
-                ? "Thanh toán thành công!"
-                : "Đang xác nhận thanh toán..."}
+            {!isSuccess ? "Thanh toán thất bại" : confirmed ? "Thanh toán thành công!" : "Đang xác nhận thanh toán..."}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="mt-1 text-sm text-gray-500">
             {!isSuccess
               ? "Giao dịch không được thực hiện. Vui lòng thử lại."
               : confirmed
@@ -75,18 +68,16 @@ function VNPayReturnContent() {
         </div>
         {/* Order info */}
         {orderId && (
-          <div className="bg-gray-50 rounded-xl p-4 text-left space-y-2 text-sm">
+          <div className="space-y-2 rounded-xl bg-gray-50 p-4 text-left text-sm">
             <div className="flex justify-between">
               <span className="text-gray-500">Mã giao dịch</span>
-              <span className="font-medium text-gray-800 truncate max-w-[180px]">
+              <span className="max-w-[180px] truncate font-medium text-gray-800">
                 {params.get("vnp_TransactionNo") ?? "—"}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Ngân hàng</span>
-              <span className="font-medium text-gray-800">
-                {params.get("vnp_BankCode") ?? "—"}
-              </span>
+              <span className="font-medium text-gray-800">{params.get("vnp_BankCode") ?? "—"}</span>
             </div>
           </div>
         )}
@@ -94,14 +85,14 @@ function VNPayReturnContent() {
         <div className="flex gap-3 pt-2">
           <button
             onClick={() => router.push("/")}
-            className="cursor-pointer flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            className="flex-1 cursor-pointer rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
           >
             Về trang chủ
           </button>
           {isSuccess && confirmed && (
             <button
               onClick={() => router.push("/booking-history")}
-              className="cursor-pointer flex-1 rounded-xl bg-[#0D99FF] py-2.5 text-sm font-semibold text-white hover:bg-[#0B84E6] transition-colors"
+              className="flex-1 cursor-pointer rounded-xl bg-[#0D99FF] py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B84E6]"
             >
               Xem lịch sử đặt phòng
             </button>
@@ -114,13 +105,7 @@ function VNPayReturnContent() {
 
 export default function VNPayReturnPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          Đang tải...
-        </div>
-      }
-    >
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Đang tải...</div>}>
       <VNPayReturnContent />
     </Suspense>
   );

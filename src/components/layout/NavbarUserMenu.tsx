@@ -38,15 +38,11 @@ export default function NavbarUserMenu() {
         <Button
           asChild
           variant="outline"
-          className="rounded-full px-5 border-[#0D99FF] text-[#0D99FF] hover:bg-[#0D99FF] hover:text-white transition-colors"
+          className="rounded-full border-[#0D99FF] px-5 text-[#0D99FF] transition-colors hover:bg-[#0D99FF] hover:text-white"
         >
           <Link href="/register">Đăng ký</Link>
         </Button>
-        <Button
-          asChild
-          className="rounded-full px-5 text-white"
-          style={{ backgroundColor: colors.primary.blue }}
-        >
+        <Button asChild className="rounded-full px-5 text-white" style={{ backgroundColor: colors.primary.blue }}>
           <Link href="/login" className="flex items-center gap-1.5">
             <User size={15} />
             Đăng nhập
@@ -60,7 +56,7 @@ export default function NavbarUserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="cursor-pointer flex items-center gap-2 rounded-full px-4 py-2 text-white"
+          className="flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-white"
           style={{ backgroundColor: colors.primary.blue }}
         >
           <User size={18} />
@@ -69,60 +65,42 @@ export default function NavbarUserMenu() {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        align="end"
-        sideOffset={8}
-        alignOffset={-10}
-        className="w-56 p-0 rounded-xl shadow-lg"
-      >
-        <div className="flex items-center gap-3 p-3 border-b">
+      <DropdownMenuContent align="end" sideOffset={8} alignOffset={-10} className="w-56 rounded-xl p-0 shadow-lg">
+        <div className="flex items-center gap-3 border-b p-3">
           {user?.avatarUrl ? (
-            <img
-              src={user.avatarUrl}
-              alt="avatar"
-              className="w-9 h-9 rounded-full"
-            />
+            <img src={user.avatarUrl} alt="avatar" className="h-9 w-9 rounded-full" />
           ) : (
-            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-100">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
               <User size={18} />
             </div>
           )}
           <div className="flex flex-col text-sm">
             <span className="font-medium">{user?.username}</span>
-            <span className="text-gray-500 text-xs">{user?.email}</span>
+            <span className="text-xs text-gray-500">{user?.email}</span>
           </div>
         </div>
 
         {role === ROLE.ADMIN && (
           <DropdownMenuItem asChild>
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2 px-3 py-2 cursor-pointer"
-            >
+            <Link href="/dashboard" className="flex cursor-pointer items-center gap-2 px-3 py-2">
               <LayoutDashboard size={16} /> Trang quản trị
             </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem asChild>
-          <Link
-            href="/profiles"
-            className="flex items-center gap-2 px-3 py-2 cursor-pointer"
-          >
+          <Link href="/profiles" className="flex cursor-pointer items-center gap-2 px-3 py-2">
             <User size={16} /> Hồ sơ cá nhân
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link
-            href="/booking-history"
-            className="flex items-center gap-2 px-3 py-2 cursor-pointer"
-          >
+          <Link href="/booking-history" className="flex cursor-pointer items-center gap-2 px-3 py-2">
             <CalendarDays size={16} /> Lịch sử đặt phòng
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleLogout}
-          className="flex items-center gap-2 px-3 py-2 text-red-500 focus:text-red-500 cursor-pointer"
+          className="flex cursor-pointer items-center gap-2 px-3 py-2 text-red-500 focus:text-red-500"
         >
           <LogOut size={16} /> Đăng xuất
         </DropdownMenuItem>

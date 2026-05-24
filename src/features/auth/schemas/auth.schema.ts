@@ -34,29 +34,17 @@ export const registerSchema = z
 
 // Login
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email không được để trống")
-    .email("Email không hợp lệ"),
-  password: z
-    .string()
-    .min(1, "Mật khẩu không được để trống")
-    .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
+  email: z.string().min(1, "Email không được để trống").email("Email không hợp lệ"),
+  password: z.string().min(1, "Mật khẩu không được để trống").min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
 });
 
 // Verify OTP
 export const verifyOTPSchema = z.object({
-  otp: z
-    .string()
-    .length(6, "Mã OTP phải có 6 số")
-    .regex(/^\d+$/, "Mã OTP chỉ được chứa số"),
+  otp: z.string().length(6, "Mã OTP phải có 6 số").regex(/^\d+$/, "Mã OTP chỉ được chứa số"),
 });
 
 export const forgotPasswordSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email không được để trống")
-    .email("Email không hợp lệ"),
+  email: z.string().min(1, "Email không được để trống").email("Email không hợp lệ"),
 });
 
 // Forgot Password
@@ -77,7 +65,6 @@ export const resetPasswordSchema = z
     message: "Mật khẩu xác nhận không khớp",
     path: ["confirmPassword"],
   });
-
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;

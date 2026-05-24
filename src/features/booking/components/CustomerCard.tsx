@@ -10,7 +10,7 @@ export default function CustomerCard({ customer }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-700">
+        <CardTitle className="flex items-center gap-2 text-sm font-bold tracking-wide text-gray-700 uppercase">
           <User size={14} className="text-[#0D99FF]" />
           Khách hàng
         </CardTitle>
@@ -21,12 +21,8 @@ export default function CustomerCard({ customer }: Props) {
             <User size={18} className="text-[#0D99FF]" />
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-medium text-gray-800">
-              {customer.fullName ?? "—"}
-            </span>
-            <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600">
-              Khách chính
-            </span>
+            <span className="font-medium text-gray-800">{customer.fullName ?? "—"}</span>
+            <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600">Khách chính</span>
           </div>
         </div>
 

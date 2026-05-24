@@ -41,26 +41,14 @@ export default function CreateRoomPage() {
 
   return (
     <div className="space-y-5">
-      <Breadcrumb
-        items={[
-          { label: "Quản lý phòng", href: "/dashboard/rooms" },
-          { label: "Thêm phòng mới" },
-        ]}
-      />
+      <Breadcrumb items={[{ label: "Quản lý phòng", href: "/dashboard/rooms" }, { label: "Thêm phòng mới" }]} />
 
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Thêm phòng mới</h1>
-        <p className="mt-0.5 text-sm text-gray-400">
-          Điền thông tin để tạo phòng mới
-        </p>
+        <p className="mt-0.5 text-sm text-gray-400">Điền thông tin để tạo phòng mới</p>
       </div>
 
-      <RoomForm
-        mode="create"
-        onSubmit={handleSubmit}
-        onCancel={() => router.back()}
-        isSubmitting={isLoading}
-      />
+      <RoomForm mode="create" onSubmit={handleSubmit} onCancel={() => router.back()} isSubmitting={isLoading} />
     </div>
   );
 }

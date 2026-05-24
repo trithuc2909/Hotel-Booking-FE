@@ -1,13 +1,6 @@
 import { BedDouble, Hotel } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { BookingDetailRoom } from "@/features/booking/types/booking.type";
 
@@ -20,7 +13,7 @@ export default function BookingRoomsTable({ rooms, totalAmount }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-700">
+        <CardTitle className="flex items-center gap-2 text-sm font-bold tracking-wide text-gray-700 uppercase">
           <BedDouble size={14} className="text-[#0D99FF]" />
           Chi tiết đặt phòng
         </CardTitle>
@@ -55,15 +48,9 @@ export default function BookingRoomsTable({ rooms, totalAmount }: Props) {
                     <span className="text-sm">{room.roomName}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-center text-gray-500">
-                  {room.nights} đêm
-                </TableCell>
-                <TableCell className="text-center text-gray-500">
-                  1 phòng
-                </TableCell>
-                <TableCell className="text-right text-gray-600">
-                  {formatCurrency(room.pricePerNight)}
-                </TableCell>
+                <TableCell className="text-center text-gray-500">{room.nights} đêm</TableCell>
+                <TableCell className="text-center text-gray-500">1 phòng</TableCell>
+                <TableCell className="text-right text-gray-600">{formatCurrency(room.pricePerNight)}</TableCell>
                 <TableCell className="text-right font-bold text-gray-800">
                   {formatCurrency(room.pricePerNight * room.nights)}
                 </TableCell>
@@ -75,9 +62,7 @@ export default function BookingRoomsTable({ rooms, totalAmount }: Props) {
         {/* Footer */}
         <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-4">
           <span className="text-sm font-medium text-gray-500">Tổng cộng</span>
-          <span className="text-lg font-extrabold text-[#0B30A7]">
-            {formatCurrency(totalAmount)}
-          </span>
+          <span className="text-lg font-extrabold text-[#0B30A7]">{formatCurrency(totalAmount)}</span>
         </div>
       </CardContent>
     </Card>

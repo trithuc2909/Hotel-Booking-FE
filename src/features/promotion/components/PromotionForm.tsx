@@ -5,10 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImagePlus, Loader2, X } from "lucide-react";
-import {
-  promotionSchema,
-  PromotionFormValues,
-} from "../schemas/promotion.schema";
+import { promotionSchema, PromotionFormValues } from "../schemas/promotion.schema";
 import { discountType } from "../types/promotion.type";
 import z from "zod";
 import { formatCurrency } from "@/lib/utils";
@@ -24,8 +21,7 @@ interface Props {
 
 const inputClass =
   "w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-[#0D99FF] focus:ring-4 focus:ring-[#0D99FF]/10";
-const labelClass =
-  "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400";
+const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400";
 const errorClass = "mt-1.5 text-xs font-medium text-red-500";
 
 function FormField({
@@ -78,9 +74,7 @@ export default function PromotionForm({
   });
 
   const imageInputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(
-    currentImageUrl ?? null,
-  );
+  const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl ?? null);
   const imageUrl = watch("imageUrl");
   const selectedDiscountType = watch("discountType");
   const isPercent = selectedDiscountType === discountType.PERCENT;
@@ -112,36 +106,20 @@ export default function PromotionForm({
           <div className="col-span-2 space-y-5">
             <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
               <div className="mb-5">
-                <h2 className="text-sm font-bold text-gray-800">
-                  Thông tin ưu đãi
-                </h2>
-                <p className="mt-1 text-xs text-gray-400">
-                  Mã code, tiêu đề và mô tả ưu đãi.
-                </p>
+                <h2 className="text-sm font-bold text-gray-800">Thông tin ưu đãi</h2>
+                <p className="mt-1 text-xs text-gray-400">Mã code, tiêu đề và mô tả ưu đãi.</p>
               </div>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    label="Mã ưu đãi"
-                    required
-                    error={errors.code?.message}
-                  >
+                  <FormField label="Mã ưu đãi" required error={errors.code?.message}>
                     <input
                       {...register("code")}
                       placeholder="VD: SUMMER2025"
                       className={`${inputClass} font-mono uppercase`}
                     />
                   </FormField>
-                  <FormField
-                    label="Tiêu đề"
-                    required
-                    error={errors.title?.message}
-                  >
-                    <input
-                      {...register("title")}
-                      placeholder="VD: Giảm 20% mùa hè"
-                      className={inputClass}
-                    />
+                  <FormField label="Tiêu đề" required error={errors.title?.message}>
+                    <input {...register("title")} placeholder="VD: Giảm 20% mùa hè" className={inputClass} />
                   </FormField>
                 </div>
                 <FormField label="Mô tả" error={errors.description?.message}>
@@ -157,19 +135,11 @@ export default function PromotionForm({
 
             <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
               <div className="mb-5">
-                <h2 className="text-sm font-bold text-gray-800">
-                  Loại giảm giá
-                </h2>
-                <p className="mt-1 text-xs text-gray-400">
-                  Chọn cách tính giảm và các giới hạn áp dụng.
-                </p>
+                <h2 className="text-sm font-bold text-gray-800">Loại giảm giá</h2>
+                <p className="mt-1 text-xs text-gray-400">Chọn cách tính giảm và các giới hạn áp dụng.</p>
               </div>
               <div className="space-y-4">
-                <FormField
-                  label="Loại giảm"
-                  required
-                  error={errors.discountType?.message}
-                >
+                <FormField label="Loại giảm" required error={errors.discountType?.message}>
                   <div className="flex gap-3">
                     {[
                       { value: "FIXED", label: "Cố định (VNĐ)" },
@@ -197,9 +167,7 @@ export default function PromotionForm({
 
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
-                    label={
-                      isPercent ? "Giá trị giảm (%)" : "Giá trị giảm (VNĐ)"
-                    }
+                    label={isPercent ? "Giá trị giảm (%)" : "Giá trị giảm (VNĐ)"}
                     required
                     error={errors.discountValue?.message}
                   >
@@ -214,17 +182,12 @@ export default function PromotionForm({
                         className={`${inputClass} pr-14`}
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                        <span className="text-xs font-semibold text-gray-400">
-                          {isPercent ? "%" : "VNĐ"}
-                        </span>
+                        <span className="text-xs font-semibold text-gray-400">{isPercent ? "%" : "VNĐ"}</span>
                       </div>
                     </div>
                   </FormField>
 
-                  <FormField
-                    label="Đơn hàng tối thiểu"
-                    error={errors.minOrderValue?.message}
-                  >
+                  <FormField label="Đơn hàng tối thiểu" error={errors.minOrderValue?.message}>
                     <div className="relative">
                       <input
                         {...register("minOrderValue")}
@@ -235,20 +198,14 @@ export default function PromotionForm({
                         className={`${inputClass} pr-14`}
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                        <span className="text-xs font-semibold text-gray-400">
-                          VNĐ
-                        </span>
+                        <span className="text-xs font-semibold text-gray-400">VNĐ</span>
                       </div>
                     </div>
                   </FormField>
                 </div>
 
                 {isPercent && (
-                  <FormField
-                    label="Giảm tối đa (VNĐ)"
-                    required
-                    error={errors.maxDiscount?.message}
-                  >
+                  <FormField label="Giảm tối đa (VNĐ)" required error={errors.maxDiscount?.message}>
                     <div className="relative">
                       <input
                         {...register("maxDiscount")}
@@ -259,9 +216,7 @@ export default function PromotionForm({
                         className={`${inputClass} pr-14`}
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                        <span className="text-xs font-semibold text-gray-400">
-                          VNĐ
-                        </span>
+                        <span className="text-xs font-semibold text-gray-400">VNĐ</span>
                       </div>
                     </div>
                   </FormField>
@@ -272,38 +227,17 @@ export default function PromotionForm({
             {/* startDate & endDate */}
             <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
               <div className="mb-5">
-                <h2 className="text-sm font-bold text-gray-800">
-                  Thời hạn & Giới hạn
-                </h2>
-                <p className="mt-1 text-xs text-gray-400">
-                  Thời gian hiệu lực và số lần sử dụng.
-                </p>
+                <h2 className="text-sm font-bold text-gray-800">Thời hạn & Giới hạn</h2>
+                <p className="mt-1 text-xs text-gray-400">Thời gian hiệu lực và số lần sử dụng.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  label="Ngày bắt đầu"
-                  error={errors.startDate?.message}
-                >
-                  <input
-                    {...register("startDate")}
-                    type="date"
-                    className={inputClass}
-                  />
+                <FormField label="Ngày bắt đầu" error={errors.startDate?.message}>
+                  <input {...register("startDate")} type="date" className={inputClass} />
                 </FormField>
-                <FormField
-                  label="Ngày kết thúc"
-                  error={errors.endDate?.message}
-                >
-                  <input
-                    {...register("endDate")}
-                    type="date"
-                    className={inputClass}
-                  />
+                <FormField label="Ngày kết thúc" error={errors.endDate?.message}>
+                  <input {...register("endDate")} type="date" className={inputClass} />
                 </FormField>
-                <FormField
-                  label="Tổng lượt dùng"
-                  error={errors.usageLimit?.message}
-                >
+                <FormField label="Tổng lượt dùng" error={errors.usageLimit?.message}>
                   <input
                     {...register("usageLimit")}
                     type="number"
@@ -313,10 +247,7 @@ export default function PromotionForm({
                     className={inputClass}
                   />
                 </FormField>
-                <FormField
-                  label="Lượt dùng / người"
-                  error={errors.maxUsagePerUser?.message}
-                >
+                <FormField label="Lượt dùng / người" error={errors.maxUsagePerUser?.message}>
                   <input
                     {...register("maxUsagePerUser")}
                     type="number"
@@ -335,12 +266,8 @@ export default function PromotionForm({
             <div className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
               <div className="flex-1">
                 <div className="mb-5">
-                  <h2 className="text-sm font-bold text-gray-800">
-                    Hình ảnh ưu đãi
-                  </h2>
-                  <p className="mt-1 text-xs text-gray-400">
-                    JPG, PNG hoặc WEBP tối đa 5MB.
-                  </p>
+                  <h2 className="text-sm font-bold text-gray-800">Hình ảnh ưu đãi</h2>
+                  <p className="mt-1 text-xs text-gray-400">JPG, PNG hoặc WEBP tối đa 5MB.</p>
                 </div>
 
                 {previewUrl ? (
@@ -357,7 +284,7 @@ export default function PromotionForm({
                       <button
                         type="button"
                         onClick={handleRemoveImage}
-                        className="cursor-pointer absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:bg-red-500"
+                        className="absolute top-3 right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:bg-red-500"
                       >
                         <X size={14} />
                       </button>
@@ -365,7 +292,7 @@ export default function PromotionForm({
                     <button
                       type="button"
                       onClick={() => imageInputRef.current?.click()}
-                      className="cursor-pointer w-full rounded-xl border border-gray-200 py-2.5 text-xs font-semibold text-gray-500 transition hover:bg-gray-50"
+                      className="w-full cursor-pointer rounded-xl border border-gray-200 py-2.5 text-xs font-semibold text-gray-500 transition hover:bg-gray-50"
                     >
                       Chọn ảnh khác
                     </button>
@@ -393,14 +320,10 @@ export default function PromotionForm({
                 />
 
                 <div className="mt-4 rounded-xl bg-green-50 px-3 py-2">
-                  <p className="text-xs font-medium text-green-700">
-                    Mặc định trạng thái: Đang hoạt động
-                  </p>
+                  <p className="text-xs font-medium text-green-700">Mặc định trạng thái: Đang hoạt động</p>
                 </div>
                 <div className="mt-5 rounded-2xl border border-gray-100 bg-gray-50 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-                    Xem trước ưu đãi
-                  </p>
+                  <p className="text-xs font-semibold tracking-wide text-gray-400 uppercase">Xem trước ưu đãi</p>
 
                   <div className="mt-3 rounded-xl bg-white p-4 shadow-sm">
                     {/* Code */}
@@ -409,9 +332,7 @@ export default function PromotionForm({
                     </p>
 
                     {/* Title */}
-                    <p className="mt-1 text-sm font-semibold text-gray-800">
-                      {watch("title") || "Tên ưu đãi"}
-                    </p>
+                    <p className="mt-1 text-sm font-semibold text-gray-800">{watch("title") || "Tên ưu đãi"}</p>
 
                     {/* Description */}
                     <p className="mt-1 line-clamp-2 text-xs text-gray-500">
@@ -433,9 +354,7 @@ export default function PromotionForm({
 
                     {/* Min Order */}
                     <div className="mt-2 flex items-center justify-between">
-                      <span className="text-xs text-gray-500">
-                        Đơn tối thiểu
-                      </span>
+                      <span className="text-xs text-gray-500">Đơn tối thiểu</span>
 
                       <span className="text-sm font-medium text-gray-700">
                         {watch("minOrderValue")
@@ -447,14 +366,10 @@ export default function PromotionForm({
                     {/* Max Discount */}
                     {isPercent && (
                       <div className="mt-2 flex items-center justify-between">
-                        <span className="text-xs text-gray-500">
-                          Giảm tối đa
-                        </span>
+                        <span className="text-xs text-gray-500">Giảm tối đa</span>
 
                         <span className="text-sm font-medium text-gray-700">
-                          {watch("maxDiscount")
-                            ? `${formatCurrency(Number(watch("maxDiscount")))} VNĐ`
-                            : ""}
+                          {watch("maxDiscount") ? `${formatCurrency(Number(watch("maxDiscount")))} VNĐ` : ""}
                         </span>
                       </div>
                     )}
@@ -464,8 +379,7 @@ export default function PromotionForm({
                       <span className="text-xs text-gray-500">Hiệu lực</span>
 
                       <span className="text-right text-xs text-gray-700">
-                        {watch("startDate")} →{" "}
-                        {watch("endDate")}
+                        {watch("startDate")} → {watch("endDate")}
                       </span>
                     </div>
 
@@ -485,7 +399,7 @@ export default function PromotionForm({
                   <button
                     type="button"
                     onClick={onCancel}
-                    className="cursor-pointer flex-1 rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
+                    className="flex-1 cursor-pointer rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
                   >
                     Hủy
                   </button>
@@ -493,16 +407,10 @@ export default function PromotionForm({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="cursor-pointer flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0D99FF] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0B84E6] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0D99FF] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0B84E6] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isSubmitting && (
-                    <Loader2 size={16} className="animate-spin" />
-                  )}
-                  {isSubmitting
-                    ? "Đang lưu..."
-                    : mode === "create"
-                      ? "Thêm ưu đãi"
-                      : "Cập nhật"}
+                  {isSubmitting && <Loader2 size={16} className="animate-spin" />}
+                  {isSubmitting ? "Đang lưu..." : mode === "create" ? "Thêm ưu đãi" : "Cập nhật"}
                 </button>
               </div>
             </div>

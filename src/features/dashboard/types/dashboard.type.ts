@@ -33,8 +33,7 @@ export const DASHBOARD_STATS_PERIOD = {
   PREVIOUS: "previous",
 } as const;
 
-export type DashboardStatsPeriod =
-  (typeof DASHBOARD_STATS_PERIOD)[keyof typeof DASHBOARD_STATS_PERIOD];
+export type DashboardStatsPeriod = (typeof DASHBOARD_STATS_PERIOD)[keyof typeof DASHBOARD_STATS_PERIOD];
 
 export type RoomTimelineRequest = {
   from: string;

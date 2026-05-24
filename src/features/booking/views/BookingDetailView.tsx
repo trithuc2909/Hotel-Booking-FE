@@ -23,8 +23,7 @@ interface Props {
 }
 
 export default function BookingDetailView({ id }: Props) {
-  const { booking, isLoading, isError, canCancel, roomTotal } =
-    useBookingDetail(id);
+  const { booking, isLoading, isError, canCancel, roomTotal } = useBookingDetail(id);
 
   if (isLoading) {
     return (
@@ -44,10 +43,7 @@ export default function BookingDetailView({ id }: Props) {
         <Navbar />
         <div className="flex flex-1 flex-col items-center justify-center gap-4">
           <p className="text-gray-500">Không tìm thấy đơn đặt phòng.</p>
-          <Link
-            href="/booking-history"
-            className="text-sm text-[#0D99FF] hover:underline"
-          >
+          <Link href="/booking-history" className="text-sm text-[#0D99FF] hover:underline">
             ← Quay lại lịch sử
           </Link>
         </div>
@@ -72,11 +68,7 @@ export default function BookingDetailView({ id }: Props) {
       </div>
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
-        <BookingHeader
-          bookingCode={booking.bookingCode}
-          createdOn={booking.createdOn}
-          status={booking.status}
-        />
+        <BookingHeader bookingCode={booking.bookingCode} createdOn={booking.createdOn} status={booking.status} />
 
         <div className="flex flex-col items-start gap-6 lg:flex-row">
           {/* Left column */}
@@ -91,26 +83,18 @@ export default function BookingDetailView({ id }: Props) {
 
             {booking.customer && <CustomerCard customer={booking.customer} />}
 
-            <BookingRoomsTable
-              rooms={booking.rooms}
-              totalAmount={booking.totalAmount}
-            />
+            <BookingRoomsTable rooms={booking.rooms} totalAmount={booking.totalAmount} />
 
             {/* Cancellation policy */}
             <Card className="border-emerald-100 bg-emerald-50/50">
               <CardContent className="pt-5">
                 <div className="flex items-start gap-3">
-                  <ShieldCheck
-                    size={18}
-                    className="mt-0.5 shrink-0 text-emerald-600"
-                  />
+                  <ShieldCheck size={18} className="mt-0.5 shrink-0 text-emerald-600" />
                   <div>
-                    <p className="text-sm font-semibold text-emerald-800">
-                      Chính sách hủy phòng
-                    </p>
+                    <p className="text-sm font-semibold text-emerald-800">Chính sách hủy phòng</p>
                     <p className="mt-1 text-xs leading-relaxed text-emerald-700">
-                      Miễn phí hủy phòng trước 48 giờ trước ngày nhận phòng.
-                      Sau thời gian này, phí hủy sẽ là 100% tổng tiền phòng.
+                      Miễn phí hủy phòng trước 48 giờ trước ngày nhận phòng. Sau thời gian này, phí hủy sẽ là 100% tổng
+                      tiền phòng.
                     </p>
                   </div>
                 </div>

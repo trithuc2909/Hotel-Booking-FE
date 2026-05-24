@@ -16,11 +16,11 @@ export type PaginationMeta = {
   hasPrev: boolean;
   nextPage: number | null;
   prevPage: number | null;
-}
+};
 
 export type CodeResponse = {
   code: string;
   displayAs: string;
-}
+};
 
 export type ApiData<T> = T extends ApiResponse<infer D> ? D : never;

@@ -7,39 +7,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 // Import validation schema
-import {
-  verifyOTPSchema,
-  type VerifyOTPFormData,
-} from "@/features/auth/schemas/auth.schema";
+import { verifyOTPSchema, type VerifyOTPFormData } from "@/features/auth/schemas/auth.schema";
 // Import Redux mutations
-import {
-  useVerifyOTPMutation,
-  useResendOTPMutation,
-} from "@/features/auth/api/authApi";
+import { useVerifyOTPMutation, useResendOTPMutation } from "@/features/auth/api/authApi";
 // Import UI components
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 // Import OTP Input component
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { ArrowLeft } from "lucide-react";
 
 export default function VerifyOTPForm() {
@@ -104,8 +80,7 @@ export default function VerifyOTPForm() {
       // Redirect to login page
       router.push("/login");
     } catch (error: any) {
-      const errorMessage =
-        error?.data?.message || "Mã OTP không hợp lệ. Vui lòng thử lại.";
+      const errorMessage = error?.data?.message || "Mã OTP không hợp lệ. Vui lòng thử lại.";
       toast.error(errorMessage);
 
       // Reset OTP input on error
@@ -130,32 +105,24 @@ export default function VerifyOTPForm() {
       setCountdown(60);
       setCanResend(false);
     } catch (error: any) {
-      const errorMessage =
-        error?.data?.message ||
-        "Không thể gửi lại mã OTP. Vui lòng thử lại sau.";
+      const errorMessage = error?.data?.message || "Không thể gửi lại mã OTP. Vui lòng thử lại sau.";
       toast.error(errorMessage);
     }
   };
 
   // Render UI
   return (
-    <Card className="w-full max-w-md border border-gray-100 bg-white shadown-xl rounded-2xl">
+    <Card className="shadown-xl w-full max-w-md rounded-2xl border border-gray-100 bg-white">
       {/* Header */}
-      <CardHeader className="space-y-2 pb-6 relative">
+      <CardHeader className="relative space-y-2 pb-6">
         {/* Back Button */}
-        <Link
-          href="/register"
-          className="absolute left-4 top-0 p-2 rounded-full hover:bg-gray-100 transition-colors"
-        >
-          <ArrowLeft className="h-5 w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+        <Link href="/register" className="absolute top-0 left-4 rounded-full p-2 transition-colors hover:bg-gray-100">
+          <ArrowLeft className="h-5 w-5 text-gray-600 transition-colors hover:text-gray-900" />
         </Link>
-        <CardTitle
-          className="text-3xl font-bold text-center"
-          style={{ color: "#0B30A7" }}
-        >
+        <CardTitle className="text-center text-3xl font-bold" style={{ color: "#0B30A7" }}>
           Xác thực tài khoản
         </CardTitle>
-        <CardDescription className="text-center text-gray-500 text-sm">
+        <CardDescription className="text-center text-sm text-gray-500">
           Nhập mã OTP gồm 6 số đã được gửi đến email của bạn
         </CardDescription>
       </CardHeader>
@@ -170,17 +137,10 @@ export default function VerifyOTPForm() {
               name="otp"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Mã OTP
-                  </FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">Mã OTP</FormLabel>
                   <FormControl>
                     <div className="flex justify-center">
-                      <InputOTP
-                        maxLength={6}
-                        value={field.value}
-                        onChange={field.onChange}
-                        disabled={isVerifying}
-                      >
+                      <InputOTP maxLength={6} value={field.value} onChange={field.onChange} disabled={isVerifying}>
                         <InputOTPGroup>
                           <InputOTPSlot index={0} />
                           <InputOTPSlot index={1} />
@@ -200,13 +160,7 @@ export default function VerifyOTPForm() {
             {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full h-11 rounded-lg text-base font-semibold text-white
-                        bg-[#0D99FF]
-                        transition-all duration-200
-                        hover:bg-[#0B84E6]
-                        hover:shadow-md
-                        active:scale-[0.98]
-                        disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+              className="h-11 w-full cursor-pointer rounded-lg bg-[#0D99FF] text-base font-semibold text-white transition-all duration-200 hover:bg-[#0B84E6] hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
               disabled={isVerifying || form.watch("otp").length !== 6}
             >
               {isVerifying ? "Đang xác thức..." : "Xác thực"}
@@ -221,7 +175,7 @@ export default function VerifyOTPForm() {
                     type="button"
                     onClick={handleResendOTP}
                     disabled={isResending}
-                    className="font-semibold hover:underline transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="cursor-pointer font-semibold transition-all hover:underline disabled:cursor-not-allowed disabled:opacity-50"
                     style={{ color: "#0D99FF" }}
                   >
                     {isResending ? "Đang gửi lại..." : "Bấm để gửi lại"}

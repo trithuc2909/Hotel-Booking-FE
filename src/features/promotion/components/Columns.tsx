@@ -4,8 +4,7 @@ import Image from "next/image";
 import { discountType, type PromotionResponse } from "../types/promotion.type";
 import { CellAction } from "./CellAction";
 
-const DEFAULT_IMG =
-  "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=200";
+const DEFAULT_IMG = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=200";
 
 const STATUS_CLASS: Record<string, string> = {
   ACT: "bg-green-50 text-green-600 border-green-200",
@@ -25,22 +24,19 @@ export const PromotionColumns = (callbacks: ColumnCallbacks): ColumnDef<Promotio
     cell: ({ row }) => {
       const p = row.original;
       return (
-        <div
-          className="flex items-center gap-3 cursor-pointer group"
-          onClick={() => callbacks.onView(p)}
-        >
+        <div className="group flex cursor-pointer items-center gap-3" onClick={() => callbacks.onView(p)}>
           <Image
             src={p.imageUrl || DEFAULT_IMG}
             alt={p.title}
             width={56}
             height={42}
-            className="rounded-lg object-cover shrink-0"
+            className="shrink-0 rounded-lg object-cover"
           />
           <div>
-            <p className="text-sm font-bold text-gray-800 group-hover:text-[#0D99FF] transition-colors font-mono">
+            <p className="font-mono text-sm font-bold text-gray-800 transition-colors group-hover:text-[#0D99FF]">
               {p.code}
             </p>
-            <p className="text-xs text-gray-400 line-clamp-1">{p.title}</p>
+            <p className="line-clamp-1 text-xs text-gray-400">{p.title}</p>
           </div>
         </div>
       );
@@ -54,7 +50,9 @@ export const PromotionColumns = (callbacks: ColumnCallbacks): ColumnDef<Promotio
       const isPercent = p.discountType === discountType.PERCENT;
       return (
         <div>
-          <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${isPercent ? "bg-purple-50 text-purple-600 border-purple-200" : "bg-blue-50 text-blue-600 border-blue-200"}`}>
+          <span
+            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${isPercent ? "border-purple-200 bg-purple-50 text-purple-600" : "border-blue-200 bg-blue-50 text-blue-600"}`}
+          >
             {isPercent ? "Phần trăm" : "Cố định"}
           </span>
           <p className="mt-1 ml-2 text-sm font-semibold text-gray-800">
@@ -86,7 +84,7 @@ export const PromotionColumns = (callbacks: ColumnCallbacks): ColumnDef<Promotio
       const date = new Date(d);
       const isExpired = date < new Date();
       return (
-        <span className={`text-xs ${isExpired ? "text-red-500 font-medium" : "text-gray-600"}`}>
+        <span className={`text-xs ${isExpired ? "font-medium text-red-500" : "text-gray-600"}`}>
           {date.toLocaleDateString("vi-VN")}
         </span>
       );

@@ -4,4 +4,3 @@ export type * from "./types/service.type";
 
 // Components
 export { default as ServiceModal } from "./modals/ServiceModal";
-

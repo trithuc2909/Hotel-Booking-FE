@@ -10,16 +10,15 @@ interface AuthState {
 const decodeToken = (token: string | undefined) => {
   if (!token) return null;
   try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const rawBinary = typeof window !== 'undefined'
-      ? window.atob(base64)
-      : Buffer.from(base64, 'base64').toString('binary');
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const rawBinary =
+      typeof window !== "undefined" ? window.atob(base64) : Buffer.from(base64, "base64").toString("binary");
     const jsonPayload = decodeURIComponent(
       rawBinary
-        .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(""),
     );
     return JSON.parse(jsonPayload);
   } catch {
@@ -43,10 +42,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuth: (
-      state,
-      action: PayloadAction<{ accessToken: string; refreshToken: string }>,
-    ) => {
+    setAuth: (state, action: PayloadAction<{ accessToken: string; refreshToken: string }>) => {
       Cookies.set("access_token", action.payload.accessToken, { path: "/" });
       Cookies.set("refresh_token", action.payload.refreshToken, { path: "/" });
       state.isAuthenticated = true;

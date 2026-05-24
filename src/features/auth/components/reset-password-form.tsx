@@ -8,35 +8,16 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 
-import {
-  resetPasswordSchema,
-  type ResetPasswordFormData,
-} from "@/features/auth/schemas/auth.schema";
+import { resetPasswordSchema, type ResetPasswordFormData } from "@/features/auth/schemas/auth.schema";
 
-import {
-  useResetPasswordMutation,
-  useValidateResetTokenQuery,
-} from "@/features/auth/api/authApi";
+import { useResetPasswordMutation, useValidateResetTokenQuery } from "@/features/auth/api/authApi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { RESET_TOKEN_INVALID_CODES } from "@/constants/auth";
 import { colors } from "@/constants/colors";
 
@@ -50,20 +31,15 @@ type ApiError = {
 function InvalidTokenCard() {
   const router = useRouter();
   return (
-    <Card className="w-full max-w-md border border-gray-100 shadow-xl rounded-2xl">
+    <Card className="w-full max-w-md rounded-2xl border border-gray-100 shadow-xl">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold text-red-500">
-          Link không hợp lệ
-        </CardTitle>
-        <CardDescription>
-          Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.
-        </CardDescription>
+        <CardTitle className="text-2xl font-bold text-red-500">Link không hợp lệ</CardTitle>
+        <CardDescription>Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.</CardDescription>
       </CardHeader>
       <CardContent className="text-center">
         <Button
           onClick={() => router.push("/forgot-password")}
-          className="w-full h-11 rounded-lg text-base font-semibold text-white
-                    bg-[#0D99FF] hover:bg-[#0B84E6] transition-all duration-200 cursor-pointer"
+          className="h-11 w-full cursor-pointer rounded-lg bg-[#0D99FF] text-base font-semibold text-white transition-all duration-200 hover:bg-[#0B84E6]"
         >
           Yêu cầu link mới
         </Button>
@@ -111,7 +87,7 @@ export default function ResetPasswordForm() {
   // checking Token UI
   if (isValidating) {
     return (
-      <Card className="w-full max-w-md border border-gray-100 shadow-xl rounded-2xl">
+      <Card className="w-full max-w-md rounded-2xl border border-gray-100 shadow-xl">
         <CardHeader className="text-center">
           <CardDescription>Đang kiểm tra đường dẫn...</CardDescription>
         </CardHeader>
@@ -153,27 +129,22 @@ export default function ResetPasswordForm() {
   };
 
   return (
-    <Card className="w-full max-w-md border border-gray-100 shadow-xl rounded-2xl">
+    <Card className="w-full max-w-md rounded-2xl border border-gray-100 shadow-xl">
       <CardHeader className="space-y-2 text-center">
         <div className="relative flex items-center justify-center">
           <button
             type="button"
             onClick={() => router.push("/forgot-password")}
-            className="absolute left-0 p-1 rounded-md hover:bg-gray-100 cursor-pointer"
+            className="absolute left-0 cursor-pointer rounded-md p-1 hover:bg-gray-100"
             aria-label="Quay lại đăng nhập"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="h-5 w-5 text-gray-700" />
           </button>
-          <CardTitle
-            className="text-3xl font-bold"
-            style={{ color: colors.primary.darkBlue }}
-          >
+          <CardTitle className="text-3xl font-bold" style={{ color: colors.primary.darkBlue }}>
             Đặt lại mật khẩu
           </CardTitle>
         </div>
-        <CardDescription>
-          Tạo mật khẩu mới cho tài khoản của bạn
-        </CardDescription>
+        <CardDescription>Tạo mật khẩu mới cho tài khoản của bạn</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -185,14 +156,12 @@ export default function ResetPasswordForm() {
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Mật khẩu mới
-                  </FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">Mật khẩu mới</FormLabel>
 
                   <FormControl>
                     <div className="relative">
                       <Input
-                        className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-700"
+                        className="h-11 rounded-lg border-gray-300 text-gray-700 focus:border-blue-500 focus:ring-blue-500"
                         {...field}
                         type={showNewPassword ? "text" : "password"}
                         placeholder="Nhập mật khẩu mới"
@@ -204,13 +173,9 @@ export default function ResetPasswordForm() {
                         type="button"
                         aria-label="Toggle password visibility"
                         onClick={() => setShowNewPassword((prev) => !prev)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900 cursor-pointer"
+                        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-700 hover:text-gray-900"
                       >
-                        {showNewPassword ? (
-                          <EyeOff size={18} />
-                        ) : (
-                          <Eye size={18} />
-                        )}
+                        {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
                     </div>
                   </FormControl>
@@ -226,14 +191,12 @@ export default function ResetPasswordForm() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Xác nhận mật khẩu
-                  </FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">Xác nhận mật khẩu</FormLabel>
 
                   <FormControl>
                     <div className="relative">
                       <Input
-                        className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-700"
+                        className="h-11 rounded-lg border-gray-300 text-gray-700 focus:border-blue-500 focus:ring-blue-500"
                         {...field}
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="Nhập lại mật khẩu"
@@ -245,13 +208,9 @@ export default function ResetPasswordForm() {
                         type="button"
                         aria-label="Toggle password visibility"
                         onClick={() => setShowConfirmPassword((prev) => !prev)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900 cursor-pointer"
+                        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-700 hover:text-gray-900"
                       >
-                        {showConfirmPassword ? (
-                          <EyeOff size={18} />
-                        ) : (
-                          <Eye size={18} />
-                        )}
+                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
                     </div>
                   </FormControl>
@@ -263,10 +222,7 @@ export default function ResetPasswordForm() {
 
             <Button
               type="submit"
-              className="w-full h-11 rounded-lg text-base font-semibold text-white cursor-pointer
-            bg-[#0D99FF] transition-all duration-200 ease-in-out
-            hover:bg-[#0B84E6] hover:shadow-md active:scale-[0.98]
-            disabled:opacity-70 disabled:cursor-not-allowed"
+              className="h-11 w-full cursor-pointer rounded-lg bg-[#0D99FF] text-base font-semibold text-white transition-all duration-200 ease-in-out hover:bg-[#0B84E6] hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
               disabled={isLoading}
             >
               {isLoading ? "Đang xử lý..." : "Đặt lại mật khẩu"}

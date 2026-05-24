@@ -26,16 +26,10 @@ interface Props {
   bookingData: any;
 }
 
-export default function CancelBookingDialog({
-  bookingId,
-  bookingCode,
-  canCancel,
-  bookingData,
-}: Props) {
+export default function CancelBookingDialog({ bookingId, bookingCode, canCancel, bookingData }: Props) {
   const router = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [cancelBooking, { isLoading: isCancelling }] =
-    useCancelBookingMutation();
+  const [cancelBooking, { isLoading: isCancelling }] = useCancelBookingMutation();
 
   const invoiceRef = useRef<HTMLDivElement>(null);
   const handleDownloadInvoice = useReactToPrint({
@@ -57,17 +51,12 @@ export default function CancelBookingDialog({
   return (
     <div className="flex flex-col gap-2 pt-1">
       <div className="flex gap-2">
-        <Button
-          variant="outline"
-          className="flex-1 cursor-pointer"
-          size="sm"
-          onClick={handleDownloadInvoice}
-        >
+        <Button variant="outline" className="flex-1 cursor-pointer" size="sm" onClick={handleDownloadInvoice}>
           <Download size={14} className="mr-1.5" />
           Tải hóa đơn
         </Button>
         <Button
-          className="flex-1 bg-[#0D99FF] hover:bg-[#0B7FDB] cursor-pointer"
+          className="flex-1 cursor-pointer bg-[#0D99FF] hover:bg-[#0B7FDB]"
           size="sm"
           onClick={() => router.push("/rooms")}
         >
@@ -79,11 +68,7 @@ export default function CancelBookingDialog({
       {canCancel && (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button
-              variant="destructive"
-              className="w-full cursor-pointer"
-              size="sm"
-            >
+            <Button variant="destructive" className="w-full cursor-pointer" size="sm">
               Hủy đặt phòng
             </Button>
           </DialogTrigger>
@@ -91,9 +76,8 @@ export default function CancelBookingDialog({
             <DialogHeader>
               <DialogTitle>Xác nhận hủy đặt phòng</DialogTitle>
               <DialogDescription>
-                Bạn có chắc muốn hủy đơn đặt phòng{" "}
-                <span className="font-semibold">{bookingCode}</span> không? Hành
-                động này không thể hoàn tác.
+                Bạn có chắc muốn hủy đơn đặt phòng <span className="font-semibold">{bookingCode}</span> không? Hành động
+                này không thể hoàn tác.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>

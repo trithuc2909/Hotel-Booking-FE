@@ -9,22 +9,8 @@ import { registerSchema, type RegisterFormData } from "@/features/auth/schemas/a
 import { useRegister } from "../hooks/useRegister";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function RegisterForm() {
@@ -46,16 +32,13 @@ export default function RegisterForm() {
   });
 
   return (
-    <Card className="w-full max-w-md border border-gray-100 bg-white shadow-xl rounded-2xl">
+    <Card className="w-full max-w-md rounded-2xl border border-gray-100 bg-white shadow-xl">
       {/* Header */}
       <CardHeader className="space-y-2 pb-6">
-        <CardTitle
-          className="text-3xl font-bold text-center"
-          style={{ color: "#0B30A7" }}
-        >
+        <CardTitle className="text-center text-3xl font-bold" style={{ color: "#0B30A7" }}>
           Tạo tài khoản
         </CardTitle>
-        <CardDescription className="text-center text-gray-500 text-sm">
+        <CardDescription className="text-center text-sm text-gray-500">
           Nhập thông tin của bạn để tạo tài khoản mới
         </CardDescription>
       </CardHeader>
@@ -69,12 +52,10 @@ export default function RegisterForm() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Tên người dùng
-                  </FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">Tên người dùng</FormLabel>
                   <FormControl>
                     <Input
-                      className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-700"
+                      className="h-11 rounded-lg border-gray-300 text-gray-700 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Nhập tên người dùng"
                       {...field}
                       disabled={isLoading}
@@ -90,12 +71,10 @@ export default function RegisterForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Email
-                  </FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">Email</FormLabel>
                   <FormControl>
                     <Input
-                      className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-700"
+                      className="h-11 rounded-lg border-gray-300 text-gray-700 focus:border-blue-500 focus:ring-blue-500"
                       type="email"
                       placeholder="example@email.com"
                       {...field}
@@ -112,13 +91,11 @@ export default function RegisterForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Mật khẩu
-                  </FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">Mật khẩu</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
-                        className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-700"
+                        className="h-11 rounded-lg border-gray-300 text-gray-700 focus:border-blue-500 focus:ring-blue-500"
                         type={showPassword ? "text" : "password"}
                         placeholder="Nhập mật khẩu"
                         {...field}
@@ -128,13 +105,9 @@ export default function RegisterForm() {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900 cursor-pointer"
+                        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-700 hover:text-gray-900"
                       >
-                        {showPassword ? (
-                          <EyeOff className="h-5 w-5" />
-                        ) : (
-                          <Eye className="h-5 w-5" />
-                        )}
+                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                       </button>
                     </div>
                   </FormControl>
@@ -148,13 +121,11 @@ export default function RegisterForm() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Xác nhận mật khẩu
-                  </FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">Xác nhận mật khẩu</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
-                        className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-700"
+                        className="h-11 rounded-lg border-gray-300 text-gray-700 focus:border-blue-500 focus:ring-blue-500"
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="Nhập lại mật khẩu"
                         {...field}
@@ -163,16 +134,10 @@ export default function RegisterForm() {
                       {/* Eye icon */}
                       <button
                         type="button"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900 cursor-pointer"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-700 hover:text-gray-900"
                       >
-                        {showConfirmPassword ? (
-                          <EyeOff className="h-5 w-5" />
-                        ) : (
-                          <Eye className="h-5 w-5" />
-                        )}
+                        {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                       </button>
                     </div>
                   </FormControl>
@@ -183,13 +148,7 @@ export default function RegisterForm() {
             {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full h-11 rounded-lg text-base font-semibold text-white cursor-pointer
-                        bg-[#0D99FF]
-                        transition-all duration-200 ease-in-out
-                        hover:bg-[#0B84E6]
-                        hover:shadow-md
-                        active:scale-[0.98]
-                        disabled:opacity-70 disabled:cursor-not-allowed"
+              className="h-11 w-full cursor-pointer rounded-lg bg-[#0D99FF] text-base font-semibold text-white transition-all duration-200 ease-in-out hover:bg-[#0B84E6] hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
               disabled={isLoading}
             >
               {isLoading ? "Đang xử lý..." : "Đăng ký"}
@@ -201,11 +160,7 @@ export default function RegisterForm() {
       <CardFooter className="flex justify-center">
         <p className="text-sm text-gray-600">
           Đã có tài khoản?{" "}
-          <Link
-            href="/login"
-            className="font-semibold hover:underline"
-            style={{ color: "#0D99FF" }}
-          >
+          <Link href="/login" className="font-semibold hover:underline" style={{ color: "#0D99FF" }}>
             Đăng nhập ngay
           </Link>
         </p>

@@ -21,7 +21,7 @@ function Skeleton() {
           <div className="h-4 w-full rounded bg-gray-200" />
           <div className="h-4 w-3/4 rounded bg-gray-200" />
         </div>
-        <div className="w-80 shrink-0 h-80 rounded-2xl bg-gray-200" />
+        <div className="h-80 w-80 shrink-0 rounded-2xl bg-gray-200" />
       </div>
     </div>
   );
@@ -31,10 +31,10 @@ export default function RoomDetailView() {
   const { room, isLoading, isError } = useRoomDetail();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-gray-50">
       <Navbar />
 
-      <div className="sticky top-16 z-10 bg-white border-b border-gray-100 shadow-sm">
+      <div className="sticky top-16 z-10 border-b border-gray-100 bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
           <Breadcrumb
             items={[
@@ -49,74 +49,50 @@ export default function RoomDetailView() {
       <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
         {isLoading && <Skeleton />}
 
-        {isError && (
-          <p className="py-24 text-center text-gray-500">
-            Không tìm thấy phòng này.
-          </p>
-        )}
+        {isError && <p className="py-24 text-center text-gray-500">Không tìm thấy phòng này.</p>}
 
         {room && (
           <div className="space-y-6">
-            <RoomGallery
-              thumbnailUrl={room.thumbnailUrl}
-              imageUrls={room.imageUrls}
-              roomName={room.roomName}
-            />
+            <RoomGallery thumbnailUrl={room.thumbnailUrl} imageUrls={room.imageUrls} roomName={room.roomName} />
 
-            <div className="flex gap-8 items-start">
-              <div className="flex-1 min-w-0 space-y-8">
+            <div className="flex items-start gap-8">
+              <div className="min-w-0 flex-1 space-y-8">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900">
-                    {room.roomName}
-                  </h1>
+                  <h1 className="text-3xl font-bold text-gray-900">{room.roomName}</h1>
                   <div className="mt-1 flex items-center gap-2">
                     <StarRating rating={room.rating} />
                   </div>
                 </div>
 
                 <section>
-                  <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                    Tổng quan không gian
-                  </h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <h2 className="mb-4 text-lg font-semibold text-gray-800">Tổng quan không gian</h2>
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                     {room.size && (
-                      <div className="flex flex-col items-center gap-1.5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm text-center">
+                      <div className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white p-4 text-center shadow-sm">
                         <Maximize2 size={22} className="text-[#0D99FF]" />
-                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
-                          Diện tích
-                        </span>
-                        <span className="text-sm font-bold text-gray-900">
-                          {room.size} m²
-                        </span>
+                        <span className="text-[10px] font-medium tracking-wide text-gray-400 uppercase">Diện tích</span>
+                        <span className="text-sm font-bold text-gray-900">{room.size} m²</span>
                       </div>
                     )}
                     {room.bedType && (
-                      <div className="flex flex-col items-center gap-1.5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm text-center">
+                      <div className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white p-4 text-center shadow-sm">
                         <BedDouble size={22} className="text-[#0D99FF]" />
-                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
-                          Giường
-                        </span>
+                        <span className="text-[10px] font-medium tracking-wide text-gray-400 uppercase">Giường</span>
                         <span className="text-sm font-bold text-gray-900">
                           {BED_TYPE_LABELS[room.bedType] ?? room.bedType}
                         </span>
                       </div>
                     )}
                     {room.view && (
-                      <div className="flex flex-col items-center gap-1.5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm text-center">
+                      <div className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white p-4 text-center shadow-sm">
                         <Compass size={22} className="text-[#0D99FF]" />
-                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
-                          Hướng
-                        </span>
-                        <span className="text-sm font-bold text-gray-900">
-                          {VIEW_LABELS[room.view] ?? room.view}
-                        </span>
+                        <span className="text-[10px] font-medium tracking-wide text-gray-400 uppercase">Hướng</span>
+                        <span className="text-sm font-bold text-gray-900">{VIEW_LABELS[room.view] ?? room.view}</span>
                       </div>
                     )}
-                    <div className="flex flex-col items-center gap-1.5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm text-center">
+                    <div className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white p-4 text-center shadow-sm">
                       <Wind size={22} className="text-[#0D99FF]" />
-                      <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
-                        Ban công
-                      </span>
+                      <span className="text-[10px] font-medium tracking-wide text-gray-400 uppercase">Ban công</span>
                       <span className="text-sm font-bold text-gray-900">
                         {room.balcony ? "Có ban công" : "Không có"}
                       </span>
@@ -127,12 +103,8 @@ export default function RoomDetailView() {
                 {/* Description */}
                 {room.description && (
                   <section>
-                    <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                      Mô tả chi tiết
-                    </h2>
-                    <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-                      {room.description}
-                    </p>
+                    <h2 className="mb-2 text-lg font-semibold text-gray-800">Mô tả chi tiết</h2>
+                    <p className="leading-relaxed whitespace-pre-line text-gray-600">{room.description}</p>
                   </section>
                 )}
 
@@ -141,7 +113,7 @@ export default function RoomDetailView() {
               </div>
 
               {/* RIGHT: Booking widget sticky */}
-              <div className="w-80 shrink-0 sticky top-[108px] self-start">
+              <div className="sticky top-[108px] w-80 shrink-0 self-start">
                 <BookingWidget room={room} />
               </div>
             </div>

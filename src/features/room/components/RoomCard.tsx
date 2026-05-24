@@ -43,7 +43,7 @@ export function RoomCard({ room }: { room: RoomResponse }) {
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
-        <span className="absolute left-3 top-3 rounded-full bg-[#0D99FF] px-3 py-1 text-xs font-semibold text-white">
+        <span className="absolute top-3 left-3 rounded-full bg-[#0D99FF] px-3 py-1 text-xs font-semibold text-white">
           {room.roomTypeName}
         </span>
       </div>
@@ -51,9 +51,7 @@ export function RoomCard({ room }: { room: RoomResponse }) {
       {/* Body */}
       <div className="flex flex-1 flex-col p-4">
         {/* Tên phòng */}
-        <h3 className="text-base font-bold text-gray-900 leading-snug">
-          {room.roomName}
-        </h3>
+        <h3 className="text-base leading-snug font-bold text-gray-900">{room.roomName}</h3>
 
         {/* Rating */}
         <div className="mt-1">
@@ -61,11 +59,7 @@ export function RoomCard({ room }: { room: RoomResponse }) {
         </div>
 
         {/* Mô tả ngắn */}
-        {room.notes && (
-          <p className="mt-2 line-clamp-2 text-sm text-gray-500">
-            {room.notes}
-          </p>
-        )}
+        {room.notes && <p className="mt-2 line-clamp-2 text-sm text-gray-500">{room.notes}</p>}
 
         {/* Số khách */}
         <div className="mt-3 flex items-center gap-1 text-xs text-gray-500">
@@ -97,7 +91,7 @@ export function RoomCard({ room }: { room: RoomResponse }) {
           </div>
           <Link
             href={`/rooms/${room.id}`}
-            className="rounded-xl bg-[#0D99FF] px-4 py-2.5 text-xs font-bold text-white transition-all duration-200 hover:bg-[#0B84E6] hover:shadow-md hover:shadow-blue-100 flex items-center justify-center"
+            className="flex items-center justify-center rounded-xl bg-[#0D99FF] px-4 py-2.5 text-xs font-bold text-white transition-all duration-200 hover:bg-[#0B84E6] hover:shadow-md hover:shadow-blue-100"
           >
             Đặt ngay
           </Link>

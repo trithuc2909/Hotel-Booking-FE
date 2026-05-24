@@ -16,24 +16,15 @@ type BreadCrumbProps = {
   homeLabel?: string;
 };
 
-export default function Breadcrumb({
-  items,
-  showHomeIcon = true,
-  homeHref,
-  homeLabel = "Trang chủ",
-}: BreadCrumbProps) {
+export default function Breadcrumb({ items, showHomeIcon = true, homeHref, homeLabel = "Trang chủ" }: BreadCrumbProps) {
   const pathname = usePathname();
-  const resolvedHomeHref =
-    homeHref || (pathname?.startsWith("/dashboard") ? "/dashboard" : "/");
+  const resolvedHomeHref = homeHref || (pathname?.startsWith("/dashboard") ? "/dashboard" : "/");
 
   return (
     <nav aria-label="breadcrumb">
-      <ol className="flex items-center gap-1.5 text-sm text-gray-500 flex-wrap">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-gray-500">
         <li>
-          <Link
-            href={resolvedHomeHref}
-            className="flex items-center gap-1 transition-colors hover:text-[#0D99FF]"
-          >
+          <Link href={resolvedHomeHref} className="flex items-center gap-1 transition-colors hover:text-[#0D99FF]">
             {showHomeIcon && <Home size={14} />}
             <span>{homeLabel}</span>
           </Link>
@@ -44,10 +35,7 @@ export default function Breadcrumb({
           <li key={index} className="flex items-center gap-1.5">
             <ChevronRight size={14} className="shrink-0 text-gray-400" />
             {item.href ? (
-              <Link
-                href={item.href}
-                className="transition-colors hover:text-[#0D99FF]"
-              >
+              <Link href={item.href} className="transition-colors hover:text-[#0D99FF]">
                 {item.label}
               </Link>
             ) : (

@@ -1,11 +1,7 @@
 import { customBaseQueryWithReauth } from "@/lib/api/baseQuery";
 import { ApiResponse } from "@/types/common";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import {
-  AdminServiceFilter,
-  ServiceResponse,
-  ServiceStatsResponse,
-} from "../types/service.type";
+import { AdminServiceFilter, ServiceResponse, ServiceStatsResponse } from "../types/service.type";
 
 export const serviceApi = createApi({
   reducerPath: "serviceApi",
@@ -18,10 +14,7 @@ export const serviceApi = createApi({
     getServiceCategories: builder.query<ApiResponse<ServiceResponse[]>, void>({
       query: () => ({ url: "/services/categories", method: "GET" }),
     }),
-    getAdminServices: builder.query<
-      ApiResponse<ServiceResponse[]>,
-      AdminServiceFilter
-    >({
+    getAdminServices: builder.query<ApiResponse<ServiceResponse[]>, AdminServiceFilter>({
       query: (filter = {}) => {
         const params = new URLSearchParams();
         if (filter.search) params.set("search", filter.search);
@@ -41,10 +34,7 @@ export const serviceApi = createApi({
       query: () => ({ url: "/admin/services/stats" }),
       providesTags: ["ServiceStats"],
     }),
-    updateServiceStatus: builder.mutation<
-      ApiResponse<null>,
-      { id: string; status: string }
-    >({
+    updateServiceStatus: builder.mutation<ApiResponse<null>, { id: string; status: string }>({
       query: ({ id, status }) => ({
         url: `/admin/services/${id}/status`,
         method: "PATCH",
@@ -63,10 +53,7 @@ export const serviceApi = createApi({
       query: (body) => ({ url: "/admin/services", method: "POST", body }),
       invalidatesTags: ["AdminServices", "ServiceStats"],
     }),
-    updateService: builder.mutation<
-      ApiResponse<null>,
-      { id: string; data: FormData }
-    >({
+    updateService: builder.mutation<ApiResponse<null>, { id: string; data: FormData }>({
       query: ({ id, data }) => ({
         url: `/admin/services/${id}`,
         method: "PATCH",

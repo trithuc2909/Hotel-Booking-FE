@@ -16,33 +16,21 @@ export const promotionApi = createApi({
     getAllPromotions: builder.query<ApiResponse<PromotionResponse[]>, void>({
       query: () => "/promotions",
     }),
-    validatePromoCode: builder.query<
-      ApiResponse<ValidatePromoResponse>,
-      { code: string; orderValue: number }
-    >({
-      query: ({ code, orderValue }) =>
-        `/promotions/validate?code=${encodeURIComponent(code)}&orderValue=${orderValue}`,
+    validatePromoCode: builder.query<ApiResponse<ValidatePromoResponse>, { code: string; orderValue: number }>({
+      query: ({ code, orderValue }) => `/promotions/validate?code=${encodeURIComponent(code)}&orderValue=${orderValue}`,
     }),
-    getAdminPromotions: builder.query<
-      ApiResponse<PromotionResponse[]>,
-      AdminPromotionFilter
-    >({
+    getAdminPromotions: builder.query<ApiResponse<PromotionResponse[]>, AdminPromotionFilter>({
       query: (params) => ({ url: "/admin/promotions", params }),
       providesTags: ["AdminPromotions"],
     }),
-    getAdminPromotionById: builder.query<
-      ApiResponse<PromotionResponse>,
-      string
-    >({
+    getAdminPromotionById: builder.query<ApiResponse<PromotionResponse>, string>({
       query: (id) => ({ url: `/admin/promotions/${id}` }),
       providesTags: (_r, _e, id) => [{ type: "AdminPromotions", id }],
     }),
-    getPromotionStats: builder.query<ApiResponse<PromotionStatsResponse>, void>(
-      {
-        query: () => ({ url: "/admin/promotions/stats" }),
-        providesTags: ["PromotionStats"],
-      },
-    ),
+    getPromotionStats: builder.query<ApiResponse<PromotionStatsResponse>, void>({
+      query: () => ({ url: "/admin/promotions/stats" }),
+      providesTags: ["PromotionStats"],
+    }),
     createPromotion: builder.mutation<ApiResponse<null>, FormData>({
       query: (data) => ({
         url: "/admin/promotions",
@@ -51,10 +39,7 @@ export const promotionApi = createApi({
       }),
       invalidatesTags: ["AdminPromotions", "PromotionStats"],
     }),
-    updatePromotion: builder.mutation<
-      ApiResponse<null>,
-      { id: string; data: FormData }
-    >({
+    updatePromotion: builder.mutation<ApiResponse<null>, { id: string; data: FormData }>({
       query: ({ id, data }) => ({
         url: `/admin/promotions/${id}`,
         method: "PATCH",
@@ -62,10 +47,7 @@ export const promotionApi = createApi({
       }),
       invalidatesTags: ["AdminPromotions"],
     }),
-    updatePromotionStatus: builder.mutation<
-      ApiResponse<null>,
-      { id: string; status: string }
-    >({
+    updatePromotionStatus: builder.mutation<ApiResponse<null>, { id: string; status: string }>({
       query: ({ id, status }) => ({
         url: `/admin/promotions/${id}/status`,
         method: "PATCH",

@@ -44,10 +44,7 @@ export const dashboardApi = createApi({
       },
       providesTags: ["Dashboard"],
     }),
-    getRoomTimeline: builder.query<
-      ApiResponse<RoomTimelineResponse[]>,
-      RoomTimelineRequest
-    >({
+    getRoomTimeline: builder.query<ApiResponse<RoomTimelineResponse[]>, RoomTimelineRequest>({
       query: ({ from, to }) => ({
         url: `/admin/dashboard/room-timeline?from=${from}&to=${to}`,
         method: "GET",
@@ -57,8 +54,4 @@ export const dashboardApi = createApi({
   }),
 });
 
-export const {
-  useGetDashboardStatsQuery,
-  useGetDailyRevenueQuery,
-  useGetRoomTimelineQuery,
-} = dashboardApi;
+export const { useGetDashboardStatsQuery, useGetDailyRevenueQuery, useGetRoomTimelineQuery } = dashboardApi;

@@ -32,9 +32,7 @@ interface NavSection {
 const NAV_SECTIONS: NavSection[] = [
   {
     title: "TỔNG QUAN",
-    items: [
-      { href: "/dashboard", label: "Quản lý doanh thu", icon: BarChart3 },
-    ],
+    items: [{ href: "/dashboard", label: "Quản lý doanh thu", icon: BarChart3 }],
   },
   {
     title: "VẬN HÀNH",
@@ -46,9 +44,7 @@ const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "MARKETING",
-    items: [
-      { href: "/dashboard/promotions", label: "Quản lý ưu đãi", icon: Tag },
-    ],
+    items: [{ href: "/dashboard/promotions", label: "Quản lý ưu đãi", icon: Tag }],
   },
 ];
 
@@ -74,23 +70,18 @@ export default function DashboardSidebar() {
     <aside
       role="complementary"
       aria-label="Sidebar Admin"
-      className={`flex h-screen flex-col bg-white border-r border-slate-100 transition-all duration-300 shrink-0 ${isCollapsed ? "w-20" : "w-64"
-        }`}
+      className={`flex h-screen shrink-0 flex-col border-r border-slate-100 bg-white transition-all duration-300 ${
+        isCollapsed ? "w-20" : "w-64"
+      }`}
     >
-      <div className="flex items-center justify-between px-4 py-5 border-b border-blue-100 h-[73px]">
+      <div className="flex h-[73px] items-center justify-between border-b border-blue-100 px-4 py-5">
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 overflow-hidden hover:opacity-85 transition-opacity cursor-pointer"
+          className="flex cursor-pointer items-center gap-2 overflow-hidden transition-opacity hover:opacity-85"
         >
-          <img
-            src={ASSETS.logoDefault}
-            alt="Logo"
-            className="h-8 w-8 rounded-full object-cover shrink-0"
-          />
+          <img src={ASSETS.logoDefault} alt="Logo" className="h-8 w-8 shrink-0 rounded-full object-cover" />
           {!isCollapsed && (
-            <span className="text-[#0D99FF] font-bold text-sm tracking-wide truncate select-none">
-              Bullman Hotel
-            </span>
+            <span className="truncate text-sm font-bold tracking-wide text-[#0D99FF] select-none">Bullman Hotel</span>
           )}
         </Link>
 
@@ -98,17 +89,13 @@ export default function DashboardSidebar() {
           onClick={() => setIsCollapsed(!isCollapsed)}
           aria-label={isCollapsed ? "Mở rộng menu" : "Thu gọn menu"}
           aria-expanded={!isCollapsed}
-          className="p-1.5 rounded-lg border border-slate-100 hover:bg-slate-50 text-slate-400 hover:text-slate-600 transition-colors shadow-sm bg-white shrink-0 cursor-pointer"
+          className="shrink-0 cursor-pointer rounded-lg border border-slate-100 bg-white p-1.5 text-slate-400 shadow-sm transition-colors hover:bg-slate-50 hover:text-slate-600"
         >
           {isCollapsed ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
         </button>
       </div>
 
-      <nav
-        role="navigation"
-        aria-label="Chính"
-        className="flex-1 overflow-y-auto px-3 py-4 space-y-6"
-      >
+      <nav role="navigation" aria-label="Chính" className="flex-1 space-y-6 overflow-y-auto px-3 py-4">
         {NAV_SECTIONS.map((section) => (
           <div key={section.title} className="space-y-1.5" role="group">
             {!isCollapsed ? (
@@ -130,31 +117,30 @@ export default function DashboardSidebar() {
                     href={item.href}
                     title={isCollapsed ? item.label : undefined}
                     aria-current={isActive ? "page" : undefined}
-                    className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200 cursor-pointer ${isActive
-                      ? "bg-[#EFF6FF] text-blue-600 font-bold"
-                      : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
-                      }`}
+                    className={`group relative flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                      isActive
+                        ? "bg-[#EFF6FF] font-bold text-blue-600"
+                        : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                    }`}
                   >
                     {isActive && (
-                      <span className="absolute left-0 top-1/4 bottom-1/4 w-[3px] bg-blue-600 rounded-r-md" />
+                      <span className="absolute top-1/4 bottom-1/4 left-0 w-[3px] rounded-r-md bg-blue-600" />
                     )}
 
                     <Icon
                       size={18}
-                      className={`shrink-0 transition-transform duration-200 group-hover:scale-105 ${isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"
-                        }`}
+                      className={`shrink-0 transition-transform duration-200 group-hover:scale-105 ${
+                        isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"
+                      }`}
                     />
 
-                    {!isCollapsed && (
-                      <span className="flex-1 truncate">{item.label}</span>
-                    )}
+                    {!isCollapsed && <span className="flex-1 truncate">{item.label}</span>}
 
                     {item.badge !== undefined && (
                       <span
-                        className={`flex h-5 items-center justify-center rounded-md px-1.5 text-[10px] font-bold shrink-0 ${isActive
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-slate-100 text-slate-600"
-                          }`}
+                        className={`flex h-5 shrink-0 items-center justify-center rounded-md px-1.5 text-[10px] font-bold ${
+                          isActive ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-600"
+                        }`}
                       >
                         {item.badge}
                       </span>
@@ -167,15 +153,16 @@ export default function DashboardSidebar() {
         ))}
       </nav>
 
-      <div className="p-3 border-t border-slate-100 bg-slate-50/30">
+      <div className="border-t border-slate-100 bg-slate-50/30 p-3">
         <button
           onClick={handleLogout}
           aria-label="Đăng xuất khỏi hệ thống"
           title={isCollapsed ? "Đăng xuất" : undefined}
-          className={`cursor-pointer flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${isCollapsed
-            ? "justify-center text-red-500 hover:bg-red-50"
-            : "text-red-500 hover:bg-red-50 hover:text-red-600"
-            }`}
+          className={`flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
+            isCollapsed
+              ? "justify-center text-red-500 hover:bg-red-50"
+              : "text-red-500 hover:bg-red-50 hover:text-red-600"
+          }`}
         >
           <LogOut size={16} className="shrink-0" />
           {!isCollapsed && <span>Đăng xuất</span>}

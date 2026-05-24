@@ -12,19 +12,13 @@ interface Props {
   rooms: BookingDetailRoom[];
 }
 
-export default function StayInfoCard({
-  checkInDate,
-  checkOutDate,
-  totalNights,
-  numberOfGuests,
-  rooms,
-}: Props) {
+export default function StayInfoCard({ checkInDate, checkOutDate, totalNights, numberOfGuests, rooms }: Props) {
   const firstRoomThumbnail = rooms[0]?.thumbnailUrl;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-700">
+        <CardTitle className="flex items-center gap-2 text-sm font-bold tracking-wide text-gray-700 uppercase">
           <Calendar size={14} className="text-[#0D99FF]" />
           Thông tin lưu trú
         </CardTitle>
@@ -33,11 +27,7 @@ export default function StayInfoCard({
         {/* Room thumbnail */}
         {firstRoomThumbnail && (
           <div className="overflow-hidden rounded-xl">
-            <img
-              src={firstRoomThumbnail}
-              alt="Ảnh phòng"
-              className="h-48 w-full object-cover"
-            />
+            <img src={firstRoomThumbnail} alt="Ảnh phòng" className="h-48 w-full object-cover" />
           </div>
         )}
 
@@ -45,9 +35,7 @@ export default function StayInfoCard({
         <div className="flex items-center gap-3">
           <div className="flex-1 rounded-xl border border-gray-100 bg-gray-50 p-4">
             <p className="mb-1 text-xs text-gray-400">Nhận phòng</p>
-            <p className="text-lg font-bold text-[#0D99FF]">
-              {fmtDate(checkInDate)}
-            </p>
+            <p className="text-lg font-bold text-[#0D99FF]">{fmtDate(checkInDate)}</p>
             <p className="mt-1 text-xs text-gray-400">Sau 14:00</p>
           </div>
 
@@ -57,9 +45,7 @@ export default function StayInfoCard({
 
           <div className="flex-1 rounded-xl border border-gray-100 bg-gray-50 p-4">
             <p className="mb-1 text-xs text-gray-400">Trả phòng</p>
-            <p className="text-lg font-bold text-[#0D99FF]">
-              {fmtDate(checkOutDate)}
-            </p>
+            <p className="text-lg font-bold text-[#0D99FF]">{fmtDate(checkOutDate)}</p>
             <p className="mt-1 text-xs text-gray-400">Trước 12:00</p>
           </div>
         </div>

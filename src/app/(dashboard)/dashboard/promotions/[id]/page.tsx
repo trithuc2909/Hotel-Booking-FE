@@ -4,10 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import PromotionForm from "@/features/promotion/components/PromotionForm";
-import {
-  useGetAdminPromotionByIdQuery,
-  useUpdatePromotionMutation,
-} from "@/features/promotion/api/promotionApi";
+import { useGetAdminPromotionByIdQuery, useUpdatePromotionMutation } from "@/features/promotion/api/promotionApi";
 import type { PromotionFormValues } from "@/features/promotion/schemas/promotion.schema";
 
 export default function PromotionDetailPage() {
@@ -27,19 +24,19 @@ export default function PromotionDetailPage() {
 
   const handleSubmit = async (data: PromotionFormValues) => {
     const formData = new FormData();
-    
+
     formData.append("code", data.code.toUpperCase());
     formData.append("title", data.title);
     formData.append("discountType", data.discountType);
     formData.append("discountValue", String(data.discountValue));
 
     if (data.description !== undefined) formData.append("description", data.description);
-    
+
     if (data.minOrderValue) formData.append("minOrderValue", String(data.minOrderValue));
     if (data.maxDiscount) formData.append("maxDiscount", String(data.maxDiscount));
     if (data.usageLimit) formData.append("usageLimit", String(data.usageLimit));
     if (data.maxUsagePerUser) formData.append("maxUsagePerUser", String(data.maxUsagePerUser));
-    
+
     if (data.startDate) formData.append("startDate", data.startDate);
     if (data.endDate) formData.append("endDate", data.endDate);
 
@@ -57,7 +54,8 @@ export default function PromotionDetailPage() {
   };
 
   if (isLoading) return <div className="py-10 text-center text-sm text-gray-400">Đang tải dữ liệu...</div>;
-  if (isError || !promotion) return <div className="py-10 text-center text-sm text-red-500">Không tìm thấy thông tin ưu đãi</div>;
+  if (isError || !promotion)
+    return <div className="py-10 text-center text-sm text-red-500">Không tìm thấy thông tin ưu đãi</div>;
 
   const defaultValues: Partial<PromotionFormValues> = {
     code: promotion.code,

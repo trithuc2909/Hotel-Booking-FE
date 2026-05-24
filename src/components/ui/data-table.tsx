@@ -1,9 +1,4 @@
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 interface Props<TData> {
   columns: ColumnDef<TData>[];
@@ -27,31 +22,17 @@ export function DataTable<TData>({
   return (
     <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
       {table.getHeaderGroups().map((headerGroup) => (
-        <div
-          key={headerGroup.id}
-          className="grid border-b px-6 py-3"
-          style={{ gridTemplateColumns }}
-        >
+        <div key={headerGroup.id} className="grid border-b px-6 py-3" style={{ gridTemplateColumns }}>
           {headerGroup.headers.map((header) => (
-            <div
-              key={header.id}
-              className="text-xs font-semibold text-gray-400"
-            >
-              {header.isPlaceholder
-                ? null
-                : flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
+            <div key={header.id} className="text-xs font-semibold text-gray-400">
+              {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
             </div>
           ))}
         </div>
       ))}
 
       {table.getRowModel().rows.length === 0 ? (
-        <p className="py-16 text-center text-sm text-gray-400">
-          {emptyMessage}
-        </p>
+        <p className="py-16 text-center text-sm text-gray-400">{emptyMessage}</p>
       ) : (
         table.getRowModel().rows.map((row) => (
           <div
@@ -60,9 +41,7 @@ export function DataTable<TData>({
             style={{ gridTemplateColumns }}
           >
             {row.getVisibleCells().map((cell) => (
-              <div key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </div>
+              <div key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>
             ))}
           </div>
         ))

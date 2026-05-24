@@ -19,25 +19,23 @@ export default function ConfirmBookingModal({
 }: ConfirmBookingModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md rounded-2xl">
+      <DialogContent className="rounded-2xl sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-lg font-bold text-gray-900">
-            Xác nhận thanh toán tiền mặt
-          </DialogTitle>
+          <DialogTitle className="text-lg font-bold text-gray-900">Xác nhận thanh toán tiền mặt</DialogTitle>
         </DialogHeader>
-        
+
         <div className="py-3">
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm leading-relaxed text-gray-600">
             Bạn có chắc chắn muốn xác nhận đặt phòng và thu tiền mặt số tiền{" "}
-            <span className="font-bold text-[#0D99FF]">{formatCurrency(total)}</span>{" "}
-            từ khách hàng <span className="font-bold text-gray-900">{guestName}</span> không?
+            <span className="font-bold text-[#0D99FF]">{formatCurrency(total)}</span> từ khách hàng{" "}
+            <span className="font-bold text-gray-900">{guestName}</span> không?
           </p>
         </div>
         <DialogFooter className="flex justify-end gap-3 pt-2">
           <Button
             variant="outline"
             onClick={onClose}
-            className="rounded-xl border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="cursor-pointer rounded-xl border-gray-200 text-gray-600 hover:bg-gray-50"
           >
             Hủy
           </Button>
@@ -46,7 +44,7 @@ export default function ConfirmBookingModal({
               onConfirm();
               onClose();
             }}
-            className="bg-[#0D99FF] hover:bg-[#0B84E6] text-white rounded-xl cursor-pointer"
+            className="cursor-pointer rounded-xl bg-[#0D99FF] text-white hover:bg-[#0B84E6]"
           >
             Xác nhận
           </Button>

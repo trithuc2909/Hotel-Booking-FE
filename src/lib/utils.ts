@@ -7,10 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Format date
-export function formatDate(
-  date: Date | string,
-  formatStr: string = "dd/MM/yyyy",
-): string {
+export function formatDate(date: Date | string, formatStr: string = "dd/MM/yyyy"): string {
   if (!date) return "-";
   return format(new Date(date), formatStr);
 }

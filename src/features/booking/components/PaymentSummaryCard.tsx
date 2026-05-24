@@ -28,7 +28,7 @@ export default function PaymentSummaryCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-700">
+        <CardTitle className="flex items-center gap-2 text-sm font-bold tracking-wide text-gray-700 uppercase">
           <CreditCard size={14} className="text-[#0D99FF]" />
           Chi tiết thanh toán
         </CardTitle>
@@ -62,9 +62,7 @@ export default function PaymentSummaryCard({
 
         <div className="flex items-center justify-between border-t border-gray-100 pt-3">
           <span className="font-semibold text-gray-700">Tổng cộng</span>
-          <span className="text-xl font-extrabold text-[#0B30A7]">
-            {formatCurrency(totalAmount)}
-          </span>
+          <span className="text-xl font-extrabold text-[#0B30A7]">{formatCurrency(totalAmount)}</span>
         </div>
 
         {/* Payment status badge */}
@@ -74,9 +72,7 @@ export default function PaymentSummaryCard({
             <div>
               <p className="text-sm font-medium text-emerald-700">Đã thanh toán</p>
               {paidPayment.paidAt && (
-                <p className="text-xs text-emerald-600">
-                  Thanh toán lúc {fmtDateTime(paidPayment.paidAt)}
-                </p>
+                <p className="text-xs text-emerald-600">Thanh toán lúc {fmtDateTime(paidPayment.paidAt)}</p>
               )}
             </div>
           </div>

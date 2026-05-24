@@ -2,10 +2,7 @@
 
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import ServiceForm from "@/features/service/components/ServiceForm";
-import {
-  useGetAdminServiceByIdQuery,
-  useUpdateServiceMutation,
-} from "@/features/service/api/serviceApi";
+import { useGetAdminServiceByIdQuery, useUpdateServiceMutation } from "@/features/service/api/serviceApi";
 import type { ServiceFormValues } from "@/features/service/schemas/service.schema";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
@@ -70,9 +67,7 @@ export default function ServiceDetailPage() {
 
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Chi tiết dịch vụ</h1>
-        <p className="mt-0.5 text-sm text-gray-400">
-          Chỉnh sửa thông tin dịch vụ trực tiếp
-        </p>
+        <p className="mt-0.5 text-sm text-gray-400">Chỉnh sửa thông tin dịch vụ trực tiếp</p>
       </div>
 
       <ServiceForm

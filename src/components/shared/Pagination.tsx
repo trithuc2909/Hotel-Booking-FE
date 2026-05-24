@@ -21,10 +21,7 @@ export default function Pagination({
 }: Props) {
   const options = pageSizeOptions || PAGE_SIZE_OPTIONS;
 
-  const hasEnhanced =
-    total !== undefined &&
-    pageSize !== undefined &&
-    onPageSizeChange !== undefined;
+  const hasEnhanced = total !== undefined && pageSize !== undefined && onPageSizeChange !== undefined;
 
   const currentCount = Math.min(pageSize ?? 0, total ?? 0);
 
@@ -61,9 +58,9 @@ export default function Pagination({
       }
     }
     return range;
-  }
+  };
   return (
-    <div className="mt-4 flex items-center justify-between w-full">
+    <div className="mt-4 flex w-full items-center justify-between">
       {hasEnhanced && (
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-400">
@@ -77,7 +74,7 @@ export default function Pagination({
                 onPageSizeChange(Number(e.target.value));
                 onPageChange(1);
               }}
-              className="rounded-md border border-gray-200 px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0D99FF]"
+              className="rounded-md border border-gray-200 px-2 py-1 text-xs text-gray-700 focus:ring-1 focus:ring-[#0D99FF] focus:outline-none"
             >
               {options.map((s) => (
                 <option key={s} value={s}>
@@ -93,7 +90,7 @@ export default function Pagination({
         <button
           disabled={page === 1}
           onClick={() => onPageChange(page - 1)}
-          className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-sm disabled:opacity-40 hover:bg-slate-50 transition-all cursor-pointer bg-white"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-sm transition-all hover:bg-slate-50 disabled:opacity-40"
         >
           ‹
         </button>
@@ -101,10 +98,7 @@ export default function Pagination({
         {getVisiblePages().map((p, idx) => {
           if (p === "...") {
             return (
-              <span
-                key={`ellipsis-${idx}`}
-                className="px-2.5 py-1 text-sm text-gray-400 font-medium select-none"
-              >
+              <span key={`ellipsis-${idx}`} className="px-2.5 py-1 text-sm font-medium text-gray-400 select-none">
                 ...
               </span>
             );
@@ -114,10 +108,11 @@ export default function Pagination({
             <button
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
-              className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 cursor-pointer ${pageNum === page
-                ? "bg-[#0D99FF] text-white shadow-md shadow-blue-100"
-                : "border border-gray-200 hover:bg-slate-50 hover:text-blue-500 hover:border-blue-300 text-gray-600 bg-white"
-                }`}
+              className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 ${
+                pageNum === page
+                  ? "bg-[#0D99FF] text-white shadow-md shadow-blue-100"
+                  : "border border-gray-200 bg-white text-gray-600 hover:border-blue-300 hover:bg-slate-50 hover:text-blue-500"
+              }`}
             >
               {pageNum}
             </button>
@@ -127,7 +122,7 @@ export default function Pagination({
         <button
           disabled={page === totalPages}
           onClick={() => onPageChange(page + 1)}
-          className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-sm disabled:opacity-40 hover:bg-slate-50 transition-all cursor-pointer bg-white"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-sm transition-all hover:bg-slate-50 disabled:opacity-40"
         >
           ›
         </button>

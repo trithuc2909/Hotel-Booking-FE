@@ -13,19 +13,9 @@ interface Props {
 
 const GRID = "2fr 1.5fr 1fr 1fr 1fr 80px";
 
-export default function PromotionTable({
-  data,
-  onView,
-  onToggleStatus,
-  onDelete,
-}: Props) {
+export default function PromotionTable({ data, onView, onToggleStatus, onDelete }: Props) {
   const columns = PromotionColumns({ onView, onToggleStatus, onDelete });
   return (
-    <DataTable
-      columns={columns}
-      data={data}
-      gridTemplateColumns={GRID}
-      emptyMessage="Không tìm thấy ưu đãi nào"
-    />
+    <DataTable columns={columns} data={data} gridTemplateColumns={GRID} emptyMessage="Không tìm thấy ưu đãi nào" />
   );
 }

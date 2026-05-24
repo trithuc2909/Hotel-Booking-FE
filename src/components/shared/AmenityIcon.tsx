@@ -10,19 +10,11 @@ type AmenityIconProps = {
   className?: string;
 };
 
-export default function AmenityIcon({
-  icon,
-  name,
-  size = 12,
-  showLabel = true,
-  className = "",
-}: AmenityIconProps) {
+export default function AmenityIcon({ icon, name, size = 12, showLabel = true, className = "" }: AmenityIconProps) {
   const IconComponent = getIconComponent(icon);
 
   if (!IconComponent) {
-    return showLabel ? (
-      <span className={`text-xs text-gray-500 ${className}`}>{name}</span>
-    ) : null;
+    return showLabel ? <span className={`text-xs text-gray-500 ${className}`}>{name}</span> : null;
   }
 
   return (

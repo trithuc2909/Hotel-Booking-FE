@@ -111,4 +111,3 @@ export const ROOM_DISPLAY_STATUS = {
   OCCUPIED: "OCP",
   RESERVED: "RSV",
 } as const;
-

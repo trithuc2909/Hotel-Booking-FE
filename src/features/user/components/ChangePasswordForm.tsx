@@ -33,25 +33,21 @@ function PasswordInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`pr-10 border-gray-300 focus:border-[#0D99FF] focus:ring-[#0D99FF] ${
+          className={`border-gray-300 pr-10 focus:border-[#0D99FF] focus:ring-[#0D99FF] ${
             error ? "border-red-400 focus:border-red-400 focus:ring-red-400" : ""
           }`}
         />
         <button
           type="button"
           tabIndex={-1}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
           onClick={() => setShow((s) => !s)}
           aria-label={show ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
         >
           {show ? <EyeOff size={16} /> : <Eye size={16} />}
         </button>
       </div>
-      {error && (
-        <p className="mt-1 text-xs text-red-500 flex items-center gap-1">
-          {error}
-        </p>
-      )}
+      {error && <p className="mt-1 flex items-center gap-1 text-xs text-red-500">{error}</p>}
     </div>
   );
 }
@@ -113,17 +109,12 @@ export default function ChangePasswordForm() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-      <h2 className="text-xl font-bold text-center text-gray-800 mb-6">
-        Thông tin bảo mật
-      </h2>
+    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <h2 className="mb-6 text-center text-xl font-bold text-gray-800">Thông tin bảo mật</h2>
 
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <label
-            htmlFor="pwd-old"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="pwd-old" className="mb-1 block text-sm font-medium text-gray-700">
             Nhập mật khẩu cũ
           </label>
           <PasswordInput
@@ -136,10 +127,7 @@ export default function ChangePasswordForm() {
         </div>
 
         <div>
-          <label
-            htmlFor="pwd-new"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="pwd-new" className="mb-1 block text-sm font-medium text-gray-700">
             Mật khẩu mới
           </label>
           <PasswordInput
@@ -152,10 +140,7 @@ export default function ChangePasswordForm() {
         </div>
 
         <div>
-          <label
-            htmlFor="pwd-confirm"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="pwd-confirm" className="mb-1 block text-sm font-medium text-gray-700">
             Xác nhận mật khẩu mới
           </label>
           <PasswordInput
@@ -168,9 +153,9 @@ export default function ChangePasswordForm() {
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-3 mt-6">
+      <div className="mt-6 flex items-center justify-end gap-3">
         {saved && (
-          <span className="flex items-center gap-1.5 text-sm text-green-600 animate-in fade-in">
+          <span className="animate-in fade-in flex items-center gap-1.5 text-sm text-green-600">
             <CheckCircle2 size={16} />
             Đổi mật khẩu thành công!
           </span>
@@ -179,7 +164,7 @@ export default function ChangePasswordForm() {
           id="change-pwd-save-btn"
           onClick={handleSubmit}
           disabled={isLoading}
-          className="flex items-center gap-2 text-white rounded-lg px-5 cursor-pointer"
+          className="flex cursor-pointer items-center gap-2 rounded-lg px-5 text-white"
           style={{ backgroundColor: colors.primary.blue }}
         >
           <Save size={15} />

@@ -3,20 +3,17 @@
 import { useState } from "react";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import Pagination from "@/components/shared/Pagination";
-import { columns } from "@/features/booking/admin/components/Columns";
-import BookingTable from "@/features/booking/admin/components/BookingTable";
-import BookingFilterBar from "@/features/booking/admin/components/BookingFilterBar";
-import {
-  useGetAdminBookingsQuery,
-  useLazyGetAdminBookingsExportQuery,
-} from "@/features/booking/api/bookingApi";
+import BookingTable from "@/features/booking/admin/booking-list/components/BookingTable";
+import BookingFilterBar from "@/features/booking/admin/booking-list/components/BookingFilterBar";
+import { useGetAdminBookingsQuery, useLazyGetAdminBookingsExportQuery } from "@/features/booking/api/bookingApi";
 import { AdminBookingsFilter } from "@/features/booking/types/booking.type";
 import { Button } from "@/components/ui/button";
 import { Download, PlusCircle } from "lucide-react";
-import BookingAnalytics from "@/features/booking/admin/components/BookingAnalytics";
+import BookingAnalytics from "@/features/booking/admin/booking-list/components/BookingAnalytics";
 import Link from "next/link";
 import { exportBookingsToExcel } from "@/features/booking/admin/export/exportExcel";
 import { toast } from "sonner";
+import { columns } from "@/features/booking/admin/booking-list/Columns";
 
 export default function AdminBookingsPage() {
   const [filter, setFilter] = useState<AdminBookingsFilter>({
@@ -30,8 +27,7 @@ export default function AdminBookingsPage() {
     refetchOnMountOrArgChange: true,
   });
 
-  const [triggerExport, { isFetching: isExporting }] =
-    useLazyGetAdminBookingsExportQuery();
+  const [triggerExport, { isFetching: isExporting }] = useLazyGetAdminBookingsExportQuery();
 
   const bookings = data?.data?.data || [];
   const total = data?.data?.total || 0;
@@ -64,16 +60,14 @@ export default function AdminBookingsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-start justify-between flex-wrap gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <Breadcrumb items={breadcrumbItems} />
-          <h1 className="text-2xl font-extrabold text-gray-900 mt-2">
-            Quản lý đặt phòng
-          </h1>
+          <h1 className="mt-2 text-2xl font-extrabold text-gray-900">Quản lý đặt phòng</h1>
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+      <div className="flex flex-col items-center justify-between gap-4 lg:flex-row">
         <BookingFilterBar
           filter={filter}
           onFilterChange={setFilter}
@@ -89,10 +83,10 @@ export default function AdminBookingsPage() {
           }
         />
 
-        <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+        <div className="flex shrink-0 flex-wrap items-center gap-2.5">
           <Button
             variant="outline"
-            className="flex items-center gap-2 border-[#0D99FF] text-[#0D99FF] hover:bg-blue-50 rounded-lg cursor-pointer h-9 text-xs"
+            className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border-[#0D99FF] text-xs text-[#0D99FF] hover:bg-blue-50"
             onClick={handleExport}
             disabled={isExporting}
           >
@@ -102,7 +96,7 @@ export default function AdminBookingsPage() {
 
           <Button
             asChild
-            className="flex items-center gap-2 text-white rounded-lg bg-[#0D99FF] hover:bg-[#0B84E6] cursor-pointer h-9 text-xs"
+            className="flex h-9 cursor-pointer items-center gap-2 rounded-lg bg-[#0D99FF] text-xs text-white hover:bg-[#0B84E6]"
           >
             <Link href="/dashboard/bookings/create">
               <PlusCircle size={14} />
@@ -113,15 +107,11 @@ export default function AdminBookingsPage() {
       </div>
 
       {isLoading ? (
-        <p className="py-16 text-center text-sm text-gray-400">
-          Đang tải dữ liệu...
-        </p>
+        <p className="py-16 text-center text-sm text-gray-400">Đang tải dữ liệu...</p>
       ) : isError ? (
-        <p className="py-16 text-center text-sm text-red-400">
-          Lỗi khi tải dữ liệu từ máy chủ
-        </p>
+        <p className="py-16 text-center text-sm text-red-400">Lỗi khi tải dữ liệu từ máy chủ</p>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
+        <div className="space-y-4 rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
           <BookingTable bookings={bookings} columns={columns} />
 
           <Pagination

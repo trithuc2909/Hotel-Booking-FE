@@ -16,15 +16,9 @@ const StatCard = ({
   value: React.ReactNode;
 }) => (
   <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-sm">
-    <div
-      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${iconBg}`}
-    >
-      {icon}
-    </div>
+    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${iconBg}`}>{icon}</div>
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-        {label}
-      </p>
+      <p className="text-xs font-semibold tracking-wide text-gray-400 uppercase">{label}</p>
       <p className="mt-0.5 text-2xl font-extrabold text-gray-900">{value}</p>
     </div>
   </div>

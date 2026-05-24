@@ -36,26 +36,14 @@ export default function CreateServicePage() {
 
   return (
     <div className="space-y-5">
-      <Breadcrumb
-        items={[
-          { label: "Quản lý dịch vụ", href: "/dashboard/services" },
-          { label: "Thêm dịch vụ mới" },
-        ]}
-      />
+      <Breadcrumb items={[{ label: "Quản lý dịch vụ", href: "/dashboard/services" }, { label: "Thêm dịch vụ mới" }]} />
 
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Thêm dịch vụ mới</h1>
-        <p className="mt-0.5 text-sm text-gray-400">
-          Điền thông tin để tạo dịch vụ mới
-        </p>
+        <p className="mt-0.5 text-sm text-gray-400">Điền thông tin để tạo dịch vụ mới</p>
       </div>
 
-      <ServiceForm
-        mode="create"
-        onSubmit={handleSubmit}
-        onCancel={() => router.back()}
-        isSubmitting={isLoading}
-      />
+      <ServiceForm mode="create" onSubmit={handleSubmit} onCancel={() => router.back()} isSubmitting={isLoading} />
     </div>
   );
 }

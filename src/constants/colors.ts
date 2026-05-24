@@ -1,11 +1,4 @@
-import {
-  CheckCircle2,
-  Clock,
-  XCircle,
-  LogIn,
-  LogOut,
-  AlertOctagon,
-} from "lucide-react";
+import { CheckCircle2, Clock, XCircle, LogIn, LogOut, AlertOctagon } from "lucide-react";
 
 export const colors = {
   // Primary Colors
@@ -80,10 +73,7 @@ export const STATUS_COLOR: Record<string, string> = {
   EXP: "bg-gray-100 text-gray-500",
 };
 
-export const STATUS_CONFIG: Record<
-  string,
-  { color: string; bg: string; text: string; Icon: any }
-> = {
+export const STATUS_CONFIG: Record<string, { color: string; bg: string; text: string; Icon: any }> = {
   PND: {
     color: "#F59E0B",
     bg: "bg-yellow-50",

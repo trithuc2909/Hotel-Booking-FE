@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import DashboardHeader from "@/components/layout/DashboardHeader";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
@@ -7,11 +7,7 @@ import { useAppSelector } from "@/store/hooks";
 import { notFound } from "next/navigation";
 import { ROLE } from "@/constants/common";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, role } = useAppSelector((state) => state.auth);
 
   useEffect(() => {

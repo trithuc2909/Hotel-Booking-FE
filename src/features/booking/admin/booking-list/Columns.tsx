@@ -3,16 +3,12 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Eye } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Link from "next/link";
 import { AdminBookingResponse } from "../../types/booking.type";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { STATUS_COLOR } from "@/constants/colors";
-import CellAction from "./CellAction";
+import CellAction from "./components/CellAction";
 
 export const columns: ColumnDef<AdminBookingResponse>[] = [
   {
@@ -33,15 +29,9 @@ export const columns: ColumnDef<AdminBookingResponse>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex flex-col">
-          <span className="text-sm font-semibold text-gray-800">
-            {row.original.customerName}
-          </span>
-          <span className="text-xs text-gray-400">
-            {row.original.customerEmail}
-          </span>
-          <span className="text-xs text-gray-400">
-            {row.original.customerPhone}
-          </span>
+          <span className="text-sm font-semibold text-gray-800">{row.original.customerName}</span>
+          <span className="text-xs text-gray-400">{row.original.customerEmail}</span>
+          <span className="text-xs text-gray-400">{row.original.customerPhone}</span>
         </div>
       );
     },
@@ -51,19 +41,12 @@ export const columns: ColumnDef<AdminBookingResponse>[] = [
     header: "Phòng",
     cell: ({ row }) => {
       const rooms = row.original.rooms || [];
-      if (rooms.length === 0)
-        return <span className="text-xs text-gray-400">-</span>;
+      if (rooms.length === 0) return <span className="text-xs text-gray-400">-</span>;
 
       return (
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-medium text-gray-700">
-            {rooms[0].roomName}
-          </span>
-          {rooms.length > 1 && (
-            <span className="text-xs text-gray-400">
-              +{rooms.length - 1} phòng khác
-            </span>
-          )}
+          <span className="text-sm font-medium text-gray-700">{rooms[0].roomName}</span>
+          {rooms.length > 1 && <span className="text-xs text-gray-400">+{rooms.length - 1} phòng khác</span>}
         </div>
       );
     },
@@ -74,9 +57,7 @@ export const columns: ColumnDef<AdminBookingResponse>[] = [
     cell: ({ row }) => {
       const checkIn = new Date(row.original.checkInDate);
       const checkOut = new Date(row.original.checkOutDate);
-      const nights = Math.ceil(
-        (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24),
-      );
+      const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
 
       return (
         <div className="flex flex-col text-xs text-gray-600">
@@ -93,11 +74,7 @@ export const columns: ColumnDef<AdminBookingResponse>[] = [
     header: "Tổng tiền",
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("totalAmount"));
-      return (
-        <div className="text-sm font-bold text-gray-800">
-          {formatCurrency(amount)}đ
-        </div>
-      );
+      return <div className="text-sm font-bold text-gray-800">{formatCurrency(amount)}đ</div>;
     },
   },
   {
@@ -106,12 +83,11 @@ export const columns: ColumnDef<AdminBookingResponse>[] = [
     cell: ({ row }) => {
       const statusLabel = row.original.displayAs || "Chưa xác định";
       const statusVal = row.original.status;
-      const className =
-        STATUS_COLOR[statusVal] ?? "bg-gray-50 text-gray-500 border-gray-200";
+      const className = STATUS_COLOR[statusVal] ?? "bg-gray-50 text-gray-500 border-gray-200";
 
       return (
         <span
-          className={`inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${className}`}
+          className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-bold tracking-wider whitespace-nowrap uppercase ${className}`}
         >
           {statusLabel}
         </span>
@@ -123,32 +99,26 @@ export const columns: ColumnDef<AdminBookingResponse>[] = [
     header: "Dịch vụ",
     cell: ({ row }) => {
       const services = row.original.services || [];
-      if (services.length === 0)
-        return <span className="text-gray-400">{""}</span>;
+      if (services.length === 0) return <span className="text-gray-400">{""}</span>;
       return (
-        <div className="flex items-center gap-1 flex-wrap">
-          <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+        <div className="flex flex-wrap items-center gap-1">
+          <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset">
             {services[0].serviceName} ({services[0].quantity})
           </span>
           {services.length > 1 && (
             <Popover>
               <PopoverTrigger asChild>
-                <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer hover:bg-gray-200 transition-colors">
+                <span className="inline-flex cursor-pointer items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 transition-colors ring-inset hover:bg-gray-200">
                   +{services.length - 1}
                 </span>
               </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-3 bg-white shadow-lg border border-gray-100 rounded-lg"
-                align="start"
-              >
-                <p className="text-xs font-bold text-gray-400 mb-2 tracking-wider">
-                  Các dịch vụ khác
-                </p>
+              <PopoverContent className="w-auto rounded-lg border border-gray-100 bg-white p-3 shadow-lg" align="start">
+                <p className="mb-2 text-xs font-bold tracking-wider text-gray-400">Các dịch vụ khác</p>
                 <div className="flex flex-col gap-2">
                   {services.slice(1).map((service, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 whitespace-nowrap"
+                      className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium whitespace-nowrap text-blue-700 ring-1 ring-blue-700/10 ring-inset"
                     >
                       {service.serviceName} ({service.quantity})
                     </span>

@@ -7,13 +7,7 @@ import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { STATUS_COLOR } from "@/constants/colors";
 import Link from "next/link";
 
-function StarRating({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: (v: number) => void;
-}) {
+function StarRating({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   const [hovered, setHovered] = useState(0);
 
   return (
@@ -29,11 +23,7 @@ function StarRating({
         >
           <Star
             size={18}
-            className={
-              star <= (hovered || value)
-                ? "fill-yellow-400 text-yellow-400"
-                : "text-gray-300"
-            }
+            className={star <= (hovered || value) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
           />
         </button>
       ))}
@@ -54,9 +44,7 @@ function ReviewSection({ bookingId }: { bookingId: string }) {
   if (submitted) {
     return (
       <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-        <p className="text-sm font-medium text-emerald-700">
-          ✓ Cảm ơn bạn đã gửi đánh giá!
-        </p>
+        <p className="text-sm font-medium text-emerald-700">✓ Cảm ơn bạn đã gửi đánh giá!</p>
       </div>
     );
   }
@@ -65,13 +53,9 @@ function ReviewSection({ bookingId }: { bookingId: string }) {
     <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h4 className="text-sm font-semibold text-gray-800">
-            Trải nghiệm của bạn thế nào?
-          </h4>
+          <h4 className="text-sm font-semibold text-gray-800">Trải nghiệm của bạn thế nào?</h4>
 
-          <p className="mt-1 text-xs text-gray-500">
-            Chia sẻ cảm nhận để giúp khách sạn cải thiện dịch vụ tốt hơn.
-          </p>
+          <p className="mt-1 text-xs text-gray-500">Chia sẻ cảm nhận để giúp khách sạn cải thiện dịch vụ tốt hơn.</p>
         </div>
 
         <StarRating value={rating} onChange={setRating} />
@@ -82,7 +66,7 @@ function ReviewSection({ bookingId }: { bookingId: string }) {
         onChange={(e) => setReview(e.target.value)}
         placeholder="Chia sẻ trải nghiệm của bạn tại khách sạn..."
         rows={4}
-        className="mt-4 w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[#0B30A7]"
+        className="mt-4 w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm transition outline-none focus:border-[#0B30A7]"
       />
 
       <div className="mt-4 flex justify-end">
@@ -102,22 +86,16 @@ type Props = {
 };
 
 export default function BookingHistoryCard({ booking }: Props) {
-  const colorClass =
-    STATUS_COLOR[booking.status.code] ||
-    "bg-gray-100 text-gray-700 border-gray-200";
+  const colorClass = STATUS_COLOR[booking.status.code] || "bg-gray-100 text-gray-700 border-gray-200";
 
   return (
     <div className="overflow-hidden rounded-md border border-gray-300 bg-white">
       <div className="flex items-start justify-between border-b border-gray-200 px-5 py-4">
         <div>
           <div className="flex items-center gap-3">
-            <h3 className="text-[18px] font-bold text-[#1E3A5F]">
-              Đơn đặt phòng: {booking.bookingCode}
-            </h3>
+            <h3 className="text-[18px] font-bold text-[#1E3A5F]">Đơn đặt phòng: {booking.bookingCode}</h3>
 
-            <span
-              className={`rounded-full border px-3 py-1 text-xs font-semibold ${colorClass}`}
-            >
+            <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${colorClass}`}>
               {booking.status.displayAs}
             </span>
           </div>
@@ -139,9 +117,7 @@ export default function BookingHistoryCard({ booking }: Props) {
       <div className="px-5 py-5">
         <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
           <div className="md:border-r md:border-gray-200 md:pr-6">
-            <p className="mb-4 text-sm font-bold uppercase tracking-wide text-gray-700">
-              Danh sách phòng
-            </p>
+            <p className="mb-4 text-sm font-bold tracking-wide text-gray-700 uppercase">Danh sách phòng</p>
 
             <div className="space-y-4">
               {booking.rooms.map((room) => (
@@ -159,7 +135,7 @@ export default function BookingHistoryCard({ booking }: Props) {
                       </p>
                     </div>
 
-                    <p className="text-sm font-bold text-gray-800 whitespace-nowrap">
+                    <p className="text-sm font-bold whitespace-nowrap text-gray-800">
                       {formatCurrency(room.pricePerNight)}
                     </p>
                   </div>
@@ -169,9 +145,7 @@ export default function BookingHistoryCard({ booking }: Props) {
           </div>
 
           <div>
-            <p className="mb-4 text-sm font-bold uppercase tracking-wide text-gray-700">
-              Dịch vụ đi kèm
-            </p>
+            <p className="mb-4 text-sm font-bold tracking-wide text-gray-700 uppercase">Dịch vụ đi kèm</p>
 
             {booking.services.length > 0 ? (
               <ul className="space-y-3">
@@ -187,9 +161,7 @@ export default function BookingHistoryCard({ booking }: Props) {
           </div>
         </div>
 
-        {booking.status.code === "CKO" && (
-          <ReviewSection bookingId={booking.id} />
-        )}
+        {booking.status.code === "CKO" && <ReviewSection bookingId={booking.id} />}
       </div>
     </div>
   );

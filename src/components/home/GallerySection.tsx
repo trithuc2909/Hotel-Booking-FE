@@ -30,13 +30,9 @@ const GALLERY_IMAGES = [
 ] as const;
 
 export default function GallerySection() {
-  const autoPlayPlugin = useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: false }),
-  );
+  const autoPlayPlugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    autoPlayPlugin.current,
-  ]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoPlayPlugin.current]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -58,15 +54,12 @@ export default function GallerySection() {
     emblaApi.scrollNext();
   }, [emblaApi]);
   return (
-    <section className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 mt-3">
+    <section className="relative mx-auto mt-3 max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Slider container */}
       <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
         <div className="flex">
           {GALLERY_IMAGES.map((image) => (
-            <div
-              key={image.id}
-              className="relative min-w-0 flex-[0_0_100%] h-[300px]"
-            >
+            <div key={image.id} className="relative h-[300px] min-w-0 flex-[0_0_100%]">
               <Image
                 src={image.src}
                 alt={image.alt}
@@ -82,13 +75,7 @@ export default function GallerySection() {
       {/* Btn prev */}
       <button
         onClick={scrollPrev}
-        className="
-          absolute left-10 top-1/2 -translate-y-1/2 z-10
-          flex h-10 w-10 items-center justify-center
-          rounded-full bg-white/80 shadow-md
-          hover:bg-white transition-all duration-200
-          cursor-pointer
-        "
+        className="absolute top-1/2 left-10 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/80 shadow-md transition-all duration-200 hover:bg-white"
         aria-label="Ảnh trước"
       >
         <ChevronLeft size={22} className="text-gray-700" />
@@ -96,19 +83,13 @@ export default function GallerySection() {
       {/* Btn next */}
       <button
         onClick={scrollNext}
-        className="
-          absolute right-10 top-1/2 -translate-y-1/2 z-10
-          flex h-10 w-10 items-center justify-center
-          rounded-full bg-white/80 shadow-md
-          hover:bg-white transition-all duration-200
-          cursor-pointer
-        "
+        className="absolute top-1/2 right-10 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/80 shadow-md transition-all duration-200 hover:bg-white"
         aria-label="Ảnh tiếp theo"
       >
         <ChevronRight size={22} className="text-gray-700" />
       </button>
       {/* Dots indicator */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-2">
         {GALLERY_IMAGES.map((_, index) => (
           <button
             key={index}
@@ -116,7 +97,7 @@ export default function GallerySection() {
               emblaApi?.scrollTo(index);
               setCurrentIndex(index);
             }}
-            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+            className={`h-2 cursor-pointer rounded-full transition-all duration-300 ${
               currentIndex === index ? "w-6 bg-white" : "w-2 bg-white/50"
             }`}
             aria-label={`Chuyển đến ảnh ${index + 1}`}

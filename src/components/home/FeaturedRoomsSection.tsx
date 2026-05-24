@@ -13,11 +13,11 @@ export default function FeaturedRoomsSection() {
   const hasFilter = !!(type || guests || checkIn || checkOut);
 
   const { data, isLoading } = useGetRoomsQuery({
-    roomTypeCode: type ? type.toUpperCase() : (hasFilter ? undefined : "VIP"),
-    guests: guests ? Number(guests) : undefined,
-    checkIn: checkIn || undefined,
-    checkOut: checkOut || undefined,
-    limit: hasFilter ? undefined : 4,
+    roomTypeCode: hasFilter ? (type ? type.toUpperCase() : undefined) : "VIP",
+    guests: hasFilter && guests ? Number(guests) : undefined,
+    checkIn: hasFilter ? checkIn || undefined : undefined,
+    checkOut: hasFilter ? checkOut || undefined : undefined,
+    pageSize: hasFilter ? undefined : 4,
   });
 
   const rooms = data?.data ?? [];
@@ -25,10 +25,8 @@ export default function FeaturedRoomsSection() {
   return (
     <section id="featured-rooms" className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="mb-8 text-center">
-        <p className="text-sm font-semibold uppercase tracking-widest text-[#0D99FF]">
-          {type === "vip" || !type
-            ? "Phòng VIP tiêu biểu"
-            : "Phòng phù hợp với yêu cầu"}
+        <p className="text-sm font-semibold tracking-widest text-[#0D99FF] uppercase">
+          {type === "vip" || !type ? "Phòng VIP tiêu biểu" : "Phòng phù hợp với yêu cầu"}
         </p>
         <h2 className="mt-2 text-3xl font-bold text-gray-900">
           Khám phá không gian sang trọng bậc nhất tại Bullman Hotel
@@ -47,11 +45,7 @@ export default function FeaturedRoomsSection() {
               stroke="currentColor"
               strokeWidth={2.5}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 5l7 7-7 7"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         </div>
@@ -59,10 +53,7 @@ export default function FeaturedRoomsSection() {
       {isLoading && (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="h-80 animate-pulse rounded-2xl bg-gray-100"
-            />
+            <div key={i} className="h-80 animate-pulse rounded-2xl bg-gray-100" />
           ))}
         </div>
       )}
@@ -74,9 +65,7 @@ export default function FeaturedRoomsSection() {
         </div>
       )}
       {!isLoading && rooms.length === 0 && (
-        <p className="text-center py-10 text-gray-500">
-          Không tìm thấy phòng phù hợp. Thử thay đổi bộ lọc!
-        </p>
+        <p className="py-10 text-center text-gray-500">Không tìm thấy phòng phù hợp. Thử thay đổi bộ lọc!</p>
       )}
     </section>
   );

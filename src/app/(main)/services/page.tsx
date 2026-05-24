@@ -9,8 +9,7 @@ import Image from "next/image";
 import { ASSETS } from "@/constants/assets";
 import { useGetServicesQuery } from "@/features/service/api/serviceApi";
 
-const FALLBACK =
-  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600";
+const FALLBACK = "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600";
 
 const CATEGORY_COLORS: Record<string, string> = {
   "Di chuyển": "bg-blue-50 text-blue-600",
@@ -24,31 +23,23 @@ export default function ServicesPage() {
   const { data, isLoading } = useGetServicesQuery();
 
   const services = data?.data ?? [];
-  const categories = [
-    "Tất cả",
-    ...Array.from(new Set(services.map((s) => s.category.name))),
-  ];
-  const filtered =
-    activeTab === "Tất cả"
-      ? services
-      : services.filter((s) => s.category.name === activeTab);
+  const categories = ["Tất cả", ...Array.from(new Set(services.map((s) => s.category.name)))];
+  const filtered = activeTab === "Tất cả" ? services : services.filter((s) => s.category.name === activeTab);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-gray-50">
       <Navbar />
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100 shadow-sm">
+      <div className="border-b border-gray-100 bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <Breadcrumb
-            items={[{ label: "Trang dịch vụ" }]}
-          />
+          <Breadcrumb items={[{ label: "Trang dịch vụ" }]} />
         </div>
       </div>
 
       <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
         {/* Hero */}
-        <div className="relative w-full h-64 overflow-hidden rounded-2xl mb-8">
+        <div className="relative mb-8 h-64 w-full overflow-hidden rounded-2xl">
           <Image
             src={ASSETS.servicesHero}
             alt="Dịch vụ tiện ích"
@@ -57,25 +48,24 @@ export default function ServicesPage() {
             priority
             sizes="(max-width: 1280px) 100vw, 1280px"
           />
-          <div className="absolute inset-0 bg-black/50 rounded-2xl" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
-            <h1 className="text-4xl font-bold mb-2">Dịch vụ tiện ích</h1>
-            <p className="text-white/80 text-base max-w-xl">
-              Nâng tầm trải nghiệm của bạn tại Bullman Hotel
-            </p>
+          <div className="absolute inset-0 rounded-2xl bg-black/50" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
+            <h1 className="mb-2 text-4xl font-bold">Dịch vụ tiện ích</h1>
+            <p className="max-w-xl text-base text-white/80">Nâng tầm trải nghiệm của bạn tại Bullman Hotel</p>
           </div>
         </div>
 
         {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="mb-8 flex flex-wrap gap-2">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${activeTab === cat
-                ? "bg-[#0D99FF] text-white shadow-sm"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-[#0D99FF] hover:text-[#0D99FF]"
-                }`}
+              className={`cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                activeTab === cat
+                  ? "bg-[#0D99FF] text-white shadow-sm"
+                  : "border border-gray-200 bg-white text-gray-600 hover:border-[#0D99FF] hover:text-[#0D99FF]"
+              }`}
             >
               {cat}
             </button>
@@ -86,10 +76,7 @@ export default function ServicesPage() {
         {isLoading && (
           <div className="space-y-5">
             {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-36 bg-gray-100 rounded-2xl animate-pulse"
-              />
+              <div key={i} className="h-36 animate-pulse rounded-2xl bg-gray-100" />
             ))}
           </div>
         )}
@@ -100,7 +87,7 @@ export default function ServicesPage() {
             {filtered.map((service) => (
               <div
                 key={service.id}
-                className="flex gap-5 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                className="flex gap-5 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
               >
                 <div className="relative w-52 shrink-0">
                   <Image
@@ -116,24 +103,18 @@ export default function ServicesPage() {
                 </div>
                 <div className="flex-1 py-5 pr-5">
                   <span
-                    className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full mb-2 ${CATEGORY_COLORS[service.category.name] ?? "bg-gray-100 text-gray-600"}`}
+                    className={`mb-2 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${CATEGORY_COLORS[service.category.name] ?? "bg-gray-100 text-gray-600"}`}
                   >
                     <Tag size={11} />
                     {service.category.name}
                   </span>
-                  <h2 className="text-base font-bold text-gray-900 mb-1.5">
-                    {service.name}
-                  </h2>
-                  <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-3">
-                    {service.description}
-                  </p>
+                  <h2 className="mb-1.5 text-base font-bold text-gray-900">{service.name}</h2>
+                  <p className="mb-3 line-clamp-2 text-sm leading-relaxed text-gray-500">{service.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold text-[#0D99FF]">
-                      Giá dịch vụ:{" "}
-                      {Number(service.basePrice).toLocaleString("vi-VN")} VNĐ /{" "}
-                      {service.unit}
+                      Giá dịch vụ: {Number(service.basePrice).toLocaleString("vi-VN")} VNĐ / {service.unit}
                     </span>
-                    <button className="flex cursor-pointer items-center gap-1 text-xs font-medium text-white bg-[#0D99FF] hover:bg-[#0B84E6] transition-colors px-3 py-1.5 rounded-lg">
+                    <button className="flex cursor-pointer items-center gap-1 rounded-lg bg-[#0D99FF] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#0B84E6]">
                       Liên hệ
                     </button>
                   </div>

@@ -5,21 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Save, Camera, CheckCircle2, Loader2 } from "lucide-react";
 import { colors } from "@/constants/colors";
-import {
-  useGetMeQuery,
-  useUpdateUserProfileMutation,
-  useUploadUserAvatarMutation,
-} from "@/features/user/api/userApi";
+import { useGetMeQuery, useUpdateUserProfileMutation, useUploadUserAvatarMutation } from "@/features/user/api/userApi";
 import { toast } from "sonner";
 
 export default function ProfileInfoForm() {
   const { data: meData, isLoading } = useGetMeQuery();
   const user = meData?.data;
 
-  const [updateProfile, { isLoading: isSaving }] =
-    useUpdateUserProfileMutation();
-  const [uploadAvatar, { isLoading: isUploading }] =
-    useUploadUserAvatarMutation();
+  const [updateProfile, { isLoading: isSaving }] = useUpdateUserProfileMutation();
+  const [uploadAvatar, { isLoading: isUploading }] = useUploadUserAvatarMutation();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -87,31 +81,25 @@ export default function ProfileInfoForm() {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 h-64 flex items-center justify-center">
+      <div className="flex h-64 items-center justify-center rounded-2xl border border-gray-100 bg-white shadow-sm">
         <Loader2 className="animate-spin text-[#0D99FF]" size={28} />
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
       {/* Header banner + Avatar */}
       <div className="relative h-28 bg-gradient-to-r from-[#0D99FF] to-[#0B30A7]">
         <div className="absolute -bottom-10 left-6 flex items-end gap-3">
           {/* Avatar */}
-          <div className="relative group">
-            <div className="w-20 h-20 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-md">
+          <div className="group relative">
+            <div className="h-20 w-20 overflow-hidden rounded-full border-4 border-white bg-gray-200 shadow-md">
               {user?.avatarUrl ? (
-                <img
-                  src={user.avatarUrl}
-                  alt="avatar"
-                  className="w-full h-full object-cover"
-                />
+                <img src={user.avatarUrl} alt="avatar" className="h-full w-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0D99FF] to-[#0B30A7]">
-                  <span className="text-white text-2xl font-bold">
-                    {user?.username?.charAt(0) ?? "?"}
-                  </span>
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#0D99FF] to-[#0B30A7]">
+                  <span className="text-2xl font-bold text-white">{user?.username?.charAt(0) ?? "?"}</span>
                 </div>
               )}
             </div>
@@ -130,35 +118,25 @@ export default function ProfileInfoForm() {
               title="Đổi ảnh đại diện"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="absolute bottom-0 right-0 w-6 h-6 bg-[#0D99FF] text-white rounded-full flex items-center justify-center shadow hover:bg-[#0B30A7] transition-colors disabled:opacity-60 cursor-pointer"
+              className="absolute right-0 bottom-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-[#0D99FF] text-white shadow transition-colors hover:bg-[#0B30A7] disabled:opacity-60"
             >
-              {isUploading ? (
-                <Loader2 size={10} className="animate-spin" />
-              ) : (
-                <Camera size={12} />
-              )}
+              {isUploading ? <Loader2 size={10} className="animate-spin" /> : <Camera size={12} />}
             </button>
           </div>
 
-          <span className="font-semibold text-gray-700 text-xl pb-1 drop-shadow">
-            {user?.username}
-          </span>
+          <span className="pb-1 text-xl font-semibold text-gray-700 drop-shadow">{user?.username}</span>
         </div>
       </div>
 
       {/* Title */}
       <div className="px-6 pt-14 pb-2">
-        <h2 className="text-xl font-bold text-center text-gray-800">
-          Thông tin cá nhân
-        </h2>
+        <h2 className="text-center text-xl font-bold text-gray-800">Thông tin cá nhân</h2>
       </div>
 
       {/* Form fields */}
-      <div className="px-6 pb-6 grid grid-cols-1 gap-4 mt-2">
+      <div className="mt-2 grid grid-cols-1 gap-4 px-6 pb-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Họ và tên
-          </label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Họ và tên</label>
           <Input
             id="profile-fullname"
             value={form.fullName}
@@ -170,22 +148,18 @@ export default function ProfileInfoForm() {
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
           <Input
             id="profile-email"
             value={user?.email ?? ""}
             disabled
-            className="bg-gray-50 text-gray-500 cursor-not-allowed"
+            className="cursor-not-allowed bg-gray-50 text-gray-500"
           />
         </div>
 
         {/* Phone number */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Số điện thoại
-          </label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Số điện thoại</label>
           <Input
             id="profile-phone"
             value={form.phone}
@@ -197,9 +171,7 @@ export default function ProfileInfoForm() {
 
         {/* Birthday */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Ngày sinh
-          </label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Ngày sinh</label>
           <Input
             id="profile-dob"
             type="date"
@@ -212,9 +184,7 @@ export default function ProfileInfoForm() {
 
         {/* Address */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Địa chỉ
-          </label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Địa chỉ</label>
           <Input
             id="profile-address"
             value={form.address}
@@ -227,7 +197,7 @@ export default function ProfileInfoForm() {
         {/* Save button */}
         <div className="flex items-center justify-end gap-3 pt-2">
           {saved && (
-            <span className="flex items-center gap-1.5 text-sm text-green-600 animate-in fade-in">
+            <span className="animate-in fade-in flex items-center gap-1.5 text-sm text-green-600">
               <CheckCircle2 size={16} />
               Đã lưu thành công!
             </span>
@@ -236,14 +206,10 @@ export default function ProfileInfoForm() {
             id="profile-save-btn"
             onClick={handleSubmit}
             disabled={isSaving}
-            className="flex items-center gap-2 text-white rounded-lg px-5 cursor-pointer"
+            className="flex cursor-pointer items-center gap-2 rounded-lg px-5 text-white"
             style={{ backgroundColor: colors.primary.blue }}
           >
-            {isSaving ? (
-              <Loader2 size={15} className="animate-spin" />
-            ) : (
-              <Save size={15} />
-            )}
+            {isSaving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
             {isSaving ? "Đang lưu..." : "Lưu thông tin"}
           </Button>
         </div>

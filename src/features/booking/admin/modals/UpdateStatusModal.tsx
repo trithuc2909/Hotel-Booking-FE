@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useUpdateBookingStatusMutation } from "../../api/bookingApi";
 import { toast } from "sonner";
@@ -26,7 +21,6 @@ export default function UpdateStatusModal({
   currentStatus,
   onSuccess,
 }: UpdateStatusModalProps) {
-
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
   const [updateStatus, { isLoading }] = useUpdateBookingStatusMutation();
 
@@ -50,40 +44,30 @@ export default function UpdateStatusModal({
   ];
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-white">
+      <DialogContent className="bg-white sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-gray-900">
-            Cập nhật trạng thái
-          </DialogTitle>
-          <p className="text-sm text-blue-600 font-medium">
-            Mã đặt phòng: {bookingCode}
-          </p>
+          <DialogTitle className="text-xl font-bold text-gray-900">Cập nhật trạng thái</DialogTitle>
+          <p className="text-sm font-medium text-blue-600">Mã đặt phòng: {bookingCode}</p>
         </DialogHeader>
         <div>
-          <p className="text-xs font-bold text-gray-400 mb-3 tracking-wider">
-            CHỌN TRẠNG THÁI MỚI
-          </p>
+          <p className="mb-3 text-xs font-bold tracking-wider text-gray-400">CHỌN TRẠNG THÁI MỚI</p>
           <div className="space-y-3">
             {statuses.map((status) => (
               <label
                 key={status.value}
-                className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${selectedStatus === status.value
-                  ? "border-[#0D99FF] bg-blue-50/50"
-                  : "border-gray-200 hover:bg-gray-50"
-                  }`}
+                className={`flex cursor-pointer items-center justify-between rounded-lg border p-4 transition-all ${
+                  selectedStatus === status.value
+                    ? "border-[#0D99FF] bg-blue-50/50"
+                    : "border-gray-200 hover:bg-gray-50"
+                }`}
               >
-                <span className="text-sm font-semibold text-gray-800">
-                  {status.label}
-                </span>
+                <span className="text-sm font-semibold text-gray-800">{status.label}</span>
                 <div
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedStatus === status.value
-                    ? "border-[#0D99FF]"
-                    : "border-gray-300"
-                    }`}
+                  className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${
+                    selectedStatus === status.value ? "border-[#0D99FF]" : "border-gray-300"
+                  }`}
                 >
-                  {selectedStatus === status.value && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#0D99FF]" />
-                  )}
+                  {selectedStatus === status.value && <div className="h-2.5 w-2.5 rounded-full bg-[#0D99FF]" />}
                 </div>
                 <input
                   type="radio"
@@ -97,18 +81,14 @@ export default function UpdateStatusModal({
             ))}
           </div>
         </div>
-        <div className="flex justify-end gap-3 mt-2">
-          <Button
-            variant="ghost"
-            onClick={onClose}
-            className="cursor-pointer text-gray-600 font-semibold"
-          >
+        <div className="mt-2 flex justify-end gap-3">
+          <Button variant="ghost" onClick={onClose} className="cursor-pointer font-semibold text-gray-600">
             Hủy bỏ
           </Button>
           <Button
             onClick={handleUpdate}
             disabled={isLoading}
-            className="bg-[#0D99FF] hover:bg-[#0B84E6] text-white font-semibold cursor-pointer min-w-[140px]"
+            className="min-w-[140px] cursor-pointer bg-[#0D99FF] font-semibold text-white hover:bg-[#0B84E6]"
           >
             {isLoading ? "Đang xử lý..." : "Xác nhận cập nhật"}
           </Button>

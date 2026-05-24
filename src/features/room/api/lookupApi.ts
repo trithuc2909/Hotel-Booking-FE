@@ -13,10 +13,7 @@ export const lookupApi = createApi({
     getAmenities: builder.query<ApiResponse<AmenityResponse[]>, void>({
       query: () => "lookup/amenities",
     }),
-    getCodes: builder.query<
-      ApiResponse<{ code: string; displayAs: string }[]>,
-      string
-    >({
+    getCodes: builder.query<ApiResponse<{ code: string; displayAs: string }[]>, string>({
       query: (type) => `lookup/codes?type=${type}`,
     }),
   }),

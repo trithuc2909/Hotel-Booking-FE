@@ -51,10 +51,7 @@ export const authApi = createApi({
     }),
 
     // Forgot Password
-    forgotPassword: builder.mutation<
-      { message: string },
-      ForgotPasswordRequest
-    >({
+    forgotPassword: builder.mutation<{ message: string }, ForgotPasswordRequest>({
       query: (data) => ({
         url: "/auth/forgot-password",
         method: "POST",

@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/ui/data-table";
-import { AdminBookingResponse } from "../../types/booking.type";
+import { AdminBookingResponse } from "../../../types/booking.type";
 import { ColumnDef } from "@tanstack/react-table";
 
 interface BookingTableProps {
