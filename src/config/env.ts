@@ -1,8 +1,6 @@
-import { log } from "console";
-
 export const env = {
   // API
-  apiUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1",
+  apiUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1",
 
   // App Info
   appName: process.env.NEXT_PUBLIC_APP_NAME || "BullManHotel",
